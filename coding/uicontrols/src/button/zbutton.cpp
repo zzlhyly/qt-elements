@@ -1,7 +1,9 @@
 ﻿#include "zbutton.h"
 
+#include <QFocusEvent>
 #include <QFontMetrics>
 #include <QKeyEvent>
+#include <QMouseEvent>
 #include <QPainter>
 #include <QPainterPath>
 
@@ -231,8 +233,8 @@ void ZButton::paintEvent(QPaintEvent*)
         p.drawPath(path);
     }
 
-    // Focus ring
-    if (hasFocus() && !circle_) {
+    // Focus ring — only on keyboard focus (Tab), not click
+    if (focus_keyboard_ && !circle_) {
         p.setPen(QPen(QColor(0xa0, 0xcf, 0xff), 2));
         p.setBrush(Qt::NoBrush);
         QPainterPath focusPath;
@@ -285,6 +287,20 @@ void ZButton::leaveEvent(QEvent*)
 {
     hovered_ = false;
     update();
+}
+
+void ZButton::focusInEvent(QFocusEvent* e)
+{
+    focus_keyboard_ = (e->reason() == Qt::TabFocusReason
+                    || e->reason() == Qt::BacktabFocusReason
+                    || e->reason() == Qt::ShortcutFocusReason);
+    QAbstractButton::focusInEvent(e);
+}
+
+void ZButton::mousePressEvent(QMouseEvent* e)
+{
+    focus_keyboard_ = false;
+    QAbstractButton::mousePressEvent(e);
 }
 
 void ZButton::keyPressEvent(QKeyEvent* e)

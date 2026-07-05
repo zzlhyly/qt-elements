@@ -34,6 +34,8 @@ protected:
     void paintEvent(QPaintEvent*) override;
     void enterEvent(QEvent*) override;
     void leaveEvent(QEvent*) override;
+    void focusInEvent(QFocusEvent*) override;
+    void mousePressEvent(QMouseEvent*) override;
     void keyPressEvent(QKeyEvent*) override;
     void changeEvent(QEvent*) override;
 
@@ -51,6 +53,7 @@ private:
     bool round_ = false;
     bool circle_ = false;
     bool hovered_ = false;
+    bool focus_keyboard_ = false;
 };
 
 #endif // CODING_UICONTROLS_SRC_BUTTON_ZBUTTON_H_
