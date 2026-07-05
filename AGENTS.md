@@ -28,10 +28,16 @@ cmake --build debug --config Debug
 
 ## Projects
 
-- `coding/practice/` — basic Qt5 app (QApplication + custom widget)
-- `coding/uicontrols/` — Qt5 UI controls playground (buttons, test widgets)
-- `coding/todolist` — planned features (Chinese)
+- `coding/uicontrols/` — **主项目**：使用 Qt5 原生绘制开发的个人 UI 组件库，视觉对标 [Element Plus](https://element-plus.org/)，力求像素级还原
+- `coding/practice/` — 早期练习项目，无实际作用，忽略即可
+- `coding/todolist` — 计划功能清单（中文）
 - Build outputs go to `<build-dir>/product/<project-name>/`
+
+## Design
+
+- 组件开发仅使用 Qt 原生 API（QPainter、QStyle），不依赖 QSS 外部样式表
+- 设计参考：Element Plus 官方文档 https://element-plus.org/en-US/component/button.html
+- 每个组件独立在一个子目录（如 `src/button/`），含 `.h`/`.cpp`
 
 ## Qt plugin deployment
 

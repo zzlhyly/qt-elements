@@ -4,7 +4,7 @@ set(VCPKG_ROOT "D:/code/github/vcpkg" CACHE STRING "Path to vcpkg root directory
 # vcpkg integration — must be set before project()
 set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "vcpkg toolchain")
 
-if(${CMAKE_GENERATOR_PLATFORM} STREQUAL "Win32")
+if("${CMAKE_GENERATOR_PLATFORM}" STREQUAL "Win32")
     message(STATUS "Building for x86 (32-bit)")
     set(VCPKG_TARGET_TRIPLET "x86-windows")
 else()
