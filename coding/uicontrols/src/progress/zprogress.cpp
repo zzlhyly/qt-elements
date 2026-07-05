@@ -83,8 +83,17 @@ void ZProgress::paintEvent(QPaintEvent*)
         int trackY = (h - strokeWidth_) / 2;
         int trackH = strokeWidth_;
 
+        // Reserve space for text on the right
+        QFont f = font();
+        f.setPixelSize(12);
+        f.setWeight(QFont::Normal);
+        QFontMetrics fm(f);
+        QString label = QString::number(percentage_) + QStringLiteral("%");
+        int textW = showText_ ? fm.horizontalAdvance(label) + 8 : 0;
+        int barW = w - textW;
+
         // Track background
-        QRectF trackRect(0, trackY, w, trackH);
+        QRectF trackRect(0, trackY, barW, trackH);
         QPainterPath trackPath;
         trackPath.addRoundedRect(trackRect, trackH / 2.0, trackH / 2.0);
         p.setBrush(QColor(0xeb, 0xee, 0xf5));
@@ -92,43 +101,22 @@ void ZProgress::paintEvent(QPaintEvent*)
         p.drawPath(trackPath);
 
         // Filled portion
-        int fillW = 0;
         if (percentage_ > 0) {
-            fillW = qMax(trackH, w * percentage_ / 100);  // min width for rounded cap
+            int fillW = qMax(trackH, barW * percentage_ / 100);
             QRectF fillRect(0, trackY, fillW, trackH);
             QPainterPath fillPath;
             fillPath.addRoundedRect(fillRect, trackH / 2.0, trackH / 2.0);
-            // Clip to track rect on right
             fillPath = fillPath.intersected(trackPath);
             p.setBrush(statusColor());
             p.setPen(Qt::NoPen);
             p.drawPath(fillPath);
         }
 
-        // Text
+        // Text — positioned to the right of the bar
         if (showText_) {
-            QFont f = font();
-            f.setPixelSize(12);
-            f.setWeight(QFont::Normal);
             p.setFont(f);
-            QFontMetrics fm(f);
-            QString label = QString::number(percentage_) + QStringLiteral("%");
-            int textW = fm.horizontalAdvance(label);
-
-            // Place text to right of bar, or inside if bar is wide enough
-            if (fillW > textW + 8 && percentage_ >= 10) {
-                // Inside the bar in white
-                p.setPen(Qt::white);
-                p.drawText(QRect(4, 0, fillW - 4, h), Qt::AlignLeft | Qt::AlignVCenter, label);
-            } else {
-                // Outside to the right
-                int textX = fillW + 8;
-                if (textX + textW > w && percentage_ == 100) {
-                    textX = w - textW;
-                }
-                p.setPen(theme::textRegular());
-                p.drawText(QRect(textX, 0, textW, h), Qt::AlignLeft | Qt::AlignVCenter, label);
-            }
+            p.setPen(theme::textRegular());
+            p.drawText(QRect(barW + 4, 0, textW, h), Qt::AlignLeft | Qt::AlignVCenter, label);
         }
     }
 }

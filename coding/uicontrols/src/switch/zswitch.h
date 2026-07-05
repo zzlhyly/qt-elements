@@ -20,7 +20,6 @@ public:
 protected:
     void paintEvent(QPaintEvent*) override;
     void nextCheckState() override;
-    void resizeEvent(QResizeEvent*) override;
 
 private:
     QPropertyAnimation* anim_;

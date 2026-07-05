@@ -3,14 +3,13 @@
 
 #include <QPainter>
 #include <QPainterPath>
-#include <QResizeEvent>
 
 ZSwitch::ZSwitch(QWidget* parent)
     : QAbstractButton(parent)
 {
     setCheckable(true);
     setCursor(Qt::PointingHandCursor);
-    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    setFixedSize(40, 20);
 
     anim_ = new QPropertyAnimation(this, "offset", this);
     anim_->setDuration(200);
@@ -30,16 +29,10 @@ void ZSwitch::setOffset(qreal o)
 
 void ZSwitch::nextCheckState()
 {
-    // Toggle check state manually rather than calling base (which would emit toggled)
     setChecked(!isChecked());
     anim_->setStartValue(offset_);
     anim_->setEndValue(isChecked() ? 1.0 : 0.0);
     anim_->start();
-}
-
-void ZSwitch::resizeEvent(QResizeEvent* e)
-{
-    QAbstractButton::resizeEvent(e);
 }
 
 void ZSwitch::paintEvent(QPaintEvent*)
@@ -50,49 +43,44 @@ void ZSwitch::paintEvent(QPaintEvent*)
     bool checked = isChecked();
     bool disabled = !isEnabled();
 
-    qreal w = 40.0;
-    qreal h = 20.0;
-    qreal trackRadius = h / 2.0;
-    qreal thumbRadius = 8.0;
+    const qreal trackW = 40.0;
+    const qreal trackH = 20.0;
+    const qreal trackRadius = trackH / 2.0;  // 10
+    const qreal thumbD = 16.0;
+    const qreal thumbR = thumbD / 2.0;       // 8
+    const qreal margin = 2.0;  // gap between thumb and track edge
 
-    // Center the track in the widget rect
-    qreal trackH = 20.0;
-    qreal trackW = 40.0;
-    qreal ty = (height() - trackH) / 2.0;
-    qreal tx = (width() - trackW) / 2.0;
+    // Track
+    QRectF trackRect(0, 0, trackW, trackH);
+    QPainterPath trackPath;
+    trackPath.addRoundedRect(trackRect, trackRadius, trackRadius);
 
-    // Track color
     QColor trackColor;
     if (disabled) {
         trackColor = QColor(0xe0, 0xe0, 0xe0);
     } else if (checked) {
-        trackColor = theme::colorPrimary();  // #409eff
+        trackColor = theme::colorPrimary();
     } else {
         trackColor = QColor(0xc0, 0xc4, 0xcc);
     }
-
-    // Draw track
-    QRectF trackRect(tx, ty, trackW, trackH);
-    QPainterPath trackPath;
-    trackPath.addRoundedRect(trackRect, trackRadius, trackRadius);
     p.setBrush(trackColor);
     p.setPen(Qt::NoPen);
     p.drawPath(trackPath);
 
-    // Thumb shadow
-    qreal thumbX = tx + 2.0 + offset_ * (trackW - 4.0 - thumbRadius * 2.0);
-    qreal thumbY = ty + trackH / 2.0;
-    QRectF shadowRect(thumbX - thumbRadius + 1, thumbY - thumbRadius + 1,
-                      thumbRadius * 2.0, thumbRadius * 2.0);
-    QColor shadowColor(0, 0, 0, 15);
-    p.setBrush(shadowColor);
+    // Thumb position: travels from margin to trackW - margin - thumbD
+    qreal thumbTravel = trackW - 2.0 * margin - thumbD;  // 40 - 4 - 16 = 20
+    qreal thumbX = margin + offset_ * thumbTravel;
+    qreal thumbY = (trackH - thumbD) / 2.0;
+
+    QRectF thumbRect(thumbX, thumbY, thumbD, thumbD);
+
+    // Thumb shadow (subtle, offset down-right)
+    QRectF shadowRect = thumbRect.translated(0.5, 0.5);
+    p.setBrush(QColor(0, 0, 0, 30));
     p.setPen(Qt::NoPen);
     p.drawEllipse(shadowRect);
 
     // Thumb
-    QRectF thumbRect(thumbX - thumbRadius, thumbY - thumbRadius,
-                     thumbRadius * 2.0, thumbRadius * 2.0);
-    p.setBrush(Qt::white);
-    p.setPen(Qt::NoPen);
+    p.setBrush(disabled ? QColor(0xf5, 0xf5, 0xf5) : Qt::white);
     p.drawEllipse(thumbRect);
 }

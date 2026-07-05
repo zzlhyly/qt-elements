@@ -38,7 +38,7 @@ private:
     int max_ = 100;
     int value_ = 0;
     bool dragging_ = false;
-    int trackPad_ = 7;
+    int trackPad_ = 10;
 };
 
 #endif // CODING_UICONTROLS_SRC_SLIDER_ZSLIDER_H_
