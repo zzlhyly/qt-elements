@@ -2,15 +2,16 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QPainter>
 #include <QVBoxLayout>
 
 ZPopup::ZPopup(QWidget* parent)
-    : QWidget(parent)
+    : QWidget(nullptr)  // ponytail: always top-level, no parent to avoid stacking issues
 {
-    setWindowFlags(Qt::Popup | Qt::FramelessWindowHint);
-    setAttribute(Qt::WA_TranslucentBackground, true);
-    setAttribute(Qt::WA_ShowWithoutActivating, true);
+    setWindowFlags(Qt::ToolTip | Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_TranslucentBackground);
+    setAttribute(Qt::WA_NoSystemBackground);
+    setAttribute(Qt::WA_ShowWithoutActivating);
+    setAutoFillBackground(false);
 
     auto* lay = new QVBoxLayout(this);
     lay->setContentsMargins(0, 0, 0, 0);
@@ -24,61 +25,46 @@ void ZPopup::setContent(QWidget* content)
         content_->setParent(nullptr);
     }
     content_ = content;
+    content_->setParent(this);
     qobject_cast<QVBoxLayout*>(layout())->addWidget(content_);
 }
 
-QWidget* ZPopup::content() const
-{
-    return content_;
-}
+QWidget* ZPopup::content() const { return content_; }
 
 void ZPopup::showAt(QWidget* target, Placement placement)
 {
-    target_ = target;
-    placement_ = placement;
+    if (!target) return;
 
-    if (!target_) return;
+    // Force layout before sizing
+    layout()->activate();
+    adjustSize();
 
-    adjustSize();  // ensure correct size before calculating position
-
-    QPoint targetTL = target->mapToGlobal(QPoint(0, 0));
-    QPoint pos;
+    QPoint tl = target->mapToGlobal(QPoint(0, 0));
     int tw = target->width();
     int th = target->height();
     int pw = width();
     int ph = height();
 
+    QPoint pos;
     switch (placement) {
-    case kBottom:
-        pos = QPoint(targetTL.x() + (tw - pw) / 2, targetTL.y() + th);
-        break;
-    case kTop:
-        pos = QPoint(targetTL.x() + (tw - pw) / 2, targetTL.y() - ph);
-        break;
-    case kLeft:
-        pos = QPoint(targetTL.x() - pw, targetTL.y() + (th - ph) / 2);
-        break;
-    case kRight:
-        pos = QPoint(targetTL.x() + tw, targetTL.y() + (th - ph) / 2);
-        break;
+    case kTop:    pos = QPoint(tl.x() + (tw - pw) / 2, tl.y() - ph - 2); break;  // 2px gap to prevent flicker
+    case kBottom: pos = QPoint(tl.x() + (tw - pw) / 2, tl.y() + th); break;
+    case kLeft:   pos = QPoint(tl.x() - pw, tl.y() + (th - ph) / 2); break;
+    case kRight:  pos = QPoint(tl.x() + tw, tl.y() + (th - ph) / 2); break;
     }
 
-    fitToScreen(pos);
-    show();
-    raise();
-}
-
-void ZPopup::fitToScreen(const QPoint& pos)
-{
+    // Clamp to screen
     QRect screen = QApplication::desktop()->availableGeometry(pos);
-    int x = qBound(screen.left(), pos.x(), screen.right() - width());
-    int y = qBound(screen.top(), pos.y(), screen.bottom() - height());
-    move(x, y);
+    pos.setX(qBound(screen.left(), pos.x(), screen.right() - pw));
+    pos.setY(qBound(screen.top(), pos.y(), screen.bottom() - ph));
+
+    move(pos);
+    show();
 }
 
 ZPopup* ZPopup::createPopup(QWidget* target, QWidget* content, Placement placement)
 {
-    auto* popup = new ZPopup(target ? target->window() : nullptr);
+    auto* popup = new ZPopup();
     popup->setContent(content);
     if (target) popup->showAt(target, placement);
     return popup;
@@ -86,8 +72,6 @@ ZPopup* ZPopup::createPopup(QWidget* target, QWidget* content, Placement placeme
 
 bool ZPopup::event(QEvent* e)
 {
-    if (e->type() == QEvent::Close) {
-        emit popupClosed();
-    }
+    if (e->type() == QEvent::Close) emit popupClosed();
     return QWidget::event(e);
 }
