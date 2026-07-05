@@ -294,15 +294,16 @@ void ZButton::paintEvent(QPaintEvent*)
         // Semi-transparent white overlay
         p.fillRect(r, QColor(255, 255, 255, 76));
 
-        // Spinning arc
+        // Spinning arc — use floating-point center for pixel-perfect centering
         int arcRadius = qMax(6, s.height / 4);
         QPen arcPen(tc, 2);
         arcPen.setCapStyle(Qt::RoundCap);
         p.setPen(arcPen);
         p.setBrush(Qt::NoBrush);
 
-        QRect arcRect(r.center().x() - arcRadius, r.center().y() - arcRadius,
-                      arcRadius * 2, arcRadius * 2);
+        qreal cx = r.x() + r.width() / 2.0;
+        qreal cy = r.y() + r.height() / 2.0;
+        QRectF arcRect(cx - arcRadius, cy - arcRadius, arcRadius * 2, arcRadius * 2);
         p.drawArc(arcRect, loading_angle_ * 16, 300 * 16);
 
         p.setPen(Qt::NoPen);
@@ -318,26 +319,31 @@ void ZButton::paintEvent(QPaintEvent*)
     if (circle_ && hasIcon) {
         // Circle: icon only, centered
         QIcon::Mode mode = !isEnabled() ? QIcon::Disabled : isDown() ? QIcon::Selected : hovered_ ? QIcon::Active : QIcon::Normal;
-        icon().paint(&p, r.center().x() - iconSize/2, r.center().y() - iconSize/2, iconSize, iconSize, Qt::AlignCenter, mode);
+        qreal cx = r.x() + r.width() / 2.0;
+        qreal cy = r.y() + r.height() / 2.0;
+        icon().paint(&p, static_cast<int>(cx - iconSize / 2.0),
+                     static_cast<int>(cy - iconSize / 2.0),
+                     iconSize, iconSize, Qt::AlignCenter, mode);
     } else {
         // Calculate total content width
         int textW = hasText ? QFontMetrics(f).horizontalAdvance(text()) : 0;
         int totalW = textW;
         if (hasIcon) totalW += iconSize + (hasText ? s.iconGap : 0);
 
-        int startX = r.center().x() - totalW / 2;
-        int y = r.center().y();
+        qreal cx = r.x() + r.width() / 2.0;
+        qreal cy = r.y() + r.height() / 2.0;
+        int startX = static_cast<int>(cx - totalW / 2.0);
 
         if (hasIcon) {
             QIcon::Mode mode = !isEnabled() ? QIcon::Disabled : isDown() ? QIcon::Selected : hovered_ ? QIcon::Active : QIcon::Normal;
-            icon().paint(&p, startX, y - iconSize/2, iconSize, iconSize, Qt::AlignCenter, mode);
+            icon().paint(&p, startX, static_cast<int>(cy - iconSize / 2.0), iconSize, iconSize, Qt::AlignCenter, mode);
             startX += iconSize + s.iconGap;
         }
 
         if (hasText) {
             QFontMetrics fm(f);
             QString elided = fm.elidedText(text(), Qt::ElideRight, textW);
-            p.drawText(startX, y - fm.height()/2, textW, fm.height(), Qt::AlignCenter, elided);
+            p.drawText(startX, static_cast<int>(cy - fm.height() / 2.0), textW, fm.height(), Qt::AlignCenter, elided);
         }
     }
 }
