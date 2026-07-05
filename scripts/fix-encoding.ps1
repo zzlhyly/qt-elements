@@ -1,4 +1,4 @@
-# Convert all C++ source files to UTF-8 with BOM
+# Convert all C++ source files to UTF-8 with BOM + CRLF line endings
 # Run from repo root: pwsh -File scripts/fix-encoding.ps1
 
 $sourceRoot = Join-Path $PSScriptRoot ".." "coding"
@@ -9,18 +9,13 @@ foreach ($ext in $extensions) {
     foreach ($f in $files) {
         $content = Get-Content -LiteralPath $f.FullName -Raw -Encoding UTF8
         if (-not $content) { continue }
-        
-        # Check if already BOM
-        $bytes = [System.IO.File]::ReadAllBytes($f.FullName)
-        $hasBom = ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF)
-        
-        if (-not $hasBom) {
-            $utf8Bom = New-Object System.Text.UTF8Encoding $true
-            [System.IO.File]::WriteAllText($f.FullName, $content, $utf8Bom)
-            Write-Host "BOM added: $($f.FullName)"
-        } else {
-            Write-Host "OK (BOM): $($f.FullName)"
-        }
+
+        # Normalize to CRLF (Windows)
+        $content = $content -replace "`r`n", "`n" -replace "`n", "`r`n"
+
+        $utf8Bom = New-Object System.Text.UTF8Encoding $true
+        [System.IO.File]::WriteAllText($f.FullName, $content, $utf8Bom)
+        Write-Host "UTF-8 BOM + CRLF: $($f.FullName)"
     }
 }
 

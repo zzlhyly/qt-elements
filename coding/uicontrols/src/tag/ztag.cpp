@@ -10,15 +10,33 @@
 // Dark: type-color bg + white text, no border
 // Plain: white bg + type-color text + type-color border
 
+// Color tables indexed by [TagType]: kPrimary=0, kSuccess=1, kInfo=2, kWarning=3, kDanger=4
+// Element Plus Tag SCSS: genTheme('light-9','light-8','') for light; genTheme(false,'light-5','') for plain
+
 static const QColor tagBgLight[5] = {
-    {0xec, 0xf5, 0xff},  // primary
-    {0xf5, 0xfa, 0xed},  // success
-    {0xf8, 0xf9, 0xfa},  // info
-    {0xfd, 0xf8, 0xde},  // warning
-    {0xfe, 0xf5, 0xf5},  // danger
+    {0xec, 0xf5, 0xff},  // primary-light-9
+    {0xf0, 0xf9, 0xeb},  // success-light-9
+    {0xf4, 0xf4, 0xf5},  // info-light-9
+    {0xfd, 0xf6, 0xec},  // warning-light-9
+    {0xfe, 0xf0, 0xf0},  // danger-light-9
 };
 
-// Element Plus Tag: default light uses info colors for text
+static const QColor tagBorderLight[5] = {
+    {0xd9, 0xec, 0xff},  // primary-light-8
+    {0xe1, 0xf3, 0xd8},  // success-light-8
+    {0xe9, 0xe9, 0xeb},  // info-light-8
+    {0xfa, 0xec, 0xd8},  // warning-light-8
+    {0xfd, 0xe2, 0xe2},  // danger-light-8
+};
+
+static const QColor tagBorderPlain[5] = {
+    {0xa0, 0xcf, 0xff},  // primary-light-5
+    {0xb3, 0xe1, 0x9d},  // success-light-5
+    {0xc8, 0xc9, 0xcc},  // info-light-5
+    {0xf3, 0xd1, 0x9e},  // warning-light-5
+    {0xfa, 0xb6, 0xb6},  // danger-light-5
+};
+
 static const QColor tagTextLight[5] = {
     {0x40, 0x9e, 0xff},  // primary: blue
     {0x67, 0xc2, 0x3a},  // success: green
@@ -105,7 +123,8 @@ QColor ZTag::textColor() const
 
 QColor ZTag::borderColor() const
 {
-    if (effect_ == kPlain) return tagTextLight[type_];
+    if (effect_ == kPlain) return tagBorderPlain[type_];
+    if (effect_ == kLight) return tagBorderLight[type_];
     if (hit_) return tagTextLight[type_];
     return Qt::transparent;
 }
