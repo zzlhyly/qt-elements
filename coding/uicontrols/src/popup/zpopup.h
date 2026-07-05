@@ -6,7 +6,6 @@
 class ZPopup : public QWidget
 {
     Q_OBJECT
-
 public:
     enum Placement { kBottom, kTop, kLeft, kRight };
 
@@ -15,7 +14,6 @@ public:
     QWidget* content() const;
 
     void showAt(QWidget* target, Placement placement = kBottom);
-    void showAt(const QPoint& globalPos);
 
     static ZPopup* createPopup(QWidget* target, QWidget* content, Placement placement = kBottom);
 
@@ -23,11 +21,10 @@ signals:
     void popupClosed();
 
 protected:
-    void paintEvent(QPaintEvent*) override;
     bool event(QEvent*) override;
 
 private:
-    void adjustPosition(const QPoint& pos);
+    void fitToScreen(const QPoint& pos);
 
     QWidget* content_ = nullptr;
     QWidget* target_ = nullptr;
