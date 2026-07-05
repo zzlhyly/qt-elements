@@ -42,6 +42,7 @@ For plugin deployment logic, see `3rd/Qt5/debug/plugins/qtdeploy.ps1`.
 | Component | Status | Description |
 |-----------|--------|-------------|
 | ZButton | ✅ Done | Full Element Plus button: 6 types, 3 sizes, solid/plain/text variants, round/circle |
+| ZTag | ✅ Done | Full Element Plus tag: 5 types, 3 effects, 3 sizes, closable/round/hit |
 
 ## Project Structure
 

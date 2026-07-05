@@ -1,4 +1,4 @@
-#include "testwidget.h"
+﻿#include "testwidget.h"
 
 #include <QFrame>
 #include <QGridLayout>
@@ -8,6 +8,7 @@
 #include <QVBoxLayout>
 
 #include "button/zbutton.h"
+#include "tag/ztag.h"
 
 static QLabel* sectionLabel(const QString& text)
 {
@@ -115,6 +116,66 @@ TestWidget::TestWidget(QWidget* parent)
     row6->addWidget(d5);
     row6->addStretch();
     mainLayout->addLayout(row6);
+
+    // --- ZTag Section ---
+    mainLayout->addWidget(sectionLabel("Tags — All Types (Light)"));
+
+    // Row 7: Tag types
+    auto* tagRow1 = new QHBoxLayout();
+    tagRow1->setSpacing(12);
+    const char* tagTypeNames[] = { "Default", "Success", "Info", "Warning", "Danger" };
+    ZTag::TagType tagTypes[] = { ZTag::kDefault, ZTag::kSuccess, ZTag::kInfo, ZTag::kWarning, ZTag::kDanger };
+    for (int i = 0; i < 5; ++i) {
+        auto* tag = new ZTag(tagTypeNames[i]);
+        tag->setTagType(tagTypes[i]);
+        tagRow1->addWidget(tag);
+    }
+    tagRow1->addStretch();
+    mainLayout->addLayout(tagRow1);
+
+    // Row 8: Tag effects
+    mainLayout->addWidget(sectionLabel("Tags — Effects (Primary)"));
+    auto* tagRow2 = new QHBoxLayout();
+    tagRow2->setSpacing(12);
+    auto* lightTag = new ZTag("Light");    lightTag->setTagType(ZTag::kSuccess);
+    auto* darkTag = new ZTag("Dark");       darkTag->setTagType(ZTag::kSuccess); darkTag->setEffect(ZTag::kDark);
+    auto* plainTag = new ZTag("Plain");     plainTag->setTagType(ZTag::kSuccess); plainTag->setEffect(ZTag::kPlain);
+    tagRow2->addWidget(lightTag);
+    tagRow2->addWidget(darkTag);
+    tagRow2->addWidget(plainTag);
+    tagRow2->addStretch();
+    mainLayout->addLayout(tagRow2);
+
+    // Row 9: Tag sizes + round
+    mainLayout->addWidget(sectionLabel("Tags — Sizes & Round"));
+    auto* tagRow3 = new QHBoxLayout();
+    tagRow3->setSpacing(12);
+    auto* tagLg = new ZTag("Large");    tagLg->setTagType(ZTag::kWarning); tagLg->setTagSize(ZTag::kLarge);
+    auto* tagMd = new ZTag("Medium");   tagMd->setTagType(ZTag::kWarning); tagMd->setTagSize(ZTag::kMedium);
+    auto* tagSm = new ZTag("Small");    tagSm->setTagType(ZTag::kWarning); tagSm->setTagSize(ZTag::kSmall);
+    auto* tagRd = new ZTag("Round");    tagRd->setTagType(ZTag::kDanger);   tagRd->setRound(true);
+    auto* tagHit = new ZTag("Hit");     tagHit->setTagType(ZTag::kDefault); tagHit->setHit(true);
+    tagRow3->addWidget(tagLg);
+    tagRow3->addWidget(tagMd);
+    tagRow3->addWidget(tagSm);
+    tagRow3->addWidget(tagRd);
+    tagRow3->addWidget(tagHit);
+    tagRow3->addStretch();
+    mainLayout->addLayout(tagRow3);
+
+    // Row 10: Closable tags
+    mainLayout->addWidget(sectionLabel("Tags — Closable"));
+    auto* tagRow4 = new QHBoxLayout();
+    tagRow4->setSpacing(12);
+    for (int i = 0; i < 5; ++i) {
+        auto* tag = new ZTag(tagTypeNames[i]);
+        tag->setTagType(tagTypes[i]);
+        tag->setClosable(true);
+        QObject::connect(tag, &ZTag::closed, tag, &QWidget::hide);
+        tagRow4->addWidget(tag);
+    }
+    tagRow4->addStretch();
+    mainLayout->addLayout(tagRow4);
 
     mainLayout->addStretch();
 

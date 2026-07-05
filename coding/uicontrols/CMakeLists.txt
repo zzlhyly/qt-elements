@@ -5,6 +5,8 @@ SET(SRC_FILES
     src/testwidget.h
     src/button/zbutton.cpp
     src/button/zbutton.h
+    src/tag/ztag.cpp
+    src/tag/ztag.h
 )
 if(WIN32)
     SOURCE_GROUP(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SRC_FILES})

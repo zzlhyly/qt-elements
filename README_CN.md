@@ -42,6 +42,7 @@ cmake --build debug --config Debug
 | 组件 | 状态 | 描述 |
 |------|------|------|
 | ZButton | ✅ 完成 | 完整 Element Plus 按钮：6 种类型、3 种尺寸、solid/plain/text 变体、圆角/圆形 |
+| ZTag | ✅ 完成 | 完整 Element Plus 标签：5 种类型、3 种效果、3 种尺寸、可关闭/圆角/边框 |
 
 ## 项目结构
 
