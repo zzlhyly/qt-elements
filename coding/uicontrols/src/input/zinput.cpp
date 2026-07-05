@@ -21,12 +21,20 @@ ZInput::ZInput(QWidget* parent)
 
     edit_->installEventFilter(this);
 
+    setFocusProxy(edit_);  // click anywhere on ZInput → focus inner QLineEdit
+
     // Clear button
     clear_btn_ = new QPushButton(QString(QChar(0x00D7)), this);
     clear_btn_->setFixedSize(16, 16);
     clear_btn_->setFlat(true);
     clear_btn_->setCursor(Qt::PointingHandCursor);
     clear_btn_->setVisible(false);
+    {
+        QPalette bp = clear_btn_->palette();
+        bp.setColor(QPalette::ButtonText, QColor(0x90, 0x93, 0x99));
+        clear_btn_->setPalette(bp);
+    }
+    clear_btn_->installEventFilter(this);
 
     // Password toggle button
     password_btn_ = new QPushButton(this);
@@ -34,6 +42,12 @@ ZInput::ZInput(QWidget* parent)
     password_btn_->setFlat(true);
     password_btn_->setCursor(Qt::PointingHandCursor);
     password_btn_->setVisible(false);
+    {
+        QPalette bp = password_btn_->palette();
+        bp.setColor(QPalette::ButtonText, QColor(0x90, 0x93, 0x99));
+        password_btn_->setPalette(bp);
+    }
+    password_btn_->installEventFilter(this);
 
     // Layout
     auto* lay = new QHBoxLayout(this);
@@ -57,12 +71,6 @@ ZInput::ZInput(QWidget* parent)
         edit_->setEchoMode(hidden ? QLineEdit::Normal : QLineEdit::Password);
         password_btn_->setText(hidden ? QString(QChar(0x25C9)) : QString(QChar(0x25CB)));
     });
-
-    // Set up default placeholder color style
-    // ponytail: minimal style to keep QLineEdit transparent
-    edit_->setStyleSheet(
-        "QLineEdit { background: transparent; border: none; }"
-    );
 
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     updateLayout();
@@ -124,6 +132,13 @@ void ZInput::updateClearButton()
     clear_btn_->setVisible(clearable_ && !edit_->text().isEmpty());
 }
 
+static void setBtnTextColor(QPushButton* btn, const QColor& c)
+{
+    QPalette bp = btn->palette();
+    bp.setColor(QPalette::ButtonText, c);
+    btn->setPalette(bp);
+}
+
 bool ZInput::eventFilter(QObject* obj, QEvent* event)
 {
     if (obj == edit_) {
@@ -133,6 +148,13 @@ bool ZInput::eventFilter(QObject* obj, QEvent* event)
         } else if (event->type() == QEvent::Leave) {
             hovered_ = false;
             update();
+        }
+    } else if (obj == clear_btn_ || obj == password_btn_) {
+        auto* btn = static_cast<QPushButton*>(obj);
+        if (event->type() == QEvent::Enter) {
+            setBtnTextColor(btn, theme::colorPrimary());
+        } else if (event->type() == QEvent::Leave) {
+            setBtnTextColor(btn, QColor(0x90, 0x93, 0x99));
         }
     }
     return QWidget::eventFilter(obj, event);
@@ -157,7 +179,7 @@ void ZInput::paintEvent(QPaintEvent*)
         border = theme::colorPrimary();
         // Focus glow ring
         QColor glow = theme::colorPrimary();
-        glow.setAlpha(38); // ~15% opacity to match Element Plus box-shadow
+        glow.setAlpha(38);
         QPainterPath glowPath;
         glowPath.addRoundedRect(QRectF(r).adjusted(-1.5, -1.5, 1.5, 1.5),
                                 radius + 2, radius + 2);
