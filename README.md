@@ -1,97 +1,108 @@
 # qt-elements
 
-A personal UI component library built with Qt5 native drawing (QPainter), visually matching [Element Plus](https://element-plus.org/) with pixel-level fidelity.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://en.cppreference.com/w/cpp/17)
+[![Qt 5.15](https://img.shields.io/badge/Qt-5.15-green.svg)](https://www.qt.io/)
+[![Platform: Windows](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)]()
 
-## Prerequisites
+A personal UI component library for Qt5, built entirely with native QPainter rendering. Every component is designed to visually match [Element Plus](https://element-plus.org/) with pixel-level fidelity — no QSS, no CSS, pure Qt native APIs.
 
-- **Visual Studio 2026** (Community) with C++ workload
-- **CMake** 4.0+
-- **Qt 5.15.18** via vcpkg (triplet: `x86-windows`)
-- **vcpkg** at `D:/code/github/vcpkg`
+## ✨ Why qt-elements?
 
-## Quick Start
+Most Qt custom widgets rely on stylesheets or hybrid approaches to achieve modern looks. qt-elements takes a different path: every pixel is drawn by `QPainter`, with exact color tokens sourced from Element Plus SCSS. The result is a component library that looks identical to Element Plus but runs natively in any Qt5 application.
+
+## 🧩 Components
+
+| Component | Description |
+|-----------|-------------|
+| **ZButton** | 6 types, 3 sizes, 5 variants (solid/plain/text/link/dashed), round, circle, loading, disabled |
+| **ZTag** | 5 types, 3 effects (light/dark/plain), 3 sizes, closable, round, hit |
+| **ZBadge** | 5 types, dot mode, max value display, hidden state |
+| **ZDivider** | Horizontal/vertical, solid/dashed/dotted, text with left/center/right positioning |
+| **ZLink** | 6 types, underline on hover/always, hover state, click signal |
+| **ZText** | 6 types, 3 sizes, text truncation |
+| **ZInput** | 3 sizes, clearable, password toggle, focus/hover states, custom border rendering |
+| **ZRadio** | Circular indicator with checked dot, hover/disabled states |
+| **ZCheckbox** | Square indicator with checkmark, hover/disabled states |
+| **ZSwitch** | Animated thumb slide (200ms InOutCubic), ON/OFF color states |
+| **ZSlider** | Horizontal slider with drag-to-value, configurable range |
+| **ZProgress** | Line bar + circle ring modes, 4 status colors, percentage text |
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- **Visual Studio 2026** (Community) — C++ desktop workload
+- **CMake 4.0+**
+- **Qt 5.15.18** — managed via [vcpkg](https://github.com/microsoft/vcpkg)
+- **vcpkg** root at `D:/code/github/vcpkg` (configurable in `CMakeLists.txt`)
+
+### Build
 
 ```powershell
-# Clone
-git clone <repo-url> qt-elements
+git clone https://github.com/zzlhyly/qt-elements.git
 cd qt-elements
 
-# Configure & Build
+# Configure (Win32)
 cmake -S coding -B build -G "Visual Studio 18 2026" -A Win32
+
+# Build
 cmake --build build --config Debug
 ```
 
-> **Note:** `debug/` is the Win32 (x86) build directory, not just a debug configuration.
+The built executable is at `build/product/uicontrols/uicontrols.exe`. Qt DLLs and plugins are auto-deployed by CMake.
 
-## Running
-
-Built executables are placed under `build/product/<project-name>/`. Qt DLLs and plugins are auto-deployed by CMake.
-
-A pre-deployed runnable exists at `build/product/uicontrols/uicontrols.exe`.
-
-## Components
-
-| Component | Status | Description |
-|-----------|--------|-------------|
-| ZButton | ✅ Done | Full Element Plus button: 6 types, 3 sizes, solid/plain/text variants, round/circle |
-| ZTag | ✅ Done | Full Element Plus tag: 5 types, 3 effects, 3 sizes, closable/round/hit |
-| ZBadge | ✅ Done | Badge with 5 types, dot mode, max value display |
-| ZDivider | ✅ Done | Horizontal/vertical divider with text, position, border styles |
-| ZLink | ✅ Done | Link with 6 types, hover state, underline, click signal |
-| ZText | ✅ Done | Text with 6 types, 3 sizes, truncation support |
-| ZInput | ✅ Done | Input with 3 sizes, clearable, password toggle, focus/hover states |
-| ZRadio | ✅ Done | Radio button with checked/hover/disabled states |
-| ZCheckbox | ✅ Done | Checkbox with checkmark, checked/hover/disabled states |
-| ZSwitch | ✅ Done | Toggle switch with animated thumb slide |
-| ZSlider | ✅ Done | Horizontal slider with drag-to-value |
-| ZProgress | ✅ Done | Line bar + circle ring progress, 4 status colors |
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 qt-elements/
-├── coding/                    # Source root (CMake entry point)
-│   ├── CMakeLists.txt         # Top-level CMake (vcpkg, Qt5 config)
-│   └── uicontrols/            # UI component library
+├── coding/                         # CMake source root
+│   ├── CMakeLists.txt              # Top-level: vcpkg, Qt5, compiler config
+│   └── uicontrols/                 # Component library
 │       ├── CMakeLists.txt
 │       └── src/
-│           ├── main.cpp
-│           ├── testwidget.h/cpp  # Component demo/showcase window
-│           └── button/
-│               ├── zbutton.h
-│               └── zbutton.cpp
-├── build/                     # Build directory (Win32, Debug)
-├── 3rd/Qt5/                   # Pre-built Qt5 binaries for deployment
-├── AGENTS.md                  # Agent/contributor quick reference
-├── README.md
-├── README_CN.md
-└── LICENSE
+│           ├── theme/theme.h       # Global color & size token system
+│           ├── testwidget.h/.cpp   # Component demo browser
+│           ├── button/             # ZButton
+│           ├── tag/                # ZTag
+│           ├── badge/              # ZBadge
+│           ├── divider/            # ZDivider
+│           ├── link/               # ZLink
+│           ├── text/               # ZText
+│           ├── input/              # ZInput
+│           ├── radio/              # ZRadio
+│           ├── checkbox/           # ZCheckbox
+│           ├── switch/             # ZSwitch
+│           ├── slider/             # ZSlider
+│           └── progress/           # ZProgress
+├── build/                          # Build output (Win32, Debug)
+├── scripts/                        # Utility scripts
+│   └── fix-encoding.ps1            # UTF-8 BOM + CRLF converter
+├── COMPONENTS.md                   # Tiered roadmap (40+ planned)
+├── AGENTS.md                       # Developer quick reference
+├── LICENSE                         # MIT
+└── README.md
 ```
 
-## Design
+## 🎨 Design Principles
 
-- Components use only Qt native APIs (QPainter, QStyle) — no QSS/CSS stylesheets
-- Design reference: [Element Plus](https://element-plus.org/en-US/component/button.html)
-- Each component lives in its own subdirectory under `src/<name>/`
+- **Zero QSS** — All visuals rendered with `QPainter`. No stylesheets, period.
+- **Element Plus fidelity** — Colors, sizes, states, and effects match the [official component docs](https://element-plus.org/zh-CN/component/button.html) pixel-for-pixel.
+- **Header-only theme** — `theme/theme.h` provides all color tokens and size specs. Every component references it — no duplicated color tables.
+- **Google C++ Style** — `trailing_underscore_` members, `kEnumValue` naming, `DIRNAME_FILENAME_H_` guards, all-lowercase filenames.
 
-## Code Style
-
-Follows [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html):
-- PascalCase class names, `trailing_underscore_` member variables
-- `k` prefix for enum values (`kPrimary`, `kLarge`)
-- `DIRNAME_FILENAME_H_` include guards
-- All-lowercase file names
-
-## Adding a New Component
+## 🛠 Adding a Component
 
 1. Create `coding/uicontrols/src/<name>/<name>.h` and `<name>.cpp`
-2. Add source files to `coding/uicontrols/CMakeLists.txt` `SRC_FILES`
-3. Add demo usage in `coding/uicontrols/src/testwidget.cpp`
+2. Add both files to `coding/uicontrols/CMakeLists.txt` under `SRC_FILES`
+3. Build a demo page function `createXxxPage()` in `testwidget.cpp`
+4. Register it in the sidebar and stacked widget in `TestWidget` constructor
+5. Update `COMPONENTS.md` and both READMEs
 
-## License
+## 📄 License
 
-[MIT](LICENSE)
+MIT — see [LICENSE](LICENSE) for details.
 
 ---
 
-[中文版](README_CN.md)
+[中文文档](README_CN.md)
