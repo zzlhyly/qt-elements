@@ -18,6 +18,9 @@
 #include "input/zinput.h"
 #include "radio/zradio.h"
 #include "checkbox/zcheckbox.h"
+#include "switch/zswitch.h"
+#include "slider/zslider.h"
+#include "progress/zprogress.h"
 
 static QLabel* sectionLabel(const QString& text)
 {
@@ -619,6 +622,135 @@ static QWidget* createCheckboxPage()
     return scroll;
 }
 
+static QWidget* createSwitchPage()
+{
+    auto* scroll = new QScrollArea();
+    scroll->setWidgetResizable(true);
+    scroll->setFrameShape(QFrame::NoFrame);
+
+    auto* content = new QWidget();
+    auto* layout = new QVBoxLayout(content);
+    layout->setSpacing(24);
+    layout->setContentsMargins(32, 24, 32, 24);
+
+    // Basic switches
+    layout->addWidget(sectionLabel("Switch — Basic"));
+    auto* row1 = new QHBoxLayout();
+    row1->setSpacing(16);
+    auto* sOff = new ZSwitch();
+    auto* sOn = new ZSwitch();  sOn->setChecked(true);
+    row1->addWidget(sOff);
+    row1->addWidget(sOn);
+    row1->addStretch();
+    layout->addLayout(row1);
+
+    // Disabled
+    layout->addWidget(sectionLabel("Switch — Disabled"));
+    auto* row2 = new QHBoxLayout();
+    row2->setSpacing(16);
+    auto* sdOff = new ZSwitch(); sdOff->setEnabled(false);
+    auto* sdOn  = new ZSwitch(); sdOn->setChecked(true); sdOn->setEnabled(false);
+    row2->addWidget(sdOff);
+    row2->addWidget(sdOn);
+    row2->addStretch();
+    layout->addLayout(row2);
+
+    layout->addStretch();
+    scroll->setWidget(content);
+    return scroll;
+}
+
+static QWidget* createSliderPage()
+{
+    auto* scroll = new QScrollArea();
+    scroll->setWidgetResizable(true);
+    scroll->setFrameShape(QFrame::NoFrame);
+
+    auto* content = new QWidget();
+    auto* layout = new QVBoxLayout(content);
+    layout->setSpacing(24);
+    layout->setContentsMargins(32, 24, 32, 24);
+
+    // Values
+    layout->addWidget(sectionLabel("Slider — Values"));
+    auto* sl0 = new ZSlider(); sl0->setValue(0);
+    auto* sl50 = new ZSlider(); sl50->setValue(50);
+    auto* sl100 = new ZSlider(); sl100->setValue(100);
+    layout->addWidget(sl0);
+    layout->addWidget(sl50);
+    layout->addWidget(sl100);
+
+    // Disabled
+    layout->addWidget(sectionLabel("Slider — Disabled"));
+    auto* sd = new ZSlider(); sd->setValue(60); sd->setEnabled(false);
+    layout->addWidget(sd);
+
+    layout->addStretch();
+    scroll->setWidget(content);
+    return scroll;
+}
+
+static QWidget* createProgressPage()
+{
+    auto* scroll = new QScrollArea();
+    scroll->setWidgetResizable(true);
+    scroll->setFrameShape(QFrame::NoFrame);
+
+    auto* content = new QWidget();
+    auto* layout = new QVBoxLayout(content);
+    layout->setSpacing(24);
+    layout->setContentsMargins(32, 24, 32, 24);
+
+    // Line: percentages
+    layout->addWidget(sectionLabel("Progress — Line"));
+    auto* p0 = new ZProgress(); p0->setPercentage(0);
+    auto* p50 = new ZProgress(); p50->setPercentage(50);
+    auto* p100 = new ZProgress(); p100->setPercentage(100);
+    layout->addWidget(p0);
+    layout->addWidget(p50);
+    layout->addWidget(p100);
+
+    // Line: status
+    layout->addWidget(sectionLabel("Progress — Status (Line)"));
+    auto* ps = new ZProgress(); ps->setPercentage(100); ps->setStatus(ZProgress::kSuccess);
+    auto* pe = new ZProgress(); pe->setPercentage(80);  pe->setStatus(ZProgress::kException);
+    auto* pw = new ZProgress(); pw->setPercentage(60);  pw->setStatus(ZProgress::kWarning);
+    layout->addWidget(ps);
+    layout->addWidget(pe);
+    layout->addWidget(pw);
+
+    // Circle
+    layout->addWidget(sectionLabel("Progress — Circle"));
+    auto* hr = new QHBoxLayout();
+    hr->setSpacing(16);
+    auto* pc0 = new ZProgress(); pc0->setType(ZProgress::kCircle); pc0->setPercentage(0);
+    auto* pc50 = new ZProgress(); pc50->setType(ZProgress::kCircle); pc50->setPercentage(50);
+    auto* pc100 = new ZProgress(); pc100->setType(ZProgress::kCircle); pc100->setPercentage(100);
+    pc100->setStatus(ZProgress::kSuccess);
+    hr->addWidget(pc0);
+    hr->addWidget(pc50);
+    hr->addWidget(pc100);
+    hr->addStretch();
+    layout->addLayout(hr);
+
+    // Circle: status
+    layout->addWidget(sectionLabel("Progress — Circle Status"));
+    auto* hr2 = new QHBoxLayout();
+    hr2->setSpacing(16);
+    auto* pcs = new ZProgress(); pcs->setType(ZProgress::kCircle); pcs->setPercentage(100); pcs->setStatus(ZProgress::kSuccess);
+    auto* pce = new ZProgress(); pce->setType(ZProgress::kCircle); pce->setPercentage(75);  pce->setStatus(ZProgress::kException);
+    auto* pcw = new ZProgress(); pcw->setType(ZProgress::kCircle); pcw->setPercentage(50);  pcw->setStatus(ZProgress::kWarning);
+    hr2->addWidget(pcs);
+    hr2->addWidget(pce);
+    hr2->addWidget(pcw);
+    hr2->addStretch();
+    layout->addLayout(hr2);
+
+    layout->addStretch();
+    scroll->setWidget(content);
+    return scroll;
+}
+
 TestWidget::TestWidget(QWidget* parent)
     : QWidget(parent)
 {
@@ -636,6 +768,9 @@ TestWidget::TestWidget(QWidget* parent)
     sidebar_->addItem("Input");
     sidebar_->addItem("Radio");
     sidebar_->addItem("Checkbox");
+    sidebar_->addItem("Switch");
+    sidebar_->addItem("Slider");
+    sidebar_->addItem("Progress");
     sidebar_->setFont(QFont("", 13));
     sidebar_->setFrameShape(QFrame::NoFrame);
     sidebar_->setSpacing(0);
@@ -658,6 +793,9 @@ TestWidget::TestWidget(QWidget* parent)
     stack_->addWidget(createInputPage());
     stack_->addWidget(createRadioPage());
     stack_->addWidget(createCheckboxPage());
+    stack_->addWidget(createSwitchPage());
+    stack_->addWidget(createSliderPage());
+    stack_->addWidget(createProgressPage());
 
     // Wire sidebar → stack
     QObject::connect(sidebar_, &QListWidget::currentRowChanged,

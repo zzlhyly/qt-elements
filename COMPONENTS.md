@@ -41,11 +41,11 @@ Element Plus 组件适配路线图，按 Tier 0-5 依赖关系排列。
 | [Input](https://element-plus.org/en-US/component/input.html) | 输入框 | 🔴 | ✅ | Theme, Icon | 8h |
 | [Radio](https://element-plus.org/en-US/component/radio.html) | 单选框 | 🔴 | ✅ | Theme | 3h |
 | [Checkbox](https://element-plus.org/en-US/component/checkbox.html) | 多选框 | 🔴 | ✅ | Theme | 3h |
-| [Switch](https://element-plus.org/en-US/component/switch.html) | 开关 | 🟡 | ⬜ | Theme | 3h |
-| [Slider](https://element-plus.org/en-US/component/slider.html) | 滑块 | 🟢 | ⬜ | Theme | 4h |
+| [Switch](https://element-plus.org/en-US/component/switch.html) | 开关 | 🟡 | ✅ | Theme | 3h |
+| [Slider](https://element-plus.org/en-US/component/slider.html) | 滑块 | 🟢 | ✅ | Theme | 4h |
 | [Rate](https://element-plus.org/en-US/component/rate.html) | 评分 | 🟢 | ⬜ | Theme, Icon | 3h |
 | [Upload](https://element-plus.org/en-US/component/upload.html) | 上传 | 🟡 | ⬜ | Button, Icon | 6h |
-| [Progress](https://element-plus.org/en-US/component/progress.html) | 进度条 | 🟢 | ⬜ | Theme | 2h |
+| [Progress](https://element-plus.org/en-US/component/progress.html) | 进度条 | 🟢 | ✅ | Theme | 2h |
 
 ## Tier 3 — Overlay System（浮层系统，依赖 Popup 定位引擎）
 

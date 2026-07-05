@@ -21,6 +21,12 @@ SET(SRC_FILES
     src/radio/zradio.h
     src/checkbox/zcheckbox.cpp
     src/checkbox/zcheckbox.h
+    src/switch/zswitch.cpp
+    src/switch/zswitch.h
+    src/slider/zslider.cpp
+    src/slider/zslider.h
+    src/progress/zprogress.cpp
+    src/progress/zprogress.h
     src/theme/theme.h
 )
 if(WIN32)
