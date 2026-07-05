@@ -17,7 +17,7 @@ public:
         f.setPixelSize(12);
         setFont(f);
         QFontMetrics fm(f);
-        int tw = fm.boundingRect(text_).width() + 16;  // 8px padding each side, boundingRect for accuracy
+        int tw = fm.horizontalAdvance(text_) + 12;  // 6px padding each side
         int w = qMin(tw, 260);
         if (tw > 260) wordWrap_ = true;
         int th = (wordWrap_ ? fm.height() * 2 + 14 : fm.height()) + 14 + 5;  // text + pad + arrow
