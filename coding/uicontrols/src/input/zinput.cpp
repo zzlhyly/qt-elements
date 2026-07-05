@@ -14,20 +14,19 @@ namespace {
 class HoverButton : public QPushButton {
 public:
     using QPushButton::QPushButton;
-    void setHoverColor(const QColor& c) { hover_color_ = c; }
-    void setNormalColor(const QColor& c) { normal_color_ = c; update(); }
 protected:
     void paintEvent(QPaintEvent*) override {
         QPainter p(this);
-        p.setPen(underMouse() ? hover_color_ : normal_color_);
+        p.setPen(hovered_ ? hover_color_ : normal_color_);
         p.setFont(font());
         p.drawText(rect(), Qt::AlignCenter, text());
     }
-    void enterEvent(QEvent*) override { update(); }
-    void leaveEvent(QEvent*) override { update(); }
+    void enterEvent(QEvent*) override { hovered_ = true; update(); }
+    void leaveEvent(QEvent*) override { hovered_ = false; update(); }
 private:
     QColor normal_color_ = QColor(0x90, 0x93, 0x99);
     QColor hover_color_ = QColor(0x40, 0x9e, 0xff);
+    bool hovered_ = false;
 };
 
 } // namespace
