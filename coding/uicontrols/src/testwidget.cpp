@@ -1,7 +1,7 @@
 ﻿#include "testwidget.h"
 
 #include <QFrame>
-#include <QGridLayout>
+#include <QButtonGroup>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QListWidget>
@@ -564,12 +564,16 @@ static QWidget* createRadioPage()
 
     // Radio group
     layout->addWidget(sectionLabel("Radio — Group"));
+    auto* radioGroup = new QButtonGroup(content);
     auto* group1 = new QHBoxLayout();
     group1->setSpacing(16);
     auto* r1 = new ZRadio("Option A");
     auto* r2 = new ZRadio("Option B");
     auto* r3 = new ZRadio("Option C");
     r1->setChecked(true);
+    radioGroup->addButton(r1);
+    radioGroup->addButton(r2);
+    radioGroup->addButton(r3);
     group1->addWidget(r1);
     group1->addWidget(r2);
     group1->addWidget(r3);
