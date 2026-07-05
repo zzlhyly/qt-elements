@@ -87,35 +87,76 @@ TestWidget::TestWidget(QWidget* parent)
     row4->addStretch();
     mainLayout->addLayout(row4);
 
-    // --- Row 5: Round buttons ---
-    mainLayout->addWidget(sectionLabel("Round Buttons"));
+    // --- Row 5: Link variant ---
+    mainLayout->addWidget(sectionLabel("Link Variant"));
     auto* row5 = new QHBoxLayout();
     row5->setSpacing(12);
     for (int i = 0; i < 6; ++i) {
         auto* btn = new ZButton(typeNames[i]);
         btn->setButtonType(types[i]);
-        btn->setRound(true);
+        btn->setButtonVariant(ZButton::kLink);
         row5->addWidget(btn);
     }
     row5->addStretch();
     mainLayout->addLayout(row5);
 
-    // --- Row 6: Disabled ---
-    mainLayout->addWidget(sectionLabel("Disabled"));
+    // --- Row 6: Round buttons ---
+    mainLayout->addWidget(sectionLabel("Round Buttons"));
     auto* row6 = new QHBoxLayout();
     row6->setSpacing(12);
+    for (int i = 0; i < 6; ++i) {
+        auto* btn = new ZButton(typeNames[i]);
+        btn->setButtonType(types[i]);
+        btn->setRound(true);
+        row6->addWidget(btn);
+    }
+    row6->addStretch();
+    mainLayout->addLayout(row6);
+
+    // --- Row 7: Dashed variant ---
+    mainLayout->addWidget(sectionLabel("Dashed Variant"));
+    auto* row7 = new QHBoxLayout();
+    row7->setSpacing(12);
+    for (int i = 0; i < 5; ++i) {
+        auto* btn = new ZButton(plainNames[i]);
+        btn->setButtonType(plainTypes[i]);
+        btn->setButtonVariant(ZButton::kDashed);
+        row7->addWidget(btn);
+    }
+    row7->addStretch();
+    mainLayout->addLayout(row7);
+
+    // --- Row 8: Disabled ---
+    mainLayout->addWidget(sectionLabel("Disabled"));
+    auto* row8 = new QHBoxLayout();
+    row8->setSpacing(12);
     auto* d1 = new ZButton("Default");  d1->setEnabled(false);
     auto* d2 = new ZButton("Primary");  d2->setButtonType(ZButton::kPrimary); d2->setEnabled(false);
     auto* d3 = new ZButton("Success");  d3->setButtonType(ZButton::kSuccess); d3->setEnabled(false);
     auto* d4 = new ZButton("Plain");    d4->setButtonType(ZButton::kPrimary); d4->setButtonVariant(ZButton::kPlain); d4->setEnabled(false);
     auto* d5 = new ZButton("Text");     d5->setButtonType(ZButton::kDanger);  d5->setButtonVariant(ZButton::kText);  d5->setEnabled(false);
-    row6->addWidget(d1);
-    row6->addWidget(d2);
-    row6->addWidget(d3);
-    row6->addWidget(d4);
-    row6->addWidget(d5);
-    row6->addStretch();
-    mainLayout->addLayout(row6);
+    row8->addWidget(d1);
+    row8->addWidget(d2);
+    row8->addWidget(d3);
+    row8->addWidget(d4);
+    row8->addWidget(d5);
+    row8->addStretch();
+    mainLayout->addLayout(row8);
+
+    // --- Row 9: Loading buttons ---
+    mainLayout->addWidget(sectionLabel("Loading"));
+    auto* row9 = new QHBoxLayout();
+    row9->setSpacing(12);
+    auto* ld1 = new ZButton("Primary"); ld1->setButtonType(ZButton::kPrimary); ld1->setLoading(true);
+    auto* ld2 = new ZButton("Success"); ld2->setButtonType(ZButton::kSuccess); ld2->setLoading(true);
+    auto* ld3 = new ZButton("Plain");   ld3->setButtonType(ZButton::kPrimary); ld3->setButtonVariant(ZButton::kPlain); ld3->setLoading(true);
+    auto* ld4 = new ZButton("Text");    ld4->setButtonType(ZButton::kDanger);  ld4->setButtonVariant(ZButton::kText);  ld4->setLoading(true);
+    row9->addWidget(ld1);
+    row9->addWidget(ld2);
+    row9->addWidget(ld3);
+    row9->addWidget(ld4);
+    row9->addStretch();
+    mainLayout->addLayout(row9);
 
     // --- ZTag Section ---
     mainLayout->addWidget(sectionLabel("Tags — All Types (Light)"));
@@ -123,8 +164,8 @@ TestWidget::TestWidget(QWidget* parent)
     // Row 7: Tag types
     auto* tagRow1 = new QHBoxLayout();
     tagRow1->setSpacing(12);
-    const char* tagTypeNames[] = { "Default", "Success", "Info", "Warning", "Danger" };
-    ZTag::TagType tagTypes[] = { ZTag::kDefault, ZTag::kSuccess, ZTag::kInfo, ZTag::kWarning, ZTag::kDanger };
+    const char* tagTypeNames[] = { "Primary", "Success", "Info", "Warning", "Danger" };
+    ZTag::TagType tagTypes[] = { ZTag::kPrimary, ZTag::kSuccess, ZTag::kInfo, ZTag::kWarning, ZTag::kDanger };
     for (int i = 0; i < 5; ++i) {
         auto* tag = new ZTag(tagTypeNames[i]);
         tag->setTagType(tagTypes[i]);
@@ -154,7 +195,7 @@ TestWidget::TestWidget(QWidget* parent)
     auto* tagMd = new ZTag("Medium");   tagMd->setTagType(ZTag::kWarning); tagMd->setTagSize(ZTag::kMedium);
     auto* tagSm = new ZTag("Small");    tagSm->setTagType(ZTag::kWarning); tagSm->setTagSize(ZTag::kSmall);
     auto* tagRd = new ZTag("Round");    tagRd->setTagType(ZTag::kDanger);   tagRd->setRound(true);
-    auto* tagHit = new ZTag("Hit");     tagHit->setTagType(ZTag::kDefault); tagHit->setHit(true);
+    auto* tagHit = new ZTag("Hit");     tagHit->setTagType(ZTag::kPrimary); tagHit->setHit(true);
     tagRow3->addWidget(tagLg);
     tagRow3->addWidget(tagMd);
     tagRow3->addWidget(tagSm);

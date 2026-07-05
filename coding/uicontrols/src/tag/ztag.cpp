@@ -11,32 +11,32 @@
 // Plain: white bg + type-color text + type-color border
 
 static const QColor tagBgLight[5] = {
-    {0xec, 0xf5, 0xff},  // default (same as primary-light-9)
+    {0xec, 0xf5, 0xff},  // primary
     {0xf5, 0xfa, 0xed},  // success
+    {0xf8, 0xf9, 0xfa},  // info
     {0xfd, 0xf8, 0xde},  // warning
     {0xfe, 0xf5, 0xf5},  // danger
-    {0xf8, 0xf9, 0xfa},  // info
 };
 
 // Element Plus Tag: default light uses info colors for text
 static const QColor tagTextLight[5] = {
-    {0x90, 0x93, 0x99},  // default: info color
-    {0x67, 0xc2, 0x3a},  // success
-    {0xe6, 0xa2, 0x3c},  // warning
-    {0xf5, 0x6c, 0x6c},  // danger
-    {0x90, 0x93, 0x99},  // info
+    {0x40, 0x9e, 0xff},  // primary: blue
+    {0x67, 0xc2, 0x3a},  // success: green
+    {0x90, 0x93, 0x99},  // info: grey
+    {0xe6, 0xa2, 0x3c},  // warning: orange
+    {0xf5, 0x6c, 0x6c},  // danger: red
 };
 
 static const QColor tagBgDark[5] = {
-    {0x90, 0x93, 0x99},  // default: info bg
-    {0x67, 0xc2, 0x3a},  // success
-    {0xe6, 0xa2, 0x3c},  // warning
-    {0xf5, 0x6c, 0x6c},  // danger
-    {0x90, 0x93, 0x99},  // info
+    {0x40, 0x9e, 0xff},  // primary: blue
+    {0x67, 0xc2, 0x3a},  // success: green
+    {0x90, 0x93, 0x99},  // info: grey
+    {0xe6, 0xa2, 0x3c},  // warning: orange
+    {0xf5, 0x6c, 0x6c},  // danger: red
 };
 
-// Tag-specific: kDefault type in dark mode uses info bg, but in light uses info text
-// This matches Element Plus where default Tag uses info color scheme
+// Tag color tables: ordered [kPrimary, kSuccess, kInfo, kWarning, kDanger]
+// This matches Element Plus where Tag types use their corresponding colors
 
 ZTag::ZTag(QWidget* parent)
     : QWidget(parent)

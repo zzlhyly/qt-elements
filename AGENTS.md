@@ -31,7 +31,8 @@ cmake --build build --config Debug
 ## Design
 
 - 组件开发仅使用 Qt 原生 API（QPainter、QStyle），不依赖 QSS 外部样式表
-- 设计参考：Element Plus 官方文档 https://element-plus.org/en-US/component/button.html
+- 设计参考：Element Plus 官方文档 https://element-plus.org/zh-CN/component/button.html
+- 后续所有新组件均从此站点获取对标的 API、视觉效果、状态定义
 - 每个组件独立在一个子目录（如 `src/button/`），含 `.h`/`.cpp`
 
 ## Code style

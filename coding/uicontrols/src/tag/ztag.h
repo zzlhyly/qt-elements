@@ -8,7 +8,7 @@ class ZTag : public QWidget
     Q_OBJECT
 
 public:
-    enum TagType { kDefault, kSuccess, kInfo, kWarning, kDanger };
+    enum TagType { kPrimary, kSuccess, kInfo, kWarning, kDanger };
     enum TagEffect { kLight, kDark, kPlain };
     enum TagSize { kLarge, kMedium, kSmall };
 
@@ -52,7 +52,7 @@ private:
     QColor borderColor() const;
     QRect closeButtonRect() const;
 
-    TagType type_ = kDefault;
+    TagType type_ = kPrimary;
     TagEffect effect_ = kLight;
     TagSize size_ = kMedium;
     QString text_;

@@ -6,6 +6,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPainterPath>
+#include <QTimerEvent>
 
 // --- Color tables: [ButtonType][state 0=normal,1=hover,2=pressed,3=disabled] ---
 
@@ -65,6 +66,16 @@ static const QColor textVarText[6] = {
     {0x60,0x62,0x66}, {0x40,0x9e,0xff}, {0x67,0xc2,0x3a}, {0xe6,0xa2,0x3c}, {0xf5,0x6c,0x6c}, {0x90,0x93,0x99}
 };
 
+// Link variant colors per type: [normal, hover]
+static const QColor linkText[6][2] = {
+    { {0x60,0x62,0x66}, {0x90,0x93,0x99} },  // Default
+    { {0x40,0x9e,0xff}, {0x66,0xb1,0xff} },  // Primary
+    { {0x67,0xc2,0x3a}, {0x85,0xce,0x61} },  // Success
+    { {0xe6,0xa2,0x3c}, {0xeb,0xb5,0x63} },  // Warning
+    { {0xf5,0x6c,0x6c}, {0xf7,0x89,0x89} },  // Danger
+    { {0x90,0x93,0x99}, {0xa6,0xa9,0xad} },  // Info
+};
+
 ZButton::ZButton(QWidget* parent)
     : QAbstractButton(parent)
 {
@@ -87,6 +98,32 @@ void ZButton::setButtonSize(ButtonSize size)   { size_ = size; updateGeometry();
 void ZButton::setButtonVariant(ButtonVariant v) { variant_ = v; update(); }
 void ZButton::setRound(bool r)                 { round_ = r; update(); }
 void ZButton::setCircle(bool c)                { circle_ = c; updateGeometry(); update(); }
+void ZButton::setLoading(bool loading)
+{
+    if (loading_ == loading) return;
+    loading_ = loading;
+    if (loading_) {
+        loading_angle_ = 0;
+        loading_timer_id_ = startTimer(50);
+    } else {
+        if (loading_timer_id_) {
+            killTimer(loading_timer_id_);
+            loading_timer_id_ = 0;
+        }
+    }
+    update();
+}
+bool ZButton::isLoading() const                      { return loading_; }
+
+void ZButton::timerEvent(QTimerEvent* e)
+{
+    if (e->timerId() == loading_timer_id_) {
+        loading_angle_ = (loading_angle_ + 30) % 360;
+        update();
+        return;
+    }
+    QWidget::timerEvent(e);
+}
 
 ZButton::ButtonType ZButton::buttonType() const     { return type_; }
 ZButton::ButtonSize ZButton::buttonSize() const      { return size_; }
@@ -113,6 +150,8 @@ qreal ZButton::borderRadius() const
 
 QColor ZButton::bgColor() const
 {
+    if (variant_ == kLink) return Qt::transparent;
+
     if (variant_ == kText) {
         if (!isEnabled()) return Qt::transparent;
         if (isDown()) return QColor(0xf0, 0xf2, 0xf5);
@@ -127,9 +166,8 @@ QColor ZButton::bgColor() const
         return solidBg[type_][si];
     }
 
-    // Plain
+    // Plain / Dashed
     if (type_ == kDefault) {
-        // plain default uses solid default bg
         return solidBg[0][si];
     }
     return plainBg[type_ - 1][si];
@@ -137,6 +175,11 @@ QColor ZButton::bgColor() const
 
 QColor ZButton::textColor() const
 {
+    if (variant_ == kLink) {
+        if (!isEnabled()) return QColor(0xc0, 0xc4, 0xcc);
+        return linkText[type_][hovered_ ? 1 : 0];
+    }
+
     if (variant_ == kText) {
         if (!isEnabled()) return QColor(0xc0, 0xc4, 0xcc);
         return textVarText[type_];
@@ -149,14 +192,14 @@ QColor ZButton::textColor() const
         return solidText[type_][si];
     }
 
-    // Plain
+    // Plain / Dashed
     if (type_ == kDefault) return solidText[0][si];
     return plainText[type_ - 1][si];
 }
 
 QColor ZButton::borderColor() const
 {
-    if (variant_ == kText) return Qt::transparent;
+    if (variant_ == kLink || variant_ == kText) return Qt::transparent;
 
     int si = !isEnabled() ? 3 : isDown() ? 2 : hovered_ ? 1 : 0;
 
@@ -165,7 +208,7 @@ QColor ZButton::borderColor() const
         return solidBorder[type_][si];
     }
 
-    // Plain
+    // Plain / Dashed
     if (type_ == kDefault) return solidBorder[0][si];
     return plainBorder[type_ - 1][si];
 }
@@ -233,17 +276,39 @@ void ZButton::paintEvent(QPaintEvent*)
     QColor bg = bgColor();
     QColor bc = borderColor();
 
-    if (variant_ == kText) {
-        // Text variant: fill only, no border
+    if (variant_ == kText || variant_ == kLink) {
+        // Text/Link variant: fill only, no border
         p.fillPath(path, bg);
     } else {
-        p.setPen(QPen(bc, bw));
+        QPen pen(bc, bw);
+        if (variant_ == kDashed) pen.setStyle(Qt::DashLine);
+        p.setPen(pen);
         p.setBrush(bg);
         p.drawPath(path);
     }
 
     // Content
     QColor tc = textColor();
+
+    if (loading_) {
+        // Semi-transparent white overlay
+        p.fillRect(r, QColor(255, 255, 255, 76));
+
+        // Spinning arc
+        int arcRadius = qMax(6, s.height / 4);
+        QPen arcPen(tc, 2);
+        arcPen.setCapStyle(Qt::RoundCap);
+        p.setPen(arcPen);
+        p.setBrush(Qt::NoBrush);
+
+        QRect arcRect(r.center().x() - arcRadius, r.center().y() - arcRadius,
+                      arcRadius * 2, arcRadius * 2);
+        p.drawArc(arcRect, loading_angle_ * 16, 300 * 16);
+
+        p.setPen(Qt::NoPen);
+        return;
+    }
+
     p.setPen(tc);
 
     bool hasIcon = !icon().isNull();
@@ -299,12 +364,14 @@ void ZButton::focusInEvent(QFocusEvent* e)
 
 void ZButton::mousePressEvent(QMouseEvent* e)
 {
+    if (loading_) return;
     focus_keyboard_ = false;
     QAbstractButton::mousePressEvent(e);
 }
 
 void ZButton::keyPressEvent(QKeyEvent* e)
 {
+    if (loading_) return;
     if (e->key() == Qt::Key_Space || e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) {
         click();
         return;

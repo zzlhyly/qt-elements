@@ -10,7 +10,7 @@ class ZButton : public QAbstractButton
 public:
     enum ButtonType { kDefault, kPrimary, kSuccess, kWarning, kDanger, kInfo };
     enum ButtonSize { kLarge, kMedium, kSmall };
-    enum ButtonVariant { kSolid, kPlain, kText };
+    enum ButtonVariant { kSolid, kPlain, kText, kLink, kDashed };
 
     explicit ZButton(QWidget* parent = nullptr);
     ZButton(const QString& text, QWidget* parent = nullptr);
@@ -20,6 +20,8 @@ public:
     void setButtonVariant(ButtonVariant variant);
     void setRound(bool round);
     void setCircle(bool circle);
+    void setLoading(bool loading);
+    bool isLoading() const;
 
     ButtonType buttonType() const;
     ButtonSize buttonSize() const;
@@ -32,6 +34,7 @@ public:
 
 protected:
     void paintEvent(QPaintEvent*) override;
+    void timerEvent(QTimerEvent*) override;
     void enterEvent(QEvent*) override;
     void leaveEvent(QEvent*) override;
     void focusInEvent(QFocusEvent*) override;
@@ -48,6 +51,9 @@ private:
     QColor borderColor() const;
 
     ButtonType type_ = kDefault;
+    bool loading_ = false;
+    int loading_timer_id_ = 0;
+    int loading_angle_ = 0;
     ButtonSize size_ = kMedium;
     ButtonVariant variant_ = kSolid;
     bool round_ = false;
