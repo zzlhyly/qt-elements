@@ -167,15 +167,17 @@ void ZTag::paintEvent(QPaintEvent*)
         p.drawPath(path);
     }
 
-    // Text
+    // Text — centered in available space (excluding close button area)
     p.setPen(textColor());
     QFontMetrics fm(f);
-    int textW = fm.horizontalAdvance(text());
-    int availableW = r.width() - s.padH * 2;
-    if (closable_) availableW -= s.closeSize + s.closeMargin;
+    QRect textRect = r;
+    if (closable_) {
+        textRect.setRight(r.right() - s.closeSize - s.closeMargin);
+    }
 
+    int availableW = textRect.width() - s.padH * 2;
     QString displayText = fm.elidedText(text(), Qt::ElideRight, availableW);
-    p.drawText(r, Qt::AlignCenter, displayText);
+    p.drawText(textRect, Qt::AlignCenter, displayText);
 
     // Close button
     if (closable_) {
