@@ -42,9 +42,9 @@ A pre-deployed runnable exists at `build/product/uicontrols/uicontrols.exe`.
 | ZInput | ✅ Done | Input with 3 sizes, clearable, password toggle, focus/hover states |
 | ZRadio | ✅ Done | Radio button with checked/hover/disabled states |
 | ZCheckbox | ✅ Done | Checkbox with checkmark, checked/hover/disabled states |
-| ZSwitch | ✅ Done | Toggle switch with smooth thumb animation, disabled state |
-| ZSlider | ✅ Done | Horizontal slider with mouse drag, value range, disabled state |
-| ZProgress | ✅ Done | Line and circle progress bar, 4 status colors, percentage text |
+| ZSwitch | ✅ Done | Toggle switch with animated thumb slide |
+| ZSlider | ✅ Done | Horizontal slider with drag-to-value |
+| ZProgress | ✅ Done | Line bar + circle ring progress, 4 status colors |
 
 ## Project Structure
 
