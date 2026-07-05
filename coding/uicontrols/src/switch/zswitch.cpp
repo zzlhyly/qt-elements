@@ -30,9 +30,19 @@ void ZSwitch::setOffset(qreal o)
 void ZSwitch::nextCheckState()
 {
     setChecked(!isChecked());
+    anim_->stop();
     anim_->setStartValue(offset_);
     anim_->setEndValue(isChecked() ? 1.0 : 0.0);
     anim_->start();
+}
+
+void ZSwitch::checkStateSet()
+{
+    // Snap offset without animation when checked state changes programmatically
+    anim_->stop();
+    offset_ = isChecked() ? 1.0 : 0.0;
+    update();
+    QAbstractButton::checkStateSet();
 }
 
 void ZSwitch::paintEvent(QPaintEvent*)

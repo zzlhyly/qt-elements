@@ -37,6 +37,7 @@ static QWidget* createButtonPage()
     auto* scroll = new QScrollArea();
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
+    scroll->viewport()->setAutoFillBackground(false);
 
     auto* content = new QWidget();
     auto* mainLayout = new QVBoxLayout(content);
@@ -180,6 +181,7 @@ static QWidget* createTagPage()
     auto* scroll = new QScrollArea();
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
+    scroll->viewport()->setAutoFillBackground(false);
 
     auto* content = new QWidget();
     auto* mainLayout = new QVBoxLayout(content);
@@ -255,6 +257,7 @@ static QWidget* createBadgePage()
     auto* scroll = new QScrollArea();
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
+    scroll->viewport()->setAutoFillBackground(false);
 
     auto* content = new QWidget();
     auto* mainLayout = new QVBoxLayout(content);
@@ -323,6 +326,7 @@ static QWidget* createDividerPage()
     auto* scroll = new QScrollArea();
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
+    scroll->viewport()->setAutoFillBackground(false);
 
     auto* content = new QWidget();
     auto* mainLayout = new QVBoxLayout(content);
@@ -382,6 +386,7 @@ static QWidget* createLinkPage()
     auto* scroll = new QScrollArea();
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
+    scroll->viewport()->setAutoFillBackground(false);
 
     auto* content = new QWidget();
     auto* mainLayout = new QVBoxLayout(content);
@@ -439,6 +444,7 @@ static QWidget* createTextPage()
     auto* scroll = new QScrollArea();
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
+    scroll->viewport()->setAutoFillBackground(false);
 
     auto* content = new QWidget();
     auto* layout = new QVBoxLayout(content);
@@ -491,6 +497,7 @@ static QWidget* createInputPage()
     auto* scroll = new QScrollArea();
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
+    scroll->viewport()->setAutoFillBackground(false);
 
     auto* content = new QWidget();
     auto* layout = new QVBoxLayout(content);
@@ -548,6 +555,7 @@ static QWidget* createRadioPage()
     auto* scroll = new QScrollArea();
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
+    scroll->viewport()->setAutoFillBackground(false);
 
     auto* content = new QWidget();
     auto* layout = new QVBoxLayout(content);
@@ -589,6 +597,7 @@ static QWidget* createCheckboxPage()
     auto* scroll = new QScrollArea();
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
+    scroll->viewport()->setAutoFillBackground(false);
 
     auto* content = new QWidget();
     auto* layout = new QVBoxLayout(content);
@@ -627,6 +636,7 @@ static QWidget* createSwitchPage()
     auto* scroll = new QScrollArea();
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
+    scroll->viewport()->setAutoFillBackground(false);
 
     auto* content = new QWidget();
     auto* layout = new QVBoxLayout(content);
@@ -665,6 +675,7 @@ static QWidget* createSliderPage()
     auto* scroll = new QScrollArea();
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
+    scroll->viewport()->setAutoFillBackground(false);
 
     auto* content = new QWidget();
     auto* layout = new QVBoxLayout(content);
@@ -695,6 +706,7 @@ static QWidget* createProgressPage()
     auto* scroll = new QScrollArea();
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
+    scroll->viewport()->setAutoFillBackground(false);
 
     auto* content = new QWidget();
     auto* layout = new QVBoxLayout(content);
@@ -755,6 +767,12 @@ TestWidget::TestWidget(QWidget* parent)
     : QWidget(parent)
 {
     setMinimumSize(900, 600);
+    setAutoFillBackground(true);
+    {
+        QPalette pal = palette();
+        pal.setColor(QPalette::Window, QColor(0xf5, 0xf7, 0xfa));
+        setPalette(pal);
+    }
 
     // Sidebar
     sidebar_ = new QListWidget();
