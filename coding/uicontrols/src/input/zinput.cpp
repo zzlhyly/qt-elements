@@ -47,7 +47,7 @@ ZInput::ZInput(QWidget* parent)
     setFocusProxy(edit_);  // click anywhere on ZInput → focus inner QLineEdit
 
     // Clear button
-    clear_btn_ = new HoverButton(QString(QChar(0x00D7)), this);
+    clear_btn_ = new HoverButton(QString(theme::icon::close()), this);
     clear_btn_->setFixedSize(16, 16);
     clear_btn_->setFlat(true);
     clear_btn_->setCursor(Qt::PointingHandCursor);
@@ -80,7 +80,7 @@ ZInput::ZInput(QWidget* parent)
     connect(password_btn_, &QPushButton::clicked, this, [this]() {
         bool hidden = (edit_->echoMode() == QLineEdit::Password);
         edit_->setEchoMode(hidden ? QLineEdit::Normal : QLineEdit::Password);
-        password_btn_->setText(hidden ? QString(QChar(0x25C9)) : QString(QChar(0x25CB)));
+        password_btn_->setText(hidden ? QString(theme::icon::eye()) : QString(theme::icon::eyeSlash()));
     });
 
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -111,7 +111,7 @@ void ZInput::setPasswordMode(bool password)
     password_btn_->setVisible(password_mode_);
     if (password_mode_) {
         edit_->setEchoMode(QLineEdit::Password);
-        password_btn_->setText(QString(QChar(0x25CB))); // ○ show
+        password_btn_->setText(QString(theme::icon::eyeSlash())); // ○ show
     } else {
         edit_->setEchoMode(QLineEdit::Normal);
     }

@@ -2,6 +2,7 @@
 #define CODING_UICONTROLS_SRC_THEME_THEME_H_
 
 #include <QColor>
+#include "theme/icon.h"
 
 namespace theme {
 

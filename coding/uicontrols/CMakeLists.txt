@@ -27,6 +27,8 @@ SET(SRC_FILES
     src/slider/zslider.h
     src/progress/zprogress.cpp
     src/progress/zprogress.h
+    src/alert/zalert.cpp
+    src/alert/zalert.h
     src/theme/theme.h
 )
 if(WIN32)

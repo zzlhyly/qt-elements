@@ -156,7 +156,7 @@ void ZTag::paintEvent(QPaintEvent*)
         cf.setWeight(QFont::Normal);
         p.setFont(cf);
         p.setPen(closeColor);
-        p.drawText(cb, Qt::AlignCenter, QString(QChar(0x00D7)));
+        p.drawText(cb, Qt::AlignCenter, QString(theme::icon::close()));
     }
 }
 

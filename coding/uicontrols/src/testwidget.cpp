@@ -21,6 +21,7 @@
 #include "switch/zswitch.h"
 #include "slider/zslider.h"
 #include "progress/zprogress.h"
+#include "alert/zalert.h"
 
 static QLabel* sectionLabel(const QString& text)
 {
@@ -767,6 +768,54 @@ static QWidget* createProgressPage()
     return scroll;
 }
 
+static QWidget* createAlertPage()
+{
+    auto* scroll = new QScrollArea();
+    scroll->setWidgetResizable(true);
+    scroll->setFrameShape(QFrame::NoFrame);
+    scroll->viewport()->setAutoFillBackground(false);
+
+    auto* content = new QWidget();
+    auto* layout = new QVBoxLayout(content);
+    layout->setSpacing(24);
+    layout->setContentsMargins(32, 24, 32, 24);
+
+    // Types — light effect
+    layout->addWidget(sectionLabel("Alert — Light Effect"));
+    layout->addWidget(new ZAlert("Success alert text", ZAlert::kSuccess));
+    layout->addWidget(new ZAlert("Info alert text"));
+    layout->addWidget(new ZAlert("Warning alert text", ZAlert::kWarning));
+    layout->addWidget(new ZAlert("Error alert text", ZAlert::kError));
+
+    // Dark effect
+    layout->addWidget(sectionLabel("Alert — Dark Effect"));
+    auto* ad1 = new ZAlert("Success dark", ZAlert::kSuccess); ad1->setEffect(ZAlert::kDark);
+    auto* ad2 = new ZAlert("Info dark", ZAlert::kInfo);       ad2->setEffect(ZAlert::kDark);
+    auto* ad3 = new ZAlert("Warning dark", ZAlert::kWarning); ad3->setEffect(ZAlert::kDark);
+    auto* ad4 = new ZAlert("Error dark", ZAlert::kError);     ad4->setEffect(ZAlert::kDark);
+    layout->addWidget(ad1);
+    layout->addWidget(ad2);
+    layout->addWidget(ad3);
+    layout->addWidget(ad4);
+
+    // Closable
+    layout->addWidget(sectionLabel("Alert — Closable"));
+    auto* ac = new ZAlert("Click × to close this alert", ZAlert::kSuccess);
+    ac->setClosable(true);
+    QObject::connect(ac, &ZAlert::closed, ac, &QWidget::hide);
+    layout->addWidget(ac);
+
+    // No icon
+    layout->addWidget(sectionLabel("Alert — No Icon"));
+    auto* ani = new ZAlert("This alert has no icon", ZAlert::kWarning);
+    ani->setShowIcon(false);
+    layout->addWidget(ani);
+
+    layout->addStretch();
+    scroll->setWidget(content);
+    return scroll;
+}
+
 TestWidget::TestWidget(QWidget* parent)
     : QWidget(parent)
 {
@@ -793,6 +842,7 @@ TestWidget::TestWidget(QWidget* parent)
     sidebar_->addItem("Switch");
     sidebar_->addItem("Slider");
     sidebar_->addItem("Progress");
+    sidebar_->addItem("Alert");
     sidebar_->setFont(QFont("", 13));
     sidebar_->setFrameShape(QFrame::NoFrame);
     sidebar_->setSpacing(0);
@@ -818,6 +868,7 @@ TestWidget::TestWidget(QWidget* parent)
     stack_->addWidget(createSwitchPage());
     stack_->addWidget(createSliderPage());
     stack_->addWidget(createProgressPage());
+    stack_->addWidget(createAlertPage());
 
     // Wire sidebar → stack
     QObject::connect(sidebar_, &QListWidget::currentRowChanged,

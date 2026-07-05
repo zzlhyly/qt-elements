@@ -19,7 +19,7 @@ Element Plus 组件适配路线图，按 Tier 0-5 依赖关系排列。
 | 组件 | 参考 | 优先级 | 状态 | 依赖 | 预估 |
 |------|------|--------|------|------|------|
 | Theme System (色彩/尺寸令牌) | — | 🔴 | ✅ | — | 2h |
-| Icon System | — | 🟡 | ⬜ | — | 2h |
+| Icon System | — | 🟡 | ✅ | — | 2h |
 
 ## Tier 1 — Simple Leaf（简单叶节点，无依赖或仅依赖 Theme）
 
@@ -32,6 +32,7 @@ Element Plus 组件适配路线图，按 Tier 0-5 依赖关系排列。
 | [Link](https://element-plus.org/en-US/component/link.html) | 链接 | 🟢 | ✅ | — | 1h |
 | [Text](https://element-plus.org/en-US/component/text.html) | 文本 | 🟢 | ✅ | — | 1h |
 | [Alert](https://element-plus.org/en-US/component/alert.html) | 警告 | 🟡 | ⬜ | Theme, Icon | 2h |
+| [Alert](https://element-plus.org/en-US/component/alert.html) | 警告 | 🟡 | ✅ | Theme, Icon | 2h |
 | [Avatar](https://element-plus.org/en-US/component/avatar.html) | 头像 | 🟢 | ⬜ | Theme | 1.5h |
 
 ## Tier 2 — Core Form（核心表单，依赖 Theme + Icon）

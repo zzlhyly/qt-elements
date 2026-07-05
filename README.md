@@ -27,6 +27,7 @@ Most Qt custom widgets rely on stylesheets or hybrid approaches to achieve moder
 | **ZSwitch** | Animated thumb slide (200ms InOutCubic), ON/OFF color states |
 | **ZSlider** | Horizontal slider with drag-to-value, configurable range |
 | **ZProgress** | Line bar + circle ring modes, 4 status colors, percentage text |
+| **ZAlert** | 4 types, light/dark effects, closable, icon toggle |
 
 ## 🚀 Quick Start
 
