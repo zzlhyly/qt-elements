@@ -22,14 +22,13 @@ void ZButton::setButtonSize(ButtonSize size)
     case ZButton::BS_Large:
         setFixedSize(320, 56);
         break;
-    default:
-        break;
     }
+    setButtonType(m_buttonType); // ponytail: reapply type to recalc radius on new size
 }
 
 void ZButton::setButtonType(ButtonType type)
 {
-    m_buttonType = type;;
+    m_buttonType = type;
     switch (type)
     {
     case ZButton::BT_Normal:

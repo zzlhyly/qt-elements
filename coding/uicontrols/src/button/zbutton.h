@@ -1,3 +1,6 @@
+#ifndef ZBUTTON_H
+#define ZBUTTON_H
+
 #include <QAbstractButton>
 
 class ZButton : public QAbstractButton
@@ -29,3 +32,5 @@ private:
     ButtonType m_buttonType = BT_Normal;
     qreal m_radius = 8.0;
 };
+
+#endif // ZBUTTON_H
