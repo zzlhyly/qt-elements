@@ -17,13 +17,12 @@ public:
         f.setPixelSize(12);
         setFont(f);
         QFontMetrics fm(f);
-        int w = fm.horizontalAdvance(text_) + 20;  // 10px padding each side
-        if (w > 260) { w = 260; setWordWrap(true); } else setWordWrap(false);
-        // Height: 7px pad top + text height + 7px pad bottom + 5px arrow
-        int h = (w > 260 ? fm.height() * 2 + 14 : fm.height()) + 14 + 5;
-        setFixedSize(w, h);
+        int tw = fm.boundingRect(text_).width() + 16;  // 8px padding each side, boundingRect for accuracy
+        int w = qMin(tw, 260);
+        if (tw > 260) wordWrap_ = true;
+        int th = (wordWrap_ ? fm.height() * 2 + 14 : fm.height()) + 14 + 5;  // text + pad + arrow
+        setFixedSize(w, th);
     }
-    void setWordWrap(bool wrap) { wordWrap_ = wrap; if (wrap) { int h = fontMetrics().height() * 2 + 19; setFixedHeight(h); } }
 protected:
     void paintEvent(QPaintEvent*) override {
         QPainter p(this);
@@ -55,7 +54,7 @@ protected:
         p.setFont(f);
         p.setPen(Qt::white);
         if (wordWrap_) {
-            p.drawText(body.adjusted(10, 7, -10, -7), Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap, text_);
+            p.drawText(body.adjusted(8, 7, -8, -7), Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap, text_);
         } else {
             p.drawText(body, Qt::AlignCenter, text_);
         }
