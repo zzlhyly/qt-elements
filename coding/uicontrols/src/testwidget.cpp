@@ -4,7 +4,9 @@
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QListWidget>
 #include <QScrollArea>
+#include <QStackedWidget>
 #include <QVBoxLayout>
 
 #include "button/zbutton.h"
@@ -20,10 +22,9 @@ static QLabel* sectionLabel(const QString& text)
     return l;
 }
 
-TestWidget::TestWidget(QWidget* parent)
-    : QWidget(parent)
+static QWidget* createButtonPage()
 {
-    auto* scroll = new QScrollArea(this);
+    auto* scroll = new QScrollArea();
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
 
@@ -158,10 +159,25 @@ TestWidget::TestWidget(QWidget* parent)
     row9->addStretch();
     mainLayout->addLayout(row9);
 
-    // --- ZTag Section ---
-    mainLayout->addWidget(sectionLabel("Tags — All Types (Light)"));
+    mainLayout->addStretch();
 
-    // Row 7: Tag types
+    scroll->setWidget(content);
+    return scroll;
+}
+
+static QWidget* createTagPage()
+{
+    auto* scroll = new QScrollArea();
+    scroll->setWidgetResizable(true);
+    scroll->setFrameShape(QFrame::NoFrame);
+
+    auto* content = new QWidget();
+    auto* mainLayout = new QVBoxLayout(content);
+    mainLayout->setSpacing(24);
+    mainLayout->setContentsMargins(32, 24, 32, 24);
+
+    // --- Tag types ---
+    mainLayout->addWidget(sectionLabel("Tags — All Types (Light)"));
     auto* tagRow1 = new QHBoxLayout();
     tagRow1->setSpacing(12);
     const char* tagTypeNames[] = { "Primary", "Success", "Info", "Warning", "Danger" };
@@ -174,7 +190,7 @@ TestWidget::TestWidget(QWidget* parent)
     tagRow1->addStretch();
     mainLayout->addLayout(tagRow1);
 
-    // Row 8: Tag effects
+    // --- Tag effects ---
     mainLayout->addWidget(sectionLabel("Tags — Effects (Primary)"));
     auto* tagRow2 = new QHBoxLayout();
     tagRow2->setSpacing(12);
@@ -187,7 +203,7 @@ TestWidget::TestWidget(QWidget* parent)
     tagRow2->addStretch();
     mainLayout->addLayout(tagRow2);
 
-    // Row 9: Tag sizes + round
+    // --- Tag sizes + round ---
     mainLayout->addWidget(sectionLabel("Tags — Sizes & Round"));
     auto* tagRow3 = new QHBoxLayout();
     tagRow3->setSpacing(12);
@@ -204,7 +220,7 @@ TestWidget::TestWidget(QWidget* parent)
     tagRow3->addStretch();
     mainLayout->addLayout(tagRow3);
 
-    // Row 10: Closable tags
+    // --- Closable tags ---
     mainLayout->addWidget(sectionLabel("Tags — Closable"));
     auto* tagRow4 = new QHBoxLayout();
     tagRow4->setSpacing(12);
@@ -221,8 +237,41 @@ TestWidget::TestWidget(QWidget* parent)
     mainLayout->addStretch();
 
     scroll->setWidget(content);
+    return scroll;
+}
 
-    auto* topLayout = new QVBoxLayout(this);
-    topLayout->setContentsMargins(0, 0, 0, 0);
-    topLayout->addWidget(scroll);
+TestWidget::TestWidget(QWidget* parent)
+    : QWidget(parent)
+{
+    setMinimumSize(900, 600);
+
+    // Sidebar
+    sidebar_ = new QListWidget();
+    sidebar_->setFixedWidth(160);
+    sidebar_->addItem("Button");
+    sidebar_->addItem("Tag");
+    sidebar_->setFont(QFont("", 13));
+    sidebar_->setStyleSheet(
+        "QListWidget { background: #f5f7fa; border: none; outline: none; }"
+        "QListWidget::item { padding: 12px 16px; }"
+        "QListWidget::item:selected { background: #ecf5ff; color: #409eff; font-weight: bold; }"
+        "QListWidget::item:hover { background: #e8eaed; }"
+    );
+
+    // Stacked pages
+    stack_ = new QStackedWidget();
+    stack_->addWidget(createButtonPage());
+    stack_->addWidget(createTagPage());
+
+    // Wire sidebar → stack
+    QObject::connect(sidebar_, &QListWidget::currentRowChanged,
+                     stack_, &QStackedWidget::setCurrentIndex);
+    sidebar_->setCurrentRow(0);
+
+    // Main layout
+    auto* layout = new QHBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    layout->addWidget(sidebar_);
+    layout->addWidget(stack_);
 }
