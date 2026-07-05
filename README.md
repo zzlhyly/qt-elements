@@ -28,6 +28,7 @@ Most Qt custom widgets rely on stylesheets or hybrid approaches to achieve moder
 | **ZSlider** | Horizontal slider with drag-to-value, configurable range |
 | **ZProgress** | Line bar + circle ring modes, 4 status colors, percentage text |
 | **ZAlert** | 4 types, light/dark effects, closable, icon toggle |
+| **ZTooltip** | Hover tooltip with 500ms delay, static showText, popup overlay engine |
 
 ## 🚀 Quick Start
 

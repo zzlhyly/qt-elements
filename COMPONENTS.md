@@ -52,9 +52,9 @@ Element Plus 组件适配路线图，按 Tier 0-5 依赖关系排列。
 
 | 组件 | 参考 | 优先级 | 状态 | 依赖 | 预估 |
 |------|------|--------|------|------|------|
-| Popup/Overlay 定位引擎 | — | 🔴 | ⬜ | Theme | 4h |
+| Popup/Overlay 定位引擎 | — | 🔴 | ✅ | Theme | 4h |
 | [Select](https://element-plus.org/en-US/component/select.html) | 选择器 | 🔴 | ⬜ | Input, Popup | 8h |
-| [Tooltip](https://element-plus.org/en-US/component/tooltip.html) | 提示 | 🟡 | ⬜ | Popup | 3h |
+| [Tooltip](https://element-plus.org/en-US/component/tooltip.html) | 提示 | 🟡 | ✅ | Popup | 3h |
 | [Popover](https://element-plus.org/en-US/component/popover.html) | 气泡卡片 | 🟡 | ⬜ | Popup | 3h |
 | [Dropdown](https://element-plus.org/en-US/component/dropdown.html) | 下拉菜单 | 🟡 | ⬜ | Popup, Button | 4h |
 | [Menu](https://element-plus.org/en-US/component/menu.html) | 导航菜单 | 🟡 | ⬜ | Popup | 6h |

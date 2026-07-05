@@ -1,6 +1,7 @@
 ﻿#include "testwidget.h"
 
 #include <QFrame>
+#include <QPushButton>
 #include <QButtonGroup>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -22,6 +23,8 @@
 #include "slider/zslider.h"
 #include "progress/zprogress.h"
 #include "alert/zalert.h"
+#include "popup/zpopup.h"
+#include "tooltip/ztooltip.h"
 
 static QLabel* sectionLabel(const QString& text)
 {
@@ -816,6 +819,59 @@ static QWidget* createAlertPage()
     return scroll;
 }
 
+static QWidget* createTooltipPage()
+{
+    auto* scroll = new QScrollArea();
+    scroll->setWidgetResizable(true);
+    scroll->setFrameShape(QFrame::NoFrame);
+    scroll->viewport()->setAutoFillBackground(false);
+
+    auto* content = new QWidget();
+    auto* layout = new QVBoxLayout(content);
+    layout->setSpacing(24);
+    layout->setContentsMargins(32, 24, 32, 24);
+
+    layout->addWidget(sectionLabel("Tooltip — Hover over buttons (500ms delay)"));
+    auto* row = new QHBoxLayout();
+    row->setSpacing(12);
+
+    auto* btn1 = new ZButton("Hover me [Top]");
+    btn1->setButtonType(ZButton::kPrimary);
+    ZTooltip::install(btn1, "Tooltip above the button");
+    row->addWidget(btn1);
+
+    auto* btn2 = new ZButton("Hover me [Long text]");
+    btn2->setButtonType(ZButton::kSuccess);
+    ZTooltip::install(btn2, "A longer tooltip that wraps to multiple lines when the text is too long");
+    row->addWidget(btn2);
+
+    auto* btn3 = new ZButton("Disabled tooltip");
+    btn3->setButtonType(ZButton::kDanger);
+    btn3->setEnabled(false);
+    ZTooltip::install(btn3, "This tooltip appears even on disabled buttons");
+    row->addWidget(btn3);
+
+    row->addStretch();
+    layout->addLayout(row);
+
+    // Static showText demo
+    layout->addWidget(sectionLabel("Tooltip — Click for static tooltip (3s auto-hide)"));
+    auto* row2 = new QHBoxLayout();
+    row2->setSpacing(12);
+    auto* btnShow = new ZButton("Click to show tooltip");
+    btnShow->setButtonType(ZButton::kPrimary);
+    QObject::connect(btnShow, &QPushButton::clicked, [btnShow]() {
+        ZTooltip::showText(btnShow, "Static tooltip — auto-hides after 3s", 3000);
+    });
+    row2->addWidget(btnShow);
+    row2->addStretch();
+    layout->addLayout(row2);
+
+    layout->addStretch();
+    scroll->setWidget(content);
+    return scroll;
+}
+
 TestWidget::TestWidget(QWidget* parent)
     : QWidget(parent)
 {
@@ -843,6 +899,7 @@ TestWidget::TestWidget(QWidget* parent)
     sidebar_->addItem("Slider");
     sidebar_->addItem("Progress");
     sidebar_->addItem("Alert");
+    sidebar_->addItem("Tooltip");
     sidebar_->setFont(QFont("", 13));
     sidebar_->setFrameShape(QFrame::NoFrame);
     sidebar_->setSpacing(0);
@@ -869,6 +926,7 @@ TestWidget::TestWidget(QWidget* parent)
     stack_->addWidget(createSliderPage());
     stack_->addWidget(createProgressPage());
     stack_->addWidget(createAlertPage());
+    stack_->addWidget(createTooltipPage());
 
     // Wire sidebar → stack
     QObject::connect(sidebar_, &QListWidget::currentRowChanged,

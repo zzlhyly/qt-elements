@@ -29,6 +29,10 @@ SET(SRC_FILES
     src/progress/zprogress.h
     src/alert/zalert.cpp
     src/alert/zalert.h
+    src/popup/zpopup.cpp
+    src/popup/zpopup.h
+    src/tooltip/ztooltip.cpp
+    src/tooltip/ztooltip.h
     src/theme/theme.h
 )
 if(WIN32)
