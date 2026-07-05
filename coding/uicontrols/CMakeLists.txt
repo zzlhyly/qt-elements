@@ -7,6 +7,12 @@ SET(SRC_FILES
     src/button/zbutton.h
     src/tag/ztag.cpp
     src/tag/ztag.h
+    src/badge/zbadge.cpp
+    src/badge/zbadge.h
+    src/divider/zdivider.cpp
+    src/divider/zdivider.h
+    src/link/zlink.cpp
+    src/link/zlink.h
     src/theme/theme.h
 )
 if(WIN32)

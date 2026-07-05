@@ -26,10 +26,10 @@ Element Plus 组件适配路线图，按 Tier 0-5 依赖关系排列。
 | 组件 | 参考 | 优先级 | 状态 | 依赖 | 预估 |
 |------|------|--------|------|------|------|
 | [Button](https://element-plus.org/en-US/component/button.html) | 按钮 | — | ✅ | — | — |
-| [Tag](https://element-plus.org/en-US/component/tag.html) | 标签 | 🔴 | ⬜ | Theme | 2h |
-| [Badge](https://element-plus.org/en-US/component/badge.html) | 徽章 | 🟡 | ⬜ | Theme | 1h |
-| [Divider](https://element-plus.org/en-US/component/divider.html) | 分割线 | 🟢 | ⬜ | — | 0.5h |
-| [Link](https://element-plus.org/en-US/component/link.html) | 链接 | 🟢 | ⬜ | — | 1h |
+| [Tag](https://element-plus.org/en-US/component/tag.html) | 标签 | 🔴 | ✅ | Theme | 2h |
+| [Badge](https://element-plus.org/en-US/component/badge.html) | 徽章 | 🟡 | ✅ | Theme | 1h |
+| [Divider](https://element-plus.org/en-US/component/divider.html) | 分割线 | 🟢 | ✅ | — | 0.5h |
+| [Link](https://element-plus.org/en-US/component/link.html) | 链接 | 🟢 | ✅ | — | 1h |
 | [Text](https://element-plus.org/en-US/component/text.html) | 文本 | 🟢 | ⬜ | — | 1h |
 | [Alert](https://element-plus.org/en-US/component/alert.html) | 警告 | 🟡 | ⬜ | Theme, Icon | 2h |
 | [Avatar](https://element-plus.org/en-US/component/avatar.html) | 头像 | 🟢 | ⬜ | Theme | 1.5h |

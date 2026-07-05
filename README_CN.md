@@ -33,6 +33,9 @@ cmake --build build --config Debug
 |------|------|------|
 | ZButton | ✅ 完成 | 完整 Element Plus 按钮：6 种类型、3 种尺寸、solid/plain/text 变体、圆角/圆形 |
 | ZTag | ✅ 完成 | 完整 Element Plus 标签：5 种类型、3 种效果、3 种尺寸、可关闭/圆角/边框 |
+| ZBadge | ✅ 完成 | 徽章组件：5 种类型、圆点模式、最大值显示 |
+| ZDivider | ✅ 完成 | 分割线组件：水平/垂直方向、文字位置、边框样式 |
+| ZLink | ✅ 完成 | 链接组件：6 种类型、悬停状态、下划线、点击信号 |
 
 ## 项目结构
 

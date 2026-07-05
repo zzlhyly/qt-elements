@@ -35,6 +35,9 @@ A pre-deployed runnable exists at `build/product/uicontrols/uicontrols.exe`.
 |-----------|--------|-------------|
 | ZButton | ✅ Done | Full Element Plus button: 6 types, 3 sizes, solid/plain/text variants, round/circle |
 | ZTag | ✅ Done | Full Element Plus tag: 5 types, 3 effects, 3 sizes, closable/round/hit |
+| ZBadge | ✅ Done | Badge with 5 types, dot mode, max value display |
+| ZDivider | ✅ Done | Horizontal/vertical divider with text, position, border styles |
+| ZLink | ✅ Done | Link with 6 types, hover state, underline, click signal |
 
 ## Project Structure
 
