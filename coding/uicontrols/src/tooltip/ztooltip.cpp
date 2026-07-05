@@ -17,7 +17,7 @@ public:
         f.setPixelSize(12);
         setFont(f);
         QFontMetrics fm(f);
-        int tw = fm.horizontalAdvance(text_) + 12;  // 6px padding each side
+        int tw = fm.horizontalAdvance(text_) + 8;  // 4px padding each side
         int w = qMin(tw, 260);
         if (tw > 260) wordWrap_ = true;
         int th = (wordWrap_ ? fm.height() * 2 + 14 : fm.height()) + 14 + 5;  // text + pad + arrow
@@ -54,7 +54,7 @@ protected:
         p.setFont(f);
         p.setPen(Qt::white);
         if (wordWrap_) {
-            p.drawText(body.adjusted(8, 7, -8, -7), Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap, text_);
+            p.drawText(body.adjusted(4, 7, -4, -7), Qt::AlignHCenter | Qt::AlignVCenter | Qt::TextWordWrap, text_);
         } else {
             p.drawText(body, Qt::AlignCenter, text_);
         }
