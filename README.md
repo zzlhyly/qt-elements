@@ -38,6 +38,10 @@ A pre-deployed runnable exists at `build/product/uicontrols/uicontrols.exe`.
 | ZBadge | ✅ Done | Badge with 5 types, dot mode, max value display |
 | ZDivider | ✅ Done | Horizontal/vertical divider with text, position, border styles |
 | ZLink | ✅ Done | Link with 6 types, hover state, underline, click signal |
+| ZText | ✅ Done | Text with 6 types, 3 sizes, truncation support |
+| ZInput | ✅ Done | Input with 3 sizes, clearable, password toggle, focus/hover states |
+| ZRadio | ✅ Done | Radio button with checked/hover/disabled states |
+| ZCheckbox | ✅ Done | Checkbox with checkmark, checked/hover/disabled states |
 
 ## Project Structure
 

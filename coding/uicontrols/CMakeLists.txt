@@ -13,6 +13,14 @@ SET(SRC_FILES
     src/divider/zdivider.h
     src/link/zlink.cpp
     src/link/zlink.h
+    src/text/ztext.cpp
+    src/text/ztext.h
+    src/input/zinput.cpp
+    src/input/zinput.h
+    src/radio/zradio.cpp
+    src/radio/zradio.h
+    src/checkbox/zcheckbox.cpp
+    src/checkbox/zcheckbox.h
     src/theme/theme.h
 )
 if(WIN32)

@@ -14,6 +14,10 @@
 #include "badge/zbadge.h"
 #include "divider/zdivider.h"
 #include "link/zlink.h"
+#include "text/ztext.h"
+#include "input/zinput.h"
+#include "radio/zradio.h"
+#include "checkbox/zcheckbox.h"
 
 static QLabel* sectionLabel(const QString& text)
 {
@@ -427,6 +431,194 @@ static QWidget* createLinkPage()
     return scroll;
 }
 
+static QWidget* createTextPage()
+{
+    auto* scroll = new QScrollArea();
+    scroll->setWidgetResizable(true);
+    scroll->setFrameShape(QFrame::NoFrame);
+
+    auto* content = new QWidget();
+    auto* layout = new QVBoxLayout(content);
+    layout->setSpacing(24);
+    layout->setContentsMargins(32, 24, 32, 24);
+
+    // Types
+    layout->addWidget(sectionLabel("Text — All Types"));
+    auto* row1 = new QHBoxLayout();
+    row1->setSpacing(16);
+    ZText::TextType ztTypes[] = { ZText::kDefault, ZText::kPrimary, ZText::kSuccess,
+                                  ZText::kInfo, ZText::kWarning, ZText::kDanger };
+    const char* ztNames[] = { "Default", "Primary", "Success", "Info", "Warning", "Danger" };
+    for (int i = 0; i < 6; ++i) {
+        auto* t = new ZText(ztNames[i]);
+        t->setTextType(ztTypes[i]);
+        row1->addWidget(t);
+    }
+    row1->addStretch();
+    layout->addLayout(row1);
+
+    // Sizes
+    layout->addWidget(sectionLabel("Text — Sizes"));
+    auto* row2 = new QHBoxLayout();
+    row2->setSpacing(16);
+    auto* tLg = new ZText("Large");   tLg->setTextSize(ZText::kLarge);   tLg->setTextType(ZText::kPrimary);
+    auto* tDf = new ZText("Medium");  tDf->setTextSize(ZText::kMedium);  tDf->setTextType(ZText::kPrimary);
+    auto* tSm = new ZText("Small");   tSm->setTextSize(ZText::kSmall);   tSm->setTextType(ZText::kPrimary);
+    row2->addWidget(tLg);
+    row2->addWidget(tDf);
+    row2->addWidget(tSm);
+    row2->addStretch();
+    layout->addLayout(row2);
+
+    // Truncated
+    layout->addWidget(sectionLabel("Text — Truncated (200px)"));
+    auto* tr = new ZText("This is a very long text that should be truncated with ellipsis");
+    tr->setTruncated(true);
+    tr->setFixedWidth(200);
+    tr->setTextType(ZText::kPrimary);
+    layout->addWidget(tr);
+
+    layout->addStretch();
+    scroll->setWidget(content);
+    return scroll;
+}
+
+static QWidget* createInputPage()
+{
+    auto* scroll = new QScrollArea();
+    scroll->setWidgetResizable(true);
+    scroll->setFrameShape(QFrame::NoFrame);
+
+    auto* content = new QWidget();
+    auto* layout = new QVBoxLayout(content);
+    layout->setSpacing(24);
+    layout->setContentsMargins(32, 24, 32, 24);
+
+    // Basic
+    layout->addWidget(sectionLabel("Input — Basic"));
+    auto* basic = new ZInput();
+    basic->setPlaceholderText("Basic input");
+    layout->addWidget(basic);
+
+    // Sizes
+    layout->addWidget(sectionLabel("Input — Sizes"));
+    auto* szRow = new QHBoxLayout();
+    szRow->setSpacing(12);
+    auto* iLg = new ZInput(); iLg->setInputSize(ZInput::kLarge); iLg->setPlaceholderText("Large");
+    auto* iDf = new ZInput(); iDf->setPlaceholderText("Default");
+    auto* iSm = new ZInput(); iSm->setInputSize(ZInput::kSmall); iSm->setPlaceholderText("Small");
+    szRow->addWidget(iLg);
+    szRow->addWidget(iDf);
+    szRow->addWidget(iSm);
+    szRow->addStretch();
+    layout->addLayout(szRow);
+
+    // Clearable
+    layout->addWidget(sectionLabel("Input — Clearable"));
+    auto* clearInput = new ZInput();
+    clearInput->setPlaceholderText("Type something and clear...");
+    clearInput->setClearable(true);
+    layout->addWidget(clearInput);
+
+    // Password
+    layout->addWidget(sectionLabel("Input — Password"));
+    auto* pwdInput = new ZInput();
+    pwdInput->setPlaceholderText("Enter password");
+    pwdInput->setPasswordMode(true);
+    layout->addWidget(pwdInput);
+
+    // Disabled
+    layout->addWidget(sectionLabel("Input — Disabled"));
+    auto* disabledInput = new ZInput();
+    disabledInput->setPlaceholderText("Disabled");
+    disabledInput->setText("Can't edit");
+    disabledInput->setEnabled(false);
+    layout->addWidget(disabledInput);
+
+    layout->addStretch();
+    scroll->setWidget(content);
+    return scroll;
+}
+
+static QWidget* createRadioPage()
+{
+    auto* scroll = new QScrollArea();
+    scroll->setWidgetResizable(true);
+    scroll->setFrameShape(QFrame::NoFrame);
+
+    auto* content = new QWidget();
+    auto* layout = new QVBoxLayout(content);
+    layout->setSpacing(24);
+    layout->setContentsMargins(32, 24, 32, 24);
+
+    // Radio group
+    layout->addWidget(sectionLabel("Radio — Group"));
+    auto* group1 = new QHBoxLayout();
+    group1->setSpacing(16);
+    auto* r1 = new ZRadio("Option A");
+    auto* r2 = new ZRadio("Option B");
+    auto* r3 = new ZRadio("Option C");
+    r1->setChecked(true);
+    group1->addWidget(r1);
+    group1->addWidget(r2);
+    group1->addWidget(r3);
+    group1->addStretch();
+    layout->addLayout(group1);
+
+    // Disabled
+    layout->addWidget(sectionLabel("Radio — Disabled"));
+    auto* group2 = new QHBoxLayout();
+    group2->setSpacing(16);
+    auto* rd1 = new ZRadio("Disabled unchecked"); rd1->setEnabled(false);
+    auto* rd2 = new ZRadio("Disabled checked");   rd2->setChecked(true); rd2->setEnabled(false);
+    group2->addWidget(rd1);
+    group2->addWidget(rd2);
+    group2->addStretch();
+    layout->addLayout(group2);
+
+    layout->addStretch();
+    scroll->setWidget(content);
+    return scroll;
+}
+
+static QWidget* createCheckboxPage()
+{
+    auto* scroll = new QScrollArea();
+    scroll->setWidgetResizable(true);
+    scroll->setFrameShape(QFrame::NoFrame);
+
+    auto* content = new QWidget();
+    auto* layout = new QVBoxLayout(content);
+    layout->setSpacing(24);
+    layout->setContentsMargins(32, 24, 32, 24);
+
+    // Basic
+    layout->addWidget(sectionLabel("Checkbox — Basic"));
+    auto* row1 = new QHBoxLayout();
+    row1->setSpacing(16);
+    auto* c1 = new ZCheckbox("Checked");   c1->setChecked(true);
+    auto* c2 = new ZCheckbox("Unchecked");
+    row1->addWidget(c1);
+    row1->addWidget(c2);
+    row1->addStretch();
+    layout->addLayout(row1);
+
+    // Disabled
+    layout->addWidget(sectionLabel("Checkbox — Disabled"));
+    auto* row2 = new QHBoxLayout();
+    row2->setSpacing(16);
+    auto* cd1 = new ZCheckbox("Disabled unchecked"); cd1->setEnabled(false);
+    auto* cd2 = new ZCheckbox("Disabled checked");   cd2->setChecked(true); cd2->setEnabled(false);
+    row2->addWidget(cd1);
+    row2->addWidget(cd2);
+    row2->addStretch();
+    layout->addLayout(row2);
+
+    layout->addStretch();
+    scroll->setWidget(content);
+    return scroll;
+}
+
 TestWidget::TestWidget(QWidget* parent)
     : QWidget(parent)
 {
@@ -440,6 +632,10 @@ TestWidget::TestWidget(QWidget* parent)
     sidebar_->addItem("Badge");
     sidebar_->addItem("Divider");
     sidebar_->addItem("Link");
+    sidebar_->addItem("Text");
+    sidebar_->addItem("Input");
+    sidebar_->addItem("Radio");
+    sidebar_->addItem("Checkbox");
     sidebar_->setFont(QFont("", 13));
     sidebar_->setStyleSheet(
         "QListWidget { background: #f5f7fa; border: none; outline: none; }"
@@ -455,6 +651,10 @@ TestWidget::TestWidget(QWidget* parent)
     stack_->addWidget(createBadgePage());
     stack_->addWidget(createDividerPage());
     stack_->addWidget(createLinkPage());
+    stack_->addWidget(createTextPage());
+    stack_->addWidget(createInputPage());
+    stack_->addWidget(createRadioPage());
+    stack_->addWidget(createCheckboxPage());
 
     // Wire sidebar → stack
     QObject::connect(sidebar_, &QListWidget::currentRowChanged,
