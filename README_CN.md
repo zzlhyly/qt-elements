@@ -6,7 +6,7 @@
 
 - **Visual Studio 2026** (Community)，需安装 C++ 工作负载
 - **CMake** 4.0+
-- **Qt 5.15.18**，通过 vcpkg 管理（triplet: `x86-windows`、`x64-windows`）
+- **Qt 5.15.18**，通过 vcpkg 管理（triplet: `x86-windows`）
 - **vcpkg** 位于 `D:/code/github/vcpkg`
 
 ## 快速开始
@@ -16,26 +16,16 @@
 git clone <repo-url> qt-elements
 cd qt-elements
 
-# 配置 (x64)
-cmake -S coding -B build -G "Visual Studio 18 2026"
-
-# 配置 (Win32/x86)
-cmake -S coding -B debug -G "Visual Studio 18 2026" -A Win32
-
-# 构建
+# 配置 & 构建
+cmake -S coding -B build -G "Visual Studio 18 2026" -A Win32
 cmake --build build --config Debug
-cmake --build debug --config Debug
 ```
-
-> **注意：** `debug/` 目录是 Win32 (x86) 的构建目录，不仅仅是 Debug 配置。
 
 ## 运行
 
-构建产物位于 `<build-dir>/product/<project-name>/`。运行前需要将 Qt DLL 和插件（platforms、imageformats、styles）部署到 exe 同级目录。
+构建产物位于 `build/product/<project-name>/`。Qt DLL 和插件由 CMake 自动部署。
 
-已部署的可运行文件：`debug/product/uicontrols/uicontrols.exe`。
-
-插件部署逻辑参考 `3rd/Qt5/debug/plugins/qtdeploy.ps1`。
+已部署的可运行文件：`build/product/uicontrols/uicontrols.exe`。
 
 ## 组件列表
 
@@ -58,8 +48,7 @@ qt-elements/
 │           └── button/
 │               ├── zbutton.h
 │               └── zbutton.cpp
-├── debug/                     # Win32 (x86) 构建目录
-├── build/                     # x64 构建目录
+├── build/                     # 构建目录（Win32, Debug）
 ├── 3rd/Qt5/                   # 预编译的 Qt5 二进制文件（部署用）
 ├── AGENTS.md                  # 开发者速查手册
 ├── README.md

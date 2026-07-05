@@ -6,7 +6,7 @@ A personal UI component library built with Qt5 native drawing (QPainter), visual
 
 - **Visual Studio 2026** (Community) with C++ workload
 - **CMake** 4.0+
-- **Qt 5.15.18** via vcpkg (triplets: `x86-windows`, `x64-windows`)
+- **Qt 5.15.18** via vcpkg (triplet: `x86-windows`)
 - **vcpkg** at `D:/code/github/vcpkg`
 
 ## Quick Start
@@ -16,26 +16,18 @@ A personal UI component library built with Qt5 native drawing (QPainter), visual
 git clone <repo-url> qt-elements
 cd qt-elements
 
-# Configure (x64)
-cmake -S coding -B build -G "Visual Studio 18 2026"
-
-# Configure (Win32/x86)
-cmake -S coding -B debug -G "Visual Studio 18 2026" -A Win32
-
-# Build
+# Configure & Build
+cmake -S coding -B build -G "Visual Studio 18 2026" -A Win32
 cmake --build build --config Debug
-cmake --build debug --config Debug
 ```
 
 > **Note:** `debug/` is the Win32 (x86) build directory, not just a debug configuration.
 
 ## Running
 
-Built executables are placed under `<build-dir>/product/<project-name>/`. Qt DLLs and plugins (platforms, imageformats, styles) must be deployed alongside the executable before running.
+Built executables are placed under `build/product/<project-name>/`. Qt DLLs and plugins are auto-deployed by CMake.
 
-A pre-deployed runnable exists at `debug/product/uicontrols/uicontrols.exe`.
-
-For plugin deployment logic, see `3rd/Qt5/debug/plugins/qtdeploy.ps1`.
+A pre-deployed runnable exists at `build/product/uicontrols/uicontrols.exe`.
 
 ## Components
 
@@ -58,8 +50,7 @@ qt-elements/
 │           └── button/
 │               ├── zbutton.h
 │               └── zbutton.cpp
-├── debug/                     # Win32 (x86) build directory
-├── build/                     # x64 build directory
+├── build/                     # Build directory (Win32, Debug)
 ├── 3rd/Qt5/                   # Pre-built Qt5 binaries for deployment
 ├── AGENTS.md                  # Agent/contributor quick reference
 ├── README.md
