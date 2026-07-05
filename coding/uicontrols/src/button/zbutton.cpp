@@ -1,8 +1,9 @@
 #include "zbutton.h"
-#include <QPainter>
-#include <QPainterPath>
+
 #include <QFontMetrics>
 #include <QKeyEvent>
+#include <QPainter>
+#include <QPainterPath>
 
 // --- Color tables: [ButtonType][state 0=normal,1=hover,2=pressed,3=disabled] ---
 
@@ -79,17 +80,17 @@ ZButton::ZButton(const QString& text, QWidget* parent)
     setFocusPolicy(Qt::StrongFocus);
 }
 
-void ZButton::setButtonType(ButtonType type)   { m_type = type; update(); }
-void ZButton::setButtonSize(ButtonSize size)   { m_size = size; updateGeometry(); update(); }
-void ZButton::setButtonVariant(ButtonVariant v) { m_variant = v; update(); }
-void ZButton::setRound(bool r)                 { m_round = r; update(); }
-void ZButton::setCircle(bool c)                { m_circle = c; updateGeometry(); update(); }
+void ZButton::setButtonType(ButtonType type)   { type_ = type; update(); }
+void ZButton::setButtonSize(ButtonSize size)   { size_ = size; updateGeometry(); update(); }
+void ZButton::setButtonVariant(ButtonVariant v) { variant_ = v; update(); }
+void ZButton::setRound(bool r)                 { round_ = r; update(); }
+void ZButton::setCircle(bool c)                { circle_ = c; updateGeometry(); update(); }
 
-ZButton::ButtonType ZButton::buttonType() const     { return m_type; }
-ZButton::ButtonSize ZButton::buttonSize() const      { return m_size; }
-ZButton::ButtonVariant ZButton::buttonVariant() const { return m_variant; }
-bool ZButton::isRound() const                        { return m_round; }
-bool ZButton::isCircle() const                       { return m_circle; }
+ZButton::ButtonType ZButton::buttonType() const     { return type_; }
+ZButton::ButtonSize ZButton::buttonSize() const      { return size_; }
+ZButton::ButtonVariant ZButton::buttonVariant() const { return variant_; }
+bool ZButton::isRound() const                        { return round_; }
+bool ZButton::isCircle() const                       { return circle_; }
 
 const ZButton::SizeSpec& ZButton::sizeSpec() const
 {
@@ -98,73 +99,73 @@ const ZButton::SizeSpec& ZButton::sizeSpec() const
         { 32, 14, 4, 16, 1, 6 }, // Default
         { 24, 12, 3, 12, 1, 4 }, // Small
     };
-    return specs[m_size];
+    return specs[size_];
 }
 
 qreal ZButton::borderRadius() const
 {
-    if (m_circle) return height() / 2.0;
-    if (m_round) return 20.0;
+    if (circle_) return height() / 2.0;
+    if (round_) return 20.0;
     return sizeSpec().radius;
 }
 
 QColor ZButton::bgColor() const
 {
-    if (m_variant == BV_Text) {
+    if (variant_ == kText) {
         if (!isEnabled()) return Qt::transparent;
         if (isDown()) return QColor(0xf0, 0xf2, 0xf5);
-        if (m_hovered) return QColor(0xf5, 0xf7, 0xfa);
+        if (hovered_) return QColor(0xf5, 0xf7, 0xfa);
         return Qt::transparent;
     }
 
-    int si = !isEnabled() ? 3 : isDown() ? 2 : m_hovered ? 1 : 0;
+    int si = !isEnabled() ? 3 : isDown() ? 2 : hovered_ ? 1 : 0;
 
-    if (m_variant == BV_Solid) {
-        if (m_type == BT_Default) return solidBg[0][si];
-        return solidBg[m_type][si];
+    if (variant_ == kSolid) {
+        if (type_ == kDefault) return solidBg[0][si];
+        return solidBg[type_][si];
     }
 
     // Plain
-    if (m_type == BT_Default) {
+    if (type_ == kDefault) {
         // plain default uses solid default bg
         return solidBg[0][si];
     }
-    return plainBg[m_type - 1][si];
+    return plainBg[type_ - 1][si];
 }
 
 QColor ZButton::textColor() const
 {
-    if (m_variant == BV_Text) {
+    if (variant_ == kText) {
         if (!isEnabled()) return QColor(0xc0, 0xc4, 0xcc);
-        return textVarText[m_type];
+        return textVarText[type_];
     }
 
-    int si = !isEnabled() ? 3 : isDown() ? 2 : m_hovered ? 1 : 0;
+    int si = !isEnabled() ? 3 : isDown() ? 2 : hovered_ ? 1 : 0;
 
-    if (m_variant == BV_Solid) {
-        if (m_type == BT_Default) return solidText[0][si];
-        return solidText[m_type][si];
+    if (variant_ == kSolid) {
+        if (type_ == kDefault) return solidText[0][si];
+        return solidText[type_][si];
     }
 
     // Plain
-    if (m_type == BT_Default) return solidText[0][si];
-    return plainText[m_type - 1][si];
+    if (type_ == kDefault) return solidText[0][si];
+    return plainText[type_ - 1][si];
 }
 
 QColor ZButton::borderColor() const
 {
-    if (m_variant == BV_Text) return Qt::transparent;
+    if (variant_ == kText) return Qt::transparent;
 
-    int si = !isEnabled() ? 3 : isDown() ? 2 : m_hovered ? 1 : 0;
+    int si = !isEnabled() ? 3 : isDown() ? 2 : hovered_ ? 1 : 0;
 
-    if (m_variant == BV_Solid) {
-        if (m_type == BT_Default) return solidBorder[0][si];
-        return solidBorder[m_type][si];
+    if (variant_ == kSolid) {
+        if (type_ == kDefault) return solidBorder[0][si];
+        return solidBorder[type_][si];
     }
 
     // Plain
-    if (m_type == BT_Default) return solidBorder[0][si];
-    return plainBorder[m_type - 1][si];
+    if (type_ == kDefault) return solidBorder[0][si];
+    return plainBorder[type_ - 1][si];
 }
 
 QSize ZButton::sizeHint() const
@@ -176,7 +177,7 @@ QSize ZButton::sizeHint() const
     QFontMetrics fm(f);
 
     int w = 0;
-    if (m_circle) {
+    if (circle_) {
         w = s.height;
     } else {
         if (!text().isEmpty()) w += fm.horizontalAdvance(text());
@@ -185,7 +186,7 @@ QSize ZButton::sizeHint() const
             w += iconSize;
             if (!text().isEmpty()) w += s.iconGap;
         }
-        if (!m_circle) w += s.padH * 2;
+        if (!circle_) w += s.padH * 2;
         w = qMax(w, s.height);
     }
     return QSize(w, s.height);
@@ -194,7 +195,7 @@ QSize ZButton::sizeHint() const
 QSize ZButton::minimumSizeHint() const
 {
     const SizeSpec& s = sizeSpec();
-    if (m_circle) return QSize(s.height, s.height);
+    if (circle_) return QSize(s.height, s.height);
     return QSize(s.height, s.height);
 }
 
@@ -221,7 +222,7 @@ void ZButton::paintEvent(QPaintEvent*)
     QColor bg = bgColor();
     QColor bc = borderColor();
 
-    if (m_variant == BV_Text) {
+    if (variant_ == kText) {
         // Text variant: fill only, no border
         p.fillPath(path, bg);
     } else {
@@ -231,7 +232,7 @@ void ZButton::paintEvent(QPaintEvent*)
     }
 
     // Focus ring
-    if (hasFocus() && !m_circle) {
+    if (hasFocus() && !circle_) {
         p.setPen(QPen(QColor(0xa0, 0xcf, 0xff), 2));
         p.setBrush(Qt::NoBrush);
         QPainterPath focusPath;
@@ -247,9 +248,9 @@ void ZButton::paintEvent(QPaintEvent*)
     bool hasText = !text().isEmpty();
     int iconSize = s.height - 8;
 
-    if (m_circle && hasIcon) {
+    if (circle_ && hasIcon) {
         // Circle: icon only, centered
-        QIcon::Mode mode = !isEnabled() ? QIcon::Disabled : isDown() ? QIcon::Selected : m_hovered ? QIcon::Active : QIcon::Normal;
+        QIcon::Mode mode = !isEnabled() ? QIcon::Disabled : isDown() ? QIcon::Selected : hovered_ ? QIcon::Active : QIcon::Normal;
         icon().paint(&p, r.center().x() - iconSize/2, r.center().y() - iconSize/2, iconSize, iconSize, Qt::AlignCenter, mode);
     } else {
         // Calculate total content width
@@ -261,7 +262,7 @@ void ZButton::paintEvent(QPaintEvent*)
         int y = r.center().y();
 
         if (hasIcon) {
-            QIcon::Mode mode = !isEnabled() ? QIcon::Disabled : isDown() ? QIcon::Selected : m_hovered ? QIcon::Active : QIcon::Normal;
+            QIcon::Mode mode = !isEnabled() ? QIcon::Disabled : isDown() ? QIcon::Selected : hovered_ ? QIcon::Active : QIcon::Normal;
             icon().paint(&p, startX, y - iconSize/2, iconSize, iconSize, Qt::AlignCenter, mode);
             startX += iconSize + s.iconGap;
         }
@@ -276,13 +277,13 @@ void ZButton::paintEvent(QPaintEvent*)
 
 void ZButton::enterEvent(QEvent*)
 {
-    m_hovered = true;
+    hovered_ = true;
     update();
 }
 
 void ZButton::leaveEvent(QEvent*)
 {
-    m_hovered = false;
+    hovered_ = false;
     update();
 }
 

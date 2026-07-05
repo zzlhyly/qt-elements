@@ -24,7 +24,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-project(qtproject)
+project(qt-elements)
 
 set(Qt5_DIR ${VCPKG_ROOT}/installed/${VCPKG_TARGET_TRIPLET}/share/cmake/Qt5)
 message(STATUS "Using Qt5_DIR: ${Qt5_DIR}")
@@ -58,5 +58,4 @@ function(qtproject_setup_target TARGET)
     endif()
 endfunction()
 
-add_subdirectory(practice)
 add_subdirectory(uicontrols)

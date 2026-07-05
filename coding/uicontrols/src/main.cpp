@@ -1,5 +1,6 @@
-#include "testwidget.h"
 #include <QApplication>
+
+#include "testwidget.h"
 
 int main(int argc, char* argv[])
 {

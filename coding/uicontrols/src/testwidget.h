@@ -1,5 +1,5 @@
-#ifndef TESTWIDGET_H
-#define TESTWIDGET_H
+#ifndef CODING_UICONTROLS_SRC_TESTWIDGET_H_
+#define CODING_UICONTROLS_SRC_TESTWIDGET_H_
 
 #include <QWidget>
 
@@ -9,4 +9,4 @@ public:
     explicit TestWidget(QWidget* parent = nullptr);
 };
 
-#endif // TESTWIDGET_H
+#endif // CODING_UICONTROLS_SRC_TESTWIDGET_H_

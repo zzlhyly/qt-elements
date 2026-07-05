@@ -37,3 +37,7 @@ Desktop.ini
 3rd/Qt5/debug/*.conf
 3rd/Qt5/release/*.dll
 3rd/Qt5/release/*.conf
+
+# Tool infrastructure (not project source)
+.opencode/
+openspec/

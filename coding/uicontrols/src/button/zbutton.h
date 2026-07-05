@@ -1,5 +1,5 @@
-#ifndef ZBUTTON_H
-#define ZBUTTON_H
+#ifndef CODING_UICONTROLS_SRC_BUTTON_ZBUTTON_H_
+#define CODING_UICONTROLS_SRC_BUTTON_ZBUTTON_H_
 
 #include <QAbstractButton>
 
@@ -8,9 +8,9 @@ class ZButton : public QAbstractButton
     Q_OBJECT
 
 public:
-    enum ButtonType { BT_Default, BT_Primary, BT_Success, BT_Warning, BT_Danger, BT_Info };
-    enum ButtonSize { BS_Large, BS_Default, BS_Small };
-    enum ButtonVariant { BV_Solid, BV_Plain, BV_Text };
+    enum ButtonType { kDefault, kPrimary, kSuccess, kWarning, kDanger, kInfo };
+    enum ButtonSize { kLarge, kMedium, kSmall };
+    enum ButtonVariant { kSolid, kPlain, kText };
 
     explicit ZButton(QWidget* parent = nullptr);
     ZButton(const QString& text, QWidget* parent = nullptr);
@@ -45,12 +45,12 @@ private:
     QColor textColor() const;
     QColor borderColor() const;
 
-    ButtonType m_type = BT_Default;
-    ButtonSize m_size = BS_Default;
-    ButtonVariant m_variant = BV_Solid;
-    bool m_round = false;
-    bool m_circle = false;
-    bool m_hovered = false;
+    ButtonType type_ = kDefault;
+    ButtonSize size_ = kMedium;
+    ButtonVariant variant_ = kSolid;
+    bool round_ = false;
+    bool circle_ = false;
+    bool hovered_ = false;
 };
 
-#endif // ZBUTTON_H
+#endif // CODING_UICONTROLS_SRC_BUTTON_ZBUTTON_H_

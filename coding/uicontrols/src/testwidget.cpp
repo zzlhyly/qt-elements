@@ -1,11 +1,13 @@
 #include "testwidget.h"
-#include "button/zbutton.h"
+
+#include <QFrame>
 #include <QGridLayout>
-#include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QScrollArea>
-#include <QFrame>
+#include <QVBoxLayout>
+
+#include "button/zbutton.h"
 
 static QLabel* sectionLabel(const QString& text)
 {
@@ -34,7 +36,7 @@ TestWidget::TestWidget(QWidget* parent)
     auto* row1 = new QHBoxLayout();
     row1->setSpacing(12);
     const char* typeNames[] = { "Default", "Primary", "Success", "Warning", "Danger", "Info" };
-    ZButton::ButtonType types[] = { ZButton::BT_Default, ZButton::BT_Primary, ZButton::BT_Success, ZButton::BT_Warning, ZButton::BT_Danger, ZButton::BT_Info };
+    ZButton::ButtonType types[] = { ZButton::kDefault, ZButton::kPrimary, ZButton::kSuccess, ZButton::kWarning, ZButton::kDanger, ZButton::kInfo };
     for (int i = 0; i < 6; ++i) {
         auto* btn = new ZButton(typeNames[i]);
         btn->setButtonType(types[i]);
@@ -47,9 +49,9 @@ TestWidget::TestWidget(QWidget* parent)
     mainLayout->addWidget(sectionLabel("Sizes — Primary"));
     auto* row2 = new QHBoxLayout();
     row2->setSpacing(12);
-    auto* lg = new ZButton("Large");   lg->setButtonType(ZButton::BT_Primary); lg->setButtonSize(ZButton::BS_Large);
-    auto* df = new ZButton("Default"); df->setButtonType(ZButton::BT_Primary); df->setButtonSize(ZButton::BS_Default);
-    auto* sm = new ZButton("Small");   sm->setButtonType(ZButton::BT_Primary); sm->setButtonSize(ZButton::BS_Small);
+    auto* lg = new ZButton("Large");   lg->setButtonType(ZButton::kPrimary); lg->setButtonSize(ZButton::kLarge);
+    auto* df = new ZButton("Default"); df->setButtonType(ZButton::kPrimary); df->setButtonSize(ZButton::kMedium);
+    auto* sm = new ZButton("Small");   sm->setButtonType(ZButton::kPrimary); sm->setButtonSize(ZButton::kSmall);
     row2->addWidget(lg);
     row2->addWidget(df);
     row2->addWidget(sm);
@@ -61,11 +63,11 @@ TestWidget::TestWidget(QWidget* parent)
     auto* row3 = new QHBoxLayout();
     row3->setSpacing(12);
     const char* plainNames[] = { "Primary", "Success", "Warning", "Danger", "Info" };
-    ZButton::ButtonType plainTypes[] = { ZButton::BT_Primary, ZButton::BT_Success, ZButton::BT_Warning, ZButton::BT_Danger, ZButton::BT_Info };
+    ZButton::ButtonType plainTypes[] = { ZButton::kPrimary, ZButton::kSuccess, ZButton::kWarning, ZButton::kDanger, ZButton::kInfo };
     for (int i = 0; i < 5; ++i) {
         auto* btn = new ZButton(plainNames[i]);
         btn->setButtonType(plainTypes[i]);
-        btn->setButtonVariant(ZButton::BV_Plain);
+        btn->setButtonVariant(ZButton::kPlain);
         row3->addWidget(btn);
     }
     row3->addStretch();
@@ -78,7 +80,7 @@ TestWidget::TestWidget(QWidget* parent)
     for (int i = 0; i < 6; ++i) {
         auto* btn = new ZButton(typeNames[i]);
         btn->setButtonType(types[i]);
-        btn->setButtonVariant(ZButton::BV_Text);
+        btn->setButtonVariant(ZButton::kText);
         row4->addWidget(btn);
     }
     row4->addStretch();
@@ -102,10 +104,10 @@ TestWidget::TestWidget(QWidget* parent)
     auto* row6 = new QHBoxLayout();
     row6->setSpacing(12);
     auto* d1 = new ZButton("Default");  d1->setEnabled(false);
-    auto* d2 = new ZButton("Primary");  d2->setButtonType(ZButton::BT_Primary); d2->setEnabled(false);
-    auto* d3 = new ZButton("Success");  d3->setButtonType(ZButton::BT_Success); d3->setEnabled(false);
-    auto* d4 = new ZButton("Plain");    d4->setButtonType(ZButton::BT_Primary); d4->setButtonVariant(ZButton::BV_Plain); d4->setEnabled(false);
-    auto* d5 = new ZButton("Text");     d5->setButtonType(ZButton::BT_Danger);  d5->setButtonVariant(ZButton::BV_Text);  d5->setEnabled(false);
+    auto* d2 = new ZButton("Primary");  d2->setButtonType(ZButton::kPrimary); d2->setEnabled(false);
+    auto* d3 = new ZButton("Success");  d3->setButtonType(ZButton::kSuccess); d3->setEnabled(false);
+    auto* d4 = new ZButton("Plain");    d4->setButtonType(ZButton::kPrimary); d4->setButtonVariant(ZButton::kPlain); d4->setEnabled(false);
+    auto* d5 = new ZButton("Text");     d5->setButtonType(ZButton::kDanger);  d5->setButtonVariant(ZButton::kText);  d5->setEnabled(false);
     row6->addWidget(d1);
     row6->addWidget(d2);
     row6->addWidget(d3);
