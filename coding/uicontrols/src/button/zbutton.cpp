@@ -217,6 +217,15 @@ void ZButton::paintEvent(QPaintEvent*)
     qreal radius = borderRadius();
     qreal bw = s.border;
 
+    // Focus ring — drawn first so button covers inner half, like CSS outline
+    if (focus_keyboard_ && !circle_) {
+        QPainterPath focusPath;
+        focusPath.addRoundedRect(QRectF(r).adjusted(-1, -1, 1, 1), radius + 1, radius + 1);
+        p.setPen(QPen(QColor(0xa0, 0xcf, 0xff), 2));
+        p.setBrush(Qt::NoBrush);
+        p.drawPath(focusPath);
+    }
+
     // Background + border
     QPainterPath path;
     path.addRoundedRect(QRectF(r).adjusted(bw/2, bw/2, -bw/2, -bw/2), radius, radius);
@@ -231,15 +240,6 @@ void ZButton::paintEvent(QPaintEvent*)
         p.setPen(QPen(bc, bw));
         p.setBrush(bg);
         p.drawPath(path);
-    }
-
-    // Focus ring — only on keyboard focus (Tab), not click
-    if (focus_keyboard_ && !circle_) {
-        p.setPen(QPen(QColor(0xa0, 0xcf, 0xff), 2));
-        p.setBrush(Qt::NoBrush);
-        QPainterPath focusPath;
-        focusPath.addRoundedRect(QRectF(r).adjusted(-1, -1, 1, 1), radius + 1, radius + 1);
-        p.drawPath(focusPath);
     }
 
     // Content
