@@ -8,6 +8,30 @@
 #include <QPainterPath>
 #include <QPushButton>
 
+// ponytail: QPushButton flat+palette hover doesn't work against native style → custom 15-line painter
+namespace {
+
+class HoverButton : public QPushButton {
+public:
+    using QPushButton::QPushButton;
+    void setHoverColor(const QColor& c) { hover_color_ = c; }
+    void setNormalColor(const QColor& c) { normal_color_ = c; update(); }
+protected:
+    void paintEvent(QPaintEvent*) override {
+        QPainter p(this);
+        p.setPen(underMouse() ? hover_color_ : normal_color_);
+        p.setFont(font());
+        p.drawText(rect(), Qt::AlignCenter, text());
+    }
+    void enterEvent(QEvent*) override { update(); }
+    void leaveEvent(QEvent*) override { update(); }
+private:
+    QColor normal_color_ = QColor(0x90, 0x93, 0x99);
+    QColor hover_color_ = QColor(0x40, 0x9e, 0xff);
+};
+
+} // namespace
+
 ZInput::ZInput(QWidget* parent)
     : QWidget(parent)
 {
@@ -24,30 +48,18 @@ ZInput::ZInput(QWidget* parent)
     setFocusProxy(edit_);  // click anywhere on ZInput → focus inner QLineEdit
 
     // Clear button
-    clear_btn_ = new QPushButton(QString(QChar(0x00D7)), this);
+    clear_btn_ = new HoverButton(QString(QChar(0x00D7)), this);
     clear_btn_->setFixedSize(16, 16);
     clear_btn_->setFlat(true);
     clear_btn_->setCursor(Qt::PointingHandCursor);
     clear_btn_->setVisible(false);
-    {
-        QPalette bp = clear_btn_->palette();
-        bp.setColor(QPalette::ButtonText, QColor(0x90, 0x93, 0x99));
-        clear_btn_->setPalette(bp);
-    }
-    clear_btn_->installEventFilter(this);
 
     // Password toggle button
-    password_btn_ = new QPushButton(this);
+    password_btn_ = new HoverButton(this);
     password_btn_->setFixedSize(16, 16);
     password_btn_->setFlat(true);
     password_btn_->setCursor(Qt::PointingHandCursor);
     password_btn_->setVisible(false);
-    {
-        QPalette bp = password_btn_->palette();
-        bp.setColor(QPalette::ButtonText, QColor(0x90, 0x93, 0x99));
-        password_btn_->setPalette(bp);
-    }
-    password_btn_->installEventFilter(this);
 
     // Layout
     auto* lay = new QHBoxLayout(this);
@@ -132,29 +144,24 @@ void ZInput::updateClearButton()
     clear_btn_->setVisible(clearable_ && !edit_->text().isEmpty());
 }
 
-static void setBtnTextColor(QPushButton* btn, const QColor& c)
-{
-    QPalette bp = btn->palette();
-    bp.setColor(QPalette::ButtonText, c);
-    btn->setPalette(bp);
-}
-
 bool ZInput::eventFilter(QObject* obj, QEvent* event)
 {
     if (obj == edit_) {
-        if (event->type() == QEvent::Enter) {
+        switch (event->type()) {
+        case QEvent::Enter:
             hovered_ = true;
             update();
-        } else if (event->type() == QEvent::Leave) {
+            break;
+        case QEvent::Leave:
             hovered_ = false;
             update();
-        }
-    } else if (obj == clear_btn_ || obj == password_btn_) {
-        auto* btn = static_cast<QPushButton*>(obj);
-        if (event->type() == QEvent::Enter) {
-            setBtnTextColor(btn, theme::colorPrimary());
-        } else if (event->type() == QEvent::Leave) {
-            setBtnTextColor(btn, QColor(0x90, 0x93, 0x99));
+            break;
+        case QEvent::FocusIn:
+        case QEvent::FocusOut:
+            update();
+            break;
+        default:
+            break;
         }
     }
     return QWidget::eventFilter(obj, event);
