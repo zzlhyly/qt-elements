@@ -1,60 +1,10 @@
 ﻿#include "ztag.h"
+#include "theme/theme.h"
 
 #include <QFontMetrics>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPainterPath>
-
-// Color tables: [TagType][effect] - 0=normal bg, 1=text color, 2=border color
-// Light: type-specific light bg + type-color text, no border
-// Dark: type-color bg + white text, no border
-// Plain: white bg + type-color text + type-color border
-
-// Color tables indexed by [TagType]: kPrimary=0, kSuccess=1, kInfo=2, kWarning=3, kDanger=4
-// Element Plus Tag SCSS: genTheme('light-9','light-8','') for light; genTheme(false,'light-5','') for plain
-
-static const QColor tagBgLight[5] = {
-    {0xec, 0xf5, 0xff},  // primary-light-9
-    {0xf0, 0xf9, 0xeb},  // success-light-9
-    {0xf4, 0xf4, 0xf5},  // info-light-9
-    {0xfd, 0xf6, 0xec},  // warning-light-9
-    {0xfe, 0xf0, 0xf0},  // danger-light-9
-};
-
-static const QColor tagBorderLight[5] = {
-    {0xd9, 0xec, 0xff},  // primary-light-8
-    {0xe1, 0xf3, 0xd8},  // success-light-8
-    {0xe9, 0xe9, 0xeb},  // info-light-8
-    {0xfa, 0xec, 0xd8},  // warning-light-8
-    {0xfd, 0xe2, 0xe2},  // danger-light-8
-};
-
-static const QColor tagBorderPlain[5] = {
-    {0xa0, 0xcf, 0xff},  // primary-light-5
-    {0xb3, 0xe1, 0x9d},  // success-light-5
-    {0xc8, 0xc9, 0xcc},  // info-light-5
-    {0xf3, 0xd1, 0x9e},  // warning-light-5
-    {0xfa, 0xb6, 0xb6},  // danger-light-5
-};
-
-static const QColor tagTextLight[5] = {
-    {0x40, 0x9e, 0xff},  // primary: blue
-    {0x67, 0xc2, 0x3a},  // success: green
-    {0x90, 0x93, 0x99},  // info: grey
-    {0xe6, 0xa2, 0x3c},  // warning: orange
-    {0xf5, 0x6c, 0x6c},  // danger: red
-};
-
-static const QColor tagBgDark[5] = {
-    {0x40, 0x9e, 0xff},  // primary: blue
-    {0x67, 0xc2, 0x3a},  // success: green
-    {0x90, 0x93, 0x99},  // info: grey
-    {0xe6, 0xa2, 0x3c},  // warning: orange
-    {0xf5, 0x6c, 0x6c},  // danger: red
-};
-
-// Tag color tables: ordered [kPrimary, kSuccess, kInfo, kWarning, kDanger]
-// This matches Element Plus where Tag types use their corresponding colors
 
 ZTag::ZTag(QWidget* parent)
     : QWidget(parent)
@@ -95,59 +45,51 @@ bool ZTag::isClosable() const         { return closable_; }
 bool ZTag::isRound() const            { return round_; }
 bool ZTag::isHit() const              { return hit_; }
 
-const ZTag::SizeSpec& ZTag::sizeSpec() const
+theme::SizeSpec ZTag::sizeSpec() const
 {
-    // Element Plus Tag sizes: large=32, default/medium=28, small=24
-    static const SizeSpec specs[] = {
-        { 32, 12, 4, 8, 12, 6 },  // Large
-        { 28, 12, 4, 8, 10, 6 },  // Medium
-        { 24, 11, 3, 7, 8,  4 },  // Small
-    };
-    return specs[size_];
+    return theme::tagSize(size_);
 }
 
 QColor ZTag::bgColor() const
 {
-    if (effect_ == kDark) return tagBgDark[type_];
+    if (effect_ == kDark) return theme::tagDarkBg(static_cast<int>(type_));
     if (effect_ == kPlain) return Qt::white;
-    // kLight
-    return tagBgLight[type_];
+    return theme::tagLightBg(static_cast<int>(type_));
 }
 
 QColor ZTag::textColor() const
 {
     if (effect_ == kDark) return Qt::white;
-    // kLight and kPlain use same text colors
-    return tagTextLight[type_];
+    return theme::tagTextColor(static_cast<int>(type_));
 }
 
 QColor ZTag::borderColor() const
 {
-    if (effect_ == kPlain) return tagBorderPlain[type_];
-    if (effect_ == kLight) return tagBorderLight[type_];
-    if (hit_) return tagTextLight[type_];
+    if (effect_ == kPlain) return theme::tagPlainBorder(static_cast<int>(type_));
+    if (effect_ == kLight) return theme::tagLightBorder(static_cast<int>(type_));
+    if (hit_) return theme::tagTextColor(static_cast<int>(type_));
     return Qt::transparent;
 }
 
 QRect ZTag::closeButtonRect() const
 {
     if (!closable_) return QRect();
-    const SizeSpec& s = sizeSpec();
-    int cs = s.closeSize;
-    int cm = s.closeMargin;
+    const theme::SizeSpec& s = sizeSpec();
+    int cs = theme::tagCloseSize(size_);
+    int cm = s.iconGap;
     return QRect(width() - cm - cs, (height() - cs) / 2, cs, cs);
 }
 
 QSize ZTag::sizeHint() const
 {
-    const SizeSpec& s = sizeSpec();
+    const theme::SizeSpec& s = sizeSpec();
     QFont f = font();
     f.setPixelSize(s.fontSize);
     f.setWeight(QFont::Medium);
     QFontMetrics fm(f);
 
     int w = s.padH * 2 + fm.horizontalAdvance(text());
-    if (closable_) w += s.closeSize + s.closeMargin;
+    if (closable_) w += theme::tagCloseSize(size_) + s.iconGap;
     w = qMax(w, s.height * 2);  // min width ~ 2x height
     return QSize(w, s.height);
 }
@@ -159,7 +101,7 @@ QSize ZTag::minimumSizeHint() const
 
 void ZTag::paintEvent(QPaintEvent*)
 {
-    const SizeSpec& s = sizeSpec();
+    const theme::SizeSpec& s = sizeSpec();
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing);
 
@@ -191,7 +133,7 @@ void ZTag::paintEvent(QPaintEvent*)
     QFontMetrics fm(f);
     QRect textRect = r;
     if (closable_) {
-        textRect.setRight(r.right() - s.closeSize - s.closeMargin);
+        textRect.setRight(r.right() - theme::tagCloseSize(size_) - s.iconGap);
     }
 
     int availableW = textRect.width() - s.padH * 2;

@@ -2,6 +2,7 @@
 #define CODING_UICONTROLS_SRC_TAG_ZTAG_H_
 
 #include <QWidget>
+#include "theme/theme.h"
 
 class ZTag : public QWidget
 {
@@ -45,8 +46,7 @@ protected:
     void mouseMoveEvent(QMouseEvent*) override;
 
 private:
-    struct SizeSpec { int height; int fontSize; int radius; int padH; int closeSize; int closeMargin; };
-    const SizeSpec& sizeSpec() const;
+    theme::SizeSpec sizeSpec() const;
     QColor bgColor() const;
     QColor textColor() const;
     QColor borderColor() const;

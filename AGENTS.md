@@ -35,6 +35,14 @@ cmake --build build --config Debug
 - 后续所有新组件均从此站点获取对标的 API、视觉效果、状态定义
 - 每个组件独立在一个子目录（如 `src/button/`），含 `.h`/`.cpp`
 
+## Theme System
+
+- 全局色彩/尺寸令牌位于 `src/theme/theme.h`（header-only）
+- 使用方式：`#include "theme/theme.h"`，通过 `theme::` 命名空间访问
+- 颜色示例：`theme::buttonSolidBg(type, theme::kHover)`、`theme::tagLightBg(type)`
+- 尺寸示例：`theme::buttonSize(size)` 返回 `theme::SizeSpec`
+- 新组件优先从 theme 获取颜色和尺寸，避免重复定义色彩表
+
 ## Code style
 
 - 遵循 [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)

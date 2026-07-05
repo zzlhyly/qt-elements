@@ -2,6 +2,7 @@
 #define CODING_UICONTROLS_SRC_BUTTON_ZBUTTON_H_
 
 #include <QAbstractButton>
+#include "theme/theme.h"
 
 class ZButton : public QAbstractButton
 {
@@ -43,8 +44,7 @@ protected:
     void changeEvent(QEvent*) override;
 
 private:
-    struct SizeSpec { int height; int fontSize; int radius; int padH; int border; int iconGap; };
-    const SizeSpec& sizeSpec() const;
+    theme::SizeSpec sizeSpec() const;
     qreal borderRadius() const;
     QColor bgColor() const;
     QColor textColor() const;
