@@ -1,0 +1,39 @@
+# Build artifacts
+build/
+debug/
+
+# IDE / Editor
+.vs/
+.vscode/
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+*.slnx
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+*.dir/
+*.autogen/
+
+# Compiled output
+*.exe
+*.dll
+*.lib
+*.pdb
+*.ilk
+*.exp
+
+# Qt MOC generated
+moc_*.cpp
+ui_*.h
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# 3rd party binaries (keep scripts/configs, exclude binaries)
+3rd/Qt5/debug/*.dll
+3rd/Qt5/debug/*.conf
+3rd/Qt5/release/*.dll
+3rd/Qt5/release/*.conf
