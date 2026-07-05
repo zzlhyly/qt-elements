@@ -637,12 +637,15 @@ TestWidget::TestWidget(QWidget* parent)
     sidebar_->addItem("Radio");
     sidebar_->addItem("Checkbox");
     sidebar_->setFont(QFont("", 13));
-    sidebar_->setStyleSheet(
-        "QListWidget { background: #f5f7fa; border: none; outline: none; }"
-        "QListWidget::item { padding: 12px 16px; }"
-        "QListWidget::item:selected { background: #ecf5ff; color: #409eff; font-weight: bold; }"
-        "QListWidget::item:hover { background: #e8eaed; }"
-    );
+    sidebar_->setFrameShape(QFrame::NoFrame);
+    sidebar_->setSpacing(0);
+    {
+        QPalette pal = sidebar_->palette();
+        pal.setColor(QPalette::Base, QColor(0xf5, 0xf7, 0xfa));
+        pal.setColor(QPalette::Highlight, QColor(0xec, 0xf5, 0xff));
+        pal.setColor(QPalette::HighlightedText, QColor(0x40, 0x9e, 0xff));
+        sidebar_->setPalette(pal);
+    }
 
     // Stacked pages
     stack_ = new QStackedWidget();
