@@ -37,9 +37,6 @@ protected:
 
 private:
     QColor statusColor() const;
-    void drawCircle(QPainter& p);
-    void drawDashboard(QPainter& p);
-    void drawLine(QPainter& p);
 
     int percentage_ = 0;
     ProgressType type_ = kLine;
