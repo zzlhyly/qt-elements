@@ -8,10 +8,19 @@
 ZProgress::ZProgress(QWidget* parent)
     : QWidget(parent)
 {
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    setMinimumWidth(50);
 }
 
 void ZProgress::setPercentage(int p)   { percentage_ = qBound(0, p, 100); update(); }
-void ZProgress::setType(ProgressType t){ type_ = t; updateGeometry(); update(); }
+void ZProgress::setType(ProgressType t){
+    type_ = t;
+    if (t == kCircle || t == kDashboard)
+        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    else
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    updateGeometry(); update();
+}
 void ZProgress::setStrokeWidth(int w)  { strokeWidth_ = qMax(1, w); update(); }
 void ZProgress::setStatus(ProgressStatus s) { status_ = s; update(); }
 void ZProgress::setShowText(bool s)    { showText_ = s; update(); }
@@ -141,7 +150,7 @@ void ZProgress::paintEvent(QPaintEvent*)
         int textW = 0;
         if (!indeterminate_ && (showText_ && !textInside_))
             textW = fm.horizontalAdvance(label) + 8;
-        int barW = w - textW;
+        int barW = qMax(w - textW, 20);
 
         // Track background
         QRectF trackRect(0, trackY, barW, trackH);
