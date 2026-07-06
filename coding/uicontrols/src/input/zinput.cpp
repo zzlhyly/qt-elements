@@ -126,6 +126,9 @@ void ZInput::setTextarea(int rows)
     if (!textarea_) {
         textarea_ = new QPlainTextEdit(this);
         textarea_->setFrameShape(QFrame::NoFrame);
+        textarea_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        textarea_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        textarea_->document()->setDocumentMargin(0);
         QPalette tp = textarea_->palette();
         tp.setColor(QPalette::Base, Qt::transparent);
         tp.setColor(QPalette::PlaceholderText, QColor(0xa8, 0xab, 0xb2));

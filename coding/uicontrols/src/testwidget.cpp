@@ -1251,16 +1251,20 @@ static QWidget* createTooltipPage()
         row->setSpacing(12);
         auto* btn1 = new ZButton("Top");
         btn1->setButtonType(ZButton::kPrimary);
-        ZTooltip::install(btn1, "Tooltip on top");
+        ZTooltip::install(btn1, "Tooltip on top", ZPopup::kTop);
         row->addWidget(btn1);
         auto* btn2 = new ZButton("Bottom");
         btn2->setButtonType(ZButton::kPrimary);
-        ZTooltip::install(btn2, "Tooltip on bottom");
+        ZTooltip::install(btn2, "Tooltip on bottom", ZPopup::kBottom);
         row->addWidget(btn2);
         auto* btn3 = new ZButton("Left");
         btn3->setButtonType(ZButton::kPrimary);
-        ZTooltip::install(btn3, "Tooltip on left");
+        ZTooltip::install(btn3, "Tooltip on left", ZPopup::kLeft);
         row->addWidget(btn3);
+        auto* btn4 = new ZButton("Right");
+        btn4->setButtonType(ZButton::kPrimary);
+        ZTooltip::install(btn4, "Tooltip on right", ZPopup::kRight);
+        row->addWidget(btn4);
         row->addStretch();
         layout->addLayout(row);
     }

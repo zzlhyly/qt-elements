@@ -29,8 +29,9 @@ QSize ZRadio::sizeHint() const
     f.setWeight(QFont::Normal);
     QFontMetrics fm(f);
     int textW = fm.horizontalAdvance(text());
-    int totalW = 14 + 8 + textW;  // circle + gap + text
-    return QSize(totalW, qMax(20, fm.height()));
+    int totalW = 14 + 8 + textW;
+    int totalH = qMax(border_ ? 28 : 20, fm.height() + (border_ ? 8 : 0));
+    return QSize(totalW, totalH);
 }
 
 void ZRadio::setBorder(bool border)
