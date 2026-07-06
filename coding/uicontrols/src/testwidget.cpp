@@ -42,140 +42,175 @@ static QWidget* createButtonPage()
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
     scroll->viewport()->setAutoFillBackground(false);
-
     auto* content = new QWidget();
-    auto* mainLayout = new QVBoxLayout(content);
-    mainLayout->setSpacing(24);
-    mainLayout->setContentsMargins(32, 24, 32, 24);
+    auto* layout = new QVBoxLayout(content);
+    layout->setSpacing(24);
+    layout->setContentsMargins(32, 24, 32, 24);
 
-    // --- Row 1: All 6 types (solid) ---
-    mainLayout->addWidget(sectionLabel("Solid Variant — All Types"));
-    auto* row1 = new QHBoxLayout();
-    row1->setSpacing(12);
-    const char* typeNames[] = { "Default", "Primary", "Success", "Warning", "Danger", "Info" };
-    ZButton::ButtonType types[] = { ZButton::kDefault, ZButton::kPrimary, ZButton::kSuccess, ZButton::kWarning, ZButton::kDanger, ZButton::kInfo };
-    for (int i = 0; i < 6; ++i) {
-        auto* btn = new ZButton(typeNames[i]);
-        btn->setButtonType(types[i]);
-        row1->addWidget(btn);
+    const int kN = 6;
+    const ZButton::ButtonType allTypes[kN] =
+        {ZButton::kDefault, ZButton::kPrimary, ZButton::kSuccess,
+         ZButton::kInfo, ZButton::kWarning, ZButton::kDanger};
+    const char* allTypeNames[kN] =
+        {"Default", "Primary", "Success", "Info", "Warning", "Danger"};
+
+    // Basic - 6 types solid
+    layout->addWidget(sectionLabel("Basic"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        for (int i = 0; i < kN; ++i) {
+            auto* btn = new ZButton(allTypeNames[i]);
+            btn->setButtonType(allTypes[i]);
+            row->addWidget(btn);
+        }
+        row->addStretch();
+        layout->addLayout(row);
     }
-    row1->addStretch();
-    mainLayout->addLayout(row1);
 
-    // --- Row 2: All 3 sizes (primary) ---
-    mainLayout->addWidget(sectionLabel("Sizes — Primary"));
-    auto* row2 = new QHBoxLayout();
-    row2->setSpacing(12);
-    auto* lg = new ZButton("Large");   lg->setButtonType(ZButton::kPrimary); lg->setButtonSize(ZButton::kLarge);
-    auto* df = new ZButton("Default"); df->setButtonType(ZButton::kPrimary); df->setButtonSize(ZButton::kMedium);
-    auto* sm = new ZButton("Small");   sm->setButtonType(ZButton::kPrimary); sm->setButtonSize(ZButton::kSmall);
-    row2->addWidget(lg);
-    row2->addWidget(df);
-    row2->addWidget(sm);
-    row2->addStretch();
-    mainLayout->addLayout(row2);
-
-    // --- Row 3: Plain variant ---
-    mainLayout->addWidget(sectionLabel("Plain Variant"));
-    auto* row3 = new QHBoxLayout();
-    row3->setSpacing(12);
-    const char* plainNames[] = { "Primary", "Success", "Warning", "Danger", "Info" };
-    ZButton::ButtonType plainTypes[] = { ZButton::kPrimary, ZButton::kSuccess, ZButton::kWarning, ZButton::kDanger, ZButton::kInfo };
-    for (int i = 0; i < 5; ++i) {
-        auto* btn = new ZButton(plainNames[i]);
-        btn->setButtonType(plainTypes[i]);
-        btn->setButtonVariant(ZButton::kPlain);
-        row3->addWidget(btn);
+    // Plain - 5 types plain, skip default
+    layout->addWidget(sectionLabel("Plain"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        for (int i = 1; i < kN; ++i) {
+            auto* btn = new ZButton(allTypeNames[i]);
+            btn->setButtonType(allTypes[i]);
+            btn->setButtonVariant(ZButton::kPlain);
+            row->addWidget(btn);
+        }
+        row->addStretch();
+        layout->addLayout(row);
     }
-    row3->addStretch();
-    mainLayout->addLayout(row3);
 
-    // --- Row 4: Text variant ---
-    mainLayout->addWidget(sectionLabel("Text Variant"));
-    auto* row4 = new QHBoxLayout();
-    row4->setSpacing(12);
-    for (int i = 0; i < 6; ++i) {
-        auto* btn = new ZButton(typeNames[i]);
-        btn->setButtonType(types[i]);
-        btn->setButtonVariant(ZButton::kText);
-        row4->addWidget(btn);
+    // Round - 5 types round, skip default
+    layout->addWidget(sectionLabel("Round"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        for (int i = 1; i < kN; ++i) {
+            auto* btn = new ZButton(allTypeNames[i]);
+            btn->setButtonType(allTypes[i]);
+            btn->setRound(true);
+            row->addWidget(btn);
+        }
+        row->addStretch();
+        layout->addLayout(row);
     }
-    row4->addStretch();
-    mainLayout->addLayout(row4);
 
-    // --- Row 5: Link variant ---
-    mainLayout->addWidget(sectionLabel("Link Variant"));
-    auto* row5 = new QHBoxLayout();
-    row5->setSpacing(12);
-    for (int i = 0; i < 6; ++i) {
-        auto* btn = new ZButton(typeNames[i]);
-        btn->setButtonType(types[i]);
-        btn->setButtonVariant(ZButton::kLink);
-        row5->addWidget(btn);
+    // Circle - 5 types circle with "A"
+    layout->addWidget(sectionLabel("Circle"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        for (int i = 1; i < kN; ++i) {
+            auto* btn = new ZButton("A");
+            btn->setButtonType(allTypes[i]);
+            btn->setCircle(true);
+            row->addWidget(btn);
+        }
+        row->addStretch();
+        layout->addLayout(row);
     }
-    row5->addStretch();
-    mainLayout->addLayout(row5);
 
-    // --- Row 6: Round buttons ---
-    mainLayout->addWidget(sectionLabel("Round Buttons"));
-    auto* row6 = new QHBoxLayout();
-    row6->setSpacing(12);
-    for (int i = 0; i < 6; ++i) {
-        auto* btn = new ZButton(typeNames[i]);
-        btn->setButtonType(types[i]);
-        btn->setRound(true);
-        row6->addWidget(btn);
+    // Dashed - 5 types dashed, skip default
+    layout->addWidget(sectionLabel("Dashed"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        for (int i = 1; i < kN; ++i) {
+            auto* btn = new ZButton(allTypeNames[i]);
+            btn->setButtonType(allTypes[i]);
+            btn->setButtonVariant(ZButton::kDashed);
+            row->addWidget(btn);
+        }
+        row->addStretch();
+        layout->addLayout(row);
     }
-    row6->addStretch();
-    mainLayout->addLayout(row6);
 
-    // --- Row 7: Dashed variant ---
-    mainLayout->addWidget(sectionLabel("Dashed Variant"));
-    auto* row7 = new QHBoxLayout();
-    row7->setSpacing(12);
-    for (int i = 0; i < 5; ++i) {
-        auto* btn = new ZButton(plainNames[i]);
-        btn->setButtonType(plainTypes[i]);
-        btn->setButtonVariant(ZButton::kDashed);
-        row7->addWidget(btn);
+    // Disabled - all 6 types disabled
+    layout->addWidget(sectionLabel("Disabled"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        for (int i = 0; i < kN; ++i) {
+            auto* btn = new ZButton(allTypeNames[i]);
+            btn->setButtonType(allTypes[i]);
+            btn->setEnabled(false);
+            row->addWidget(btn);
+        }
+        row->addStretch();
+        layout->addLayout(row);
     }
-    row7->addStretch();
-    mainLayout->addLayout(row7);
 
-    // --- Row 8: Disabled ---
-    mainLayout->addWidget(sectionLabel("Disabled"));
-    auto* row8 = new QHBoxLayout();
-    row8->setSpacing(12);
-    auto* d1 = new ZButton("Default");  d1->setEnabled(false);
-    auto* d2 = new ZButton("Primary");  d2->setButtonType(ZButton::kPrimary); d2->setEnabled(false);
-    auto* d3 = new ZButton("Success");  d3->setButtonType(ZButton::kSuccess); d3->setEnabled(false);
-    auto* d4 = new ZButton("Plain");    d4->setButtonType(ZButton::kPrimary); d4->setButtonVariant(ZButton::kPlain); d4->setEnabled(false);
-    auto* d5 = new ZButton("Text");     d5->setButtonType(ZButton::kDanger);  d5->setButtonVariant(ZButton::kText);  d5->setEnabled(false);
-    row8->addWidget(d1);
-    row8->addWidget(d2);
-    row8->addWidget(d3);
-    row8->addWidget(d4);
-    row8->addWidget(d5);
-    row8->addStretch();
-    mainLayout->addLayout(row8);
+    // Link - ZLink primary + disabled
+    layout->addWidget(sectionLabel("Link"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        auto* link = new ZLink("Link");
+        link->setLinkType(ZLink::kPrimary);
+        row->addWidget(link);
+        auto* linkDisabled = new ZLink("Disabled");
+        linkDisabled->setLinkType(ZLink::kPrimary);
+        linkDisabled->setEnabled(false);
+        row->addWidget(linkDisabled);
+        row->addStretch();
+        layout->addLayout(row);
+    }
 
-    // --- Row 9: Loading buttons ---
-    mainLayout->addWidget(sectionLabel("Loading"));
-    auto* row9 = new QHBoxLayout();
-    row9->setSpacing(12);
-    auto* ld1 = new ZButton("Primary"); ld1->setButtonType(ZButton::kPrimary); ld1->setLoading(true);
-    auto* ld2 = new ZButton("Success"); ld2->setButtonType(ZButton::kSuccess); ld2->setLoading(true);
-    auto* ld3 = new ZButton("Plain");   ld3->setButtonType(ZButton::kPrimary); ld3->setButtonVariant(ZButton::kPlain); ld3->setLoading(true);
-    auto* ld4 = new ZButton("Text");    ld4->setButtonType(ZButton::kDanger);  ld4->setButtonVariant(ZButton::kText);  ld4->setLoading(true);
-    row9->addWidget(ld1);
-    row9->addWidget(ld2);
-    row9->addWidget(ld3);
-    row9->addWidget(ld4);
-    row9->addStretch();
-    mainLayout->addLayout(row9);
+    // Text - text basic + text disabled
+    layout->addWidget(sectionLabel("Text"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        auto* tb = new ZButton("Text");
+        tb->setButtonType(ZButton::kPrimary);
+        tb->setButtonVariant(ZButton::kText);
+        row->addWidget(tb);
+        auto* tbd = new ZButton("Disabled");
+        tbd->setButtonType(ZButton::kPrimary);
+        tbd->setButtonVariant(ZButton::kText);
+        tbd->setEnabled(false);
+        row->addWidget(tbd);
+        row->addStretch();
+        layout->addLayout(row);
+    }
 
-    mainLayout->addStretch();
+    // Loading - 1 loading primary button
+    layout->addWidget(sectionLabel("Loading"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        auto* loading = new ZButton("Loading");
+        loading->setButtonType(ZButton::kPrimary);
+        loading->setLoading(true);
+        row->addWidget(loading);
+        row->addStretch();
+        layout->addLayout(row);
+    }
 
+    // Size - large / default / small primary
+    layout->addWidget(sectionLabel("Size"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        auto* lg = new ZButton("Large");
+        lg->setButtonType(ZButton::kPrimary);
+        lg->setButtonSize(ZButton::kLarge);
+        auto* df = new ZButton("Default");
+        df->setButtonType(ZButton::kPrimary);
+        auto* sm = new ZButton("Small");
+        sm->setButtonType(ZButton::kPrimary);
+        sm->setButtonSize(ZButton::kSmall);
+        row->addWidget(lg);
+        row->addWidget(df);
+        row->addWidget(sm);
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
+    layout->addStretch();
     scroll->setWidget(content);
     return scroll;
 }
@@ -186,72 +221,128 @@ static QWidget* createTagPage()
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
     scroll->viewport()->setAutoFillBackground(false);
-
     auto* content = new QWidget();
-    auto* mainLayout = new QVBoxLayout(content);
-    mainLayout->setSpacing(24);
-    mainLayout->setContentsMargins(32, 24, 32, 24);
+    auto* layout = new QVBoxLayout(content);
+    layout->setSpacing(24);
+    layout->setContentsMargins(32, 24, 32, 24);
 
-    // --- Tag types ---
-    mainLayout->addWidget(sectionLabel("Tags — All Types (Light)"));
-    auto* tagRow1 = new QHBoxLayout();
-    tagRow1->setSpacing(12);
-    const char* tagTypeNames[] = { "Primary", "Success", "Info", "Warning", "Danger" };
-    ZTag::TagType tagTypes[] = { ZTag::kPrimary, ZTag::kSuccess, ZTag::kInfo, ZTag::kWarning, ZTag::kDanger };
-    for (int i = 0; i < 5; ++i) {
-        auto* tag = new ZTag(tagTypeNames[i]);
-        tag->setTagType(tagTypes[i]);
-        tagRow1->addWidget(tag);
+    const int kN = 5;
+    const ZTag::TagType allTypes[kN] =
+        {ZTag::kPrimary, ZTag::kSuccess, ZTag::kInfo, ZTag::kWarning, ZTag::kDanger};
+    const char* allTypeNames[kN] =
+        {"Primary", "Success", "Info", "Warning", "Danger"};
+
+    // Basic - 5 types, light effect
+    layout->addWidget(sectionLabel("Basic"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        for (int i = 0; i < kN; ++i) {
+            auto* tag = new ZTag(allTypeNames[i]);
+            tag->setTagType(allTypes[i]);
+            row->addWidget(tag);
+        }
+        row->addStretch();
+        layout->addLayout(row);
     }
-    tagRow1->addStretch();
-    mainLayout->addLayout(tagRow1);
 
-    // --- Tag effects ---
-    mainLayout->addWidget(sectionLabel("Tags — Effects (Primary)"));
-    auto* tagRow2 = new QHBoxLayout();
-    tagRow2->setSpacing(12);
-    auto* lightTag = new ZTag("Light");    lightTag->setTagType(ZTag::kSuccess);
-    auto* darkTag = new ZTag("Dark");       darkTag->setTagType(ZTag::kSuccess); darkTag->setEffect(ZTag::kDark);
-    auto* plainTag = new ZTag("Plain");     plainTag->setTagType(ZTag::kSuccess); plainTag->setEffect(ZTag::kPlain);
-    tagRow2->addWidget(lightTag);
-    tagRow2->addWidget(darkTag);
-    tagRow2->addWidget(plainTag);
-    tagRow2->addStretch();
-    mainLayout->addLayout(tagRow2);
-
-    // --- Tag sizes + round ---
-    mainLayout->addWidget(sectionLabel("Tags — Sizes & Round"));
-    auto* tagRow3 = new QHBoxLayout();
-    tagRow3->setSpacing(12);
-    auto* tagLg = new ZTag("Large");    tagLg->setTagType(ZTag::kWarning); tagLg->setTagSize(ZTag::kLarge);
-    auto* tagMd = new ZTag("Medium");   tagMd->setTagType(ZTag::kWarning); tagMd->setTagSize(ZTag::kMedium);
-    auto* tagSm = new ZTag("Small");    tagSm->setTagType(ZTag::kWarning); tagSm->setTagSize(ZTag::kSmall);
-    auto* tagRd = new ZTag("Round");    tagRd->setTagType(ZTag::kDanger);   tagRd->setRound(true);
-    auto* tagHit = new ZTag("Hit");     tagHit->setTagType(ZTag::kPrimary); tagHit->setHit(true);
-    tagRow3->addWidget(tagLg);
-    tagRow3->addWidget(tagMd);
-    tagRow3->addWidget(tagSm);
-    tagRow3->addWidget(tagRd);
-    tagRow3->addWidget(tagHit);
-    tagRow3->addStretch();
-    mainLayout->addLayout(tagRow3);
-
-    // --- Closable tags ---
-    mainLayout->addWidget(sectionLabel("Tags — Closable"));
-    auto* tagRow4 = new QHBoxLayout();
-    tagRow4->setSpacing(12);
-    for (int i = 0; i < 5; ++i) {
-        auto* tag = new ZTag(tagTypeNames[i]);
-        tag->setTagType(tagTypes[i]);
-        tag->setClosable(true);
-        QObject::connect(tag, &ZTag::closed, tag, &QWidget::hide);
-        tagRow4->addWidget(tag);
+    // Closable - 5 types closable
+    layout->addWidget(sectionLabel("Closable"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        for (int i = 0; i < kN; ++i) {
+            auto* tag = new ZTag(allTypeNames[i]);
+            tag->setTagType(allTypes[i]);
+            tag->setClosable(true);
+            QObject::connect(tag, &ZTag::closed, tag, &QWidget::hide);
+            row->addWidget(tag);
+        }
+        row->addStretch();
+        layout->addLayout(row);
     }
-    tagRow4->addStretch();
-    mainLayout->addLayout(tagRow4);
 
-    mainLayout->addStretch();
+    // Sizes - large / default / small primary
+    layout->addWidget(sectionLabel("Sizes"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        auto* lg = new ZTag("Large");
+        lg->setTagType(ZTag::kPrimary);
+        lg->setTagSize(ZTag::kLarge);
+        auto* md = new ZTag("Default");
+        md->setTagType(ZTag::kPrimary);
+        auto* sm = new ZTag("Small");
+        sm->setTagType(ZTag::kPrimary);
+        sm->setTagSize(ZTag::kSmall);
+        row->addWidget(lg);
+        row->addWidget(md);
+        row->addWidget(sm);
+        row->addStretch();
+        layout->addLayout(row);
+    }
 
+    // Theme: Dark - 5 types dark effect
+    layout->addWidget(sectionLabel("Theme: Dark"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        for (int i = 0; i < kN; ++i) {
+            auto* tag = new ZTag(allTypeNames[i]);
+            tag->setTagType(allTypes[i]);
+            tag->setEffect(ZTag::kDark);
+            row->addWidget(tag);
+        }
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
+    // Theme: Light - 5 types light effect
+    layout->addWidget(sectionLabel("Theme: Light"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        for (int i = 0; i < kN; ++i) {
+            auto* tag = new ZTag(allTypeNames[i]);
+            tag->setTagType(allTypes[i]);
+            tag->setEffect(ZTag::kLight);
+            row->addWidget(tag);
+        }
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
+    // Theme: Plain - 5 types plain effect
+    layout->addWidget(sectionLabel("Theme: Plain"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        for (int i = 0; i < kN; ++i) {
+            auto* tag = new ZTag(allTypeNames[i]);
+            tag->setTagType(allTypes[i]);
+            tag->setEffect(ZTag::kPlain);
+            row->addWidget(tag);
+        }
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
+    // Round - 5 types round
+    layout->addWidget(sectionLabel("Round"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        for (int i = 0; i < kN; ++i) {
+            auto* tag = new ZTag(allTypeNames[i]);
+            tag->setTagType(allTypes[i]);
+            tag->setRound(true);
+            row->addWidget(tag);
+        }
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
+    layout->addStretch();
     scroll->setWidget(content);
     return scroll;
 }
@@ -262,65 +353,62 @@ static QWidget* createBadgePage()
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
     scroll->viewport()->setAutoFillBackground(false);
-
     auto* content = new QWidget();
-    auto* mainLayout = new QVBoxLayout(content);
-    mainLayout->setSpacing(24);
-    mainLayout->setContentsMargins(32, 24, 32, 24);
+    auto* layout = new QVBoxLayout(content);
+    layout->setSpacing(24);
+    layout->setContentsMargins(32, 24, 32, 24);
 
-    // Row 1: Types
-    mainLayout->addWidget(sectionLabel("Badge — All Types (value=10)"));
-    auto* row1 = new QHBoxLayout();
-    row1->setSpacing(16);
-    const char* badgeTypeNames[] = { "Primary", "Success", "Info", "Warning", "Danger" };
-    ZBadge::BadgeType badgeTypes[] = { ZBadge::kPrimary, ZBadge::kSuccess, ZBadge::kInfo, ZBadge::kWarning, ZBadge::kDanger };
-    for (int i = 0; i < 5; ++i) {
-        auto* badge = new ZBadge(10);
-        badge->setBadgeType(badgeTypes[i]);
-        row1->addWidget(badge);
+    const int kN = 5;
+    const ZBadge::BadgeType allTypes[kN] =
+        {ZBadge::kPrimary, ZBadge::kSuccess, ZBadge::kInfo,
+         ZBadge::kWarning, ZBadge::kDanger};
+    const int values[kN] = {10, 20, 30, 40, 50};
+
+    // Basic - 5 badges with type-specific values
+    layout->addWidget(sectionLabel("Basic"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        for (int i = 0; i < kN; ++i) {
+            auto* badge = new ZBadge(values[i]);
+            badge->setBadgeType(allTypes[i]);
+            row->addWidget(badge);
+        }
+        row->addStretch();
+        layout->addLayout(row);
     }
-    row1->addStretch();
-    mainLayout->addLayout(row1);
 
-    // Row 2: Dot mode
-    mainLayout->addWidget(sectionLabel("Badge — Dot Mode"));
-    auto* row2 = new QHBoxLayout();
-    row2->setSpacing(16);
-    for (int i = 0; i < 5; ++i) {
-        auto* badge = new ZBadge();
-        badge->setBadgeType(badgeTypes[i]);
-        badge->setDot(true);
-        row2->addWidget(badge);
+    // Dot Mode - 5 badges dot=true
+    layout->addWidget(sectionLabel("Dot Mode"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        for (int i = 0; i < kN; ++i) {
+            auto* badge = new ZBadge();
+            badge->setBadgeType(allTypes[i]);
+            badge->setDot(true);
+            row->addWidget(badge);
+        }
+        row->addStretch();
+        layout->addLayout(row);
     }
-    row2->addStretch();
-    mainLayout->addLayout(row2);
 
-    // Row 3: Max value
-    mainLayout->addWidget(sectionLabel("Badge — Max Value (value=150, max=99 → \"99+\")"));
-    auto* row3 = new QHBoxLayout();
-    row3->setSpacing(16);
-    auto* badgeMax1 = new ZBadge(150);
-    badgeMax1->setBadgeType(ZBadge::kDanger);
-    row3->addWidget(badgeMax1);
-    auto* badgeMax2 = new ZBadge(50);
-    badgeMax2->setBadgeType(ZBadge::kDanger);
-    row3->addWidget(badgeMax2);
-    row3->addStretch();
-    mainLayout->addLayout(row3);
+    // Max Value - value=150 (shows 99+) and value=50
+    layout->addWidget(sectionLabel("Max Value"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        auto* b1 = new ZBadge(150);
+        b1->setBadgeType(ZBadge::kDanger);
+        row->addWidget(b1);
+        auto* b2 = new ZBadge(50);
+        b2->setBadgeType(ZBadge::kDanger);
+        row->addWidget(b2);
+        row->addStretch();
+        layout->addLayout(row);
+    }
 
-    // Row 4: Hidden toggle
-    mainLayout->addWidget(sectionLabel("Badge — Hidden"));
-    auto* row4 = new QHBoxLayout();
-    row4->setSpacing(16);
-    auto* badgeHidden = new ZBadge(5);
-    badgeHidden->setBadgeType(ZBadge::kDanger);
-    badgeHidden->setBadgeHidden(true);
-    row4->addWidget(badgeHidden);
-    row4->addStretch();
-    mainLayout->addLayout(row4);
-
-    mainLayout->addStretch();
-
+    layout->addStretch();
     scroll->setWidget(content);
     return scroll;
 }
@@ -331,56 +419,43 @@ static QWidget* createDividerPage()
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
     scroll->viewport()->setAutoFillBackground(false);
-
     auto* content = new QWidget();
-    auto* mainLayout = new QVBoxLayout(content);
-    mainLayout->setSpacing(24);
-    mainLayout->setContentsMargins(32, 24, 32, 24);
+    auto* layout = new QVBoxLayout(content);
+    layout->setSpacing(24);
+    layout->setContentsMargins(32, 24, 32, 24);
 
-    // Horizontal divider, no text
-    mainLayout->addWidget(sectionLabel("Divider — Horizontal, No Text"));
-    mainLayout->addWidget(new ZDivider());
+    // Basic - plain horizontal divider
+    layout->addWidget(sectionLabel("Basic"));
+    layout->addWidget(new ZDivider());
 
-    // Horizontal divider with text, left
-    mainLayout->addWidget(sectionLabel("Divider — Left"));
-    auto* dLeft = new ZDivider("Left");
-    dLeft->setContentPosition(ZDivider::kLeft);
-    mainLayout->addWidget(dLeft);
+    // With Text - left / center / right
+    layout->addWidget(sectionLabel("With Text"));
+    {
+        auto* dLeft = new ZDivider("Left");
+        dLeft->setContentPosition(ZDivider::kLeft);
+        layout->addWidget(dLeft);
+    }
+    layout->addWidget(new ZDivider("Center"));
+    {
+        auto* dRight = new ZDivider("Right");
+        dRight->setContentPosition(ZDivider::kRight);
+        layout->addWidget(dRight);
+    }
 
-    // Horizontal divider with text, center
-    mainLayout->addWidget(sectionLabel("Divider — Center"));
-    mainLayout->addWidget(new ZDivider("Center"));
+    // Dashed/Dotted
+    layout->addWidget(sectionLabel("Dashed/Dotted"));
+    {
+        auto* dDashed = new ZDivider("Dashed");
+        dDashed->setBorderStyle(ZDivider::kDashed);
+        layout->addWidget(dDashed);
+    }
+    {
+        auto* dDotted = new ZDivider("Dotted");
+        dDotted->setBorderStyle(ZDivider::kDotted);
+        layout->addWidget(dDotted);
+    }
 
-    // Horizontal divider with text, right
-    mainLayout->addWidget(sectionLabel("Divider — Right"));
-    auto* dRight = new ZDivider("Right");
-    dRight->setContentPosition(ZDivider::kRight);
-    mainLayout->addWidget(dRight);
-
-    // Dashed style
-    mainLayout->addWidget(sectionLabel("Divider — Dashed"));
-    auto* dDashed = new ZDivider("Dashed");
-    dDashed->setBorderStyle(ZDivider::kDashed);
-    mainLayout->addWidget(dDashed);
-
-    // Dotted style
-    mainLayout->addWidget(sectionLabel("Divider — Dotted"));
-    auto* dDotted = new ZDivider("Dotted");
-    dDotted->setBorderStyle(ZDivider::kDotted);
-    mainLayout->addWidget(dDotted);
-
-    // Vertical divider
-    mainLayout->addWidget(sectionLabel("Divider — Vertical"));
-    auto* vertLayout = new QHBoxLayout();
-    auto* vd = new ZDivider();
-    vd->setDirection(ZDivider::kVertical);
-    vd->setFixedHeight(100);
-    vertLayout->addWidget(vd);
-    vertLayout->addStretch();
-    mainLayout->addLayout(vertLayout);
-
-    mainLayout->addStretch();
-
+    layout->addStretch();
     scroll->setWidget(content);
     return scroll;
 }
@@ -391,54 +466,70 @@ static QWidget* createLinkPage()
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
     scroll->viewport()->setAutoFillBackground(false);
-
     auto* content = new QWidget();
-    auto* mainLayout = new QVBoxLayout(content);
-    mainLayout->setSpacing(24);
-    mainLayout->setContentsMargins(32, 24, 32, 24);
+    auto* layout = new QVBoxLayout(content);
+    layout->setSpacing(24);
+    layout->setContentsMargins(32, 24, 32, 24);
 
-    // Row 1: All 6 types
-    mainLayout->addWidget(sectionLabel("Link — All Types"));
-    auto* row1 = new QHBoxLayout();
-    row1->setSpacing(16);
-    const char* linkTypeNames[] = { "Default", "Primary", "Success", "Warning", "Danger", "Info" };
-    ZLink::LinkType linkTypes[] = { ZLink::kDefault, ZLink::kPrimary, ZLink::kSuccess, ZLink::kWarning, ZLink::kDanger, ZLink::kInfo };
-    for (int i = 0; i < 6; ++i) {
-        auto* link = new ZLink(linkTypeNames[i]);
-        link->setLinkType(linkTypes[i]);
-        row1->addWidget(link);
+    const int kN = 6;
+    const ZLink::LinkType allTypes[kN] =
+        {ZLink::kDefault, ZLink::kPrimary, ZLink::kSuccess,
+         ZLink::kWarning, ZLink::kDanger, ZLink::kInfo};
+    const char* allTypeNames[kN] =
+        {"Default", "Primary", "Success", "Warning", "Danger", "Info"};
+
+    // Basic - all 6 types
+    layout->addWidget(sectionLabel("Basic"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        for (int i = 0; i < kN; ++i) {
+            auto* link = new ZLink(allTypeNames[i]);
+            link->setLinkType(allTypes[i]);
+            row->addWidget(link);
+        }
+        row->addStretch();
+        layout->addLayout(row);
     }
-    row1->addStretch();
-    mainLayout->addLayout(row1);
 
-    // Row 2: Underline always on
-    mainLayout->addWidget(sectionLabel("Link — Underline Always On"));
-    auto* row2 = new QHBoxLayout();
-    row2->setSpacing(16);
-    for (int i = 0; i < 6; ++i) {
-        auto* link = new ZLink(linkTypeNames[i]);
-        link->setLinkType(linkTypes[i]);
-        link->setUnderline(true);
-        row2->addWidget(link);
+    // Underline - 2 links with underline always on
+    layout->addWidget(sectionLabel("Underline"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        auto* l1 = new ZLink("With underline");
+        l1->setLinkType(ZLink::kInfo);
+        l1->setUnderline(true);
+        row->addWidget(l1);
+        auto* l2 = new ZLink("Always show");
+        l2->setLinkType(ZLink::kInfo);
+        l2->setUnderline(true);
+        row->addWidget(l2);
+        row->addStretch();
+        layout->addLayout(row);
     }
-    row2->addStretch();
-    mainLayout->addLayout(row2);
 
-    // Row 3: Disabled links
-    mainLayout->addWidget(sectionLabel("Link — Disabled"));
-    auto* row3 = new QHBoxLayout();
-    row3->setSpacing(16);
-    for (int i = 0; i < 6; ++i) {
-        auto* link = new ZLink(linkTypeNames[i]);
-        link->setLinkType(linkTypes[i]);
-        link->setEnabled(false);
-        row3->addWidget(link);
+    // Disabled - 3 disabled links
+    layout->addWidget(sectionLabel("Disabled"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        auto* d1 = new ZLink("Default");
+        d1->setEnabled(false);
+        row->addWidget(d1);
+        auto* d2 = new ZLink("Primary");
+        d2->setLinkType(ZLink::kPrimary);
+        d2->setEnabled(false);
+        row->addWidget(d2);
+        auto* d3 = new ZLink("Info");
+        d3->setLinkType(ZLink::kInfo);
+        d3->setEnabled(false);
+        row->addWidget(d3);
+        row->addStretch();
+        layout->addLayout(row);
     }
-    row3->addStretch();
-    mainLayout->addLayout(row3);
 
-    mainLayout->addStretch();
-
+    layout->addStretch();
     scroll->setWidget(content);
     return scroll;
 }
@@ -449,47 +540,60 @@ static QWidget* createTextPage()
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
     scroll->viewport()->setAutoFillBackground(false);
-
     auto* content = new QWidget();
     auto* layout = new QVBoxLayout(content);
     layout->setSpacing(24);
     layout->setContentsMargins(32, 24, 32, 24);
 
-    // Types
-    layout->addWidget(sectionLabel("Text — All Types"));
-    auto* row1 = new QHBoxLayout();
-    row1->setSpacing(16);
-    ZText::TextType ztTypes[] = { ZText::kDefault, ZText::kPrimary, ZText::kSuccess,
-                                  ZText::kInfo, ZText::kWarning, ZText::kDanger };
-    const char* ztNames[] = { "Default", "Primary", "Success", "Info", "Warning", "Danger" };
-    for (int i = 0; i < 6; ++i) {
-        auto* t = new ZText(ztNames[i]);
-        t->setTextType(ztTypes[i]);
-        row1->addWidget(t);
+    // Types - all 6 text types in one row
+    layout->addWidget(sectionLabel("Types"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        ZText::TextType types[] =
+            {ZText::kDefault, ZText::kPrimary, ZText::kSuccess,
+             ZText::kInfo, ZText::kWarning, ZText::kDanger};
+        const char* names[] =
+            {"Default", "Primary", "Success", "Info", "Warning", "Danger"};
+        for (int i = 0; i < 6; ++i) {
+            auto* t = new ZText(names[i]);
+            t->setTextType(types[i]);
+            row->addWidget(t);
+        }
+        row->addStretch();
+        layout->addLayout(row);
     }
-    row1->addStretch();
-    layout->addLayout(row1);
 
-    // Sizes
-    layout->addWidget(sectionLabel("Text — Sizes"));
-    auto* row2 = new QHBoxLayout();
-    row2->setSpacing(16);
-    auto* tLg = new ZText("Large");   tLg->setTextSize(ZText::kLarge);   tLg->setTextType(ZText::kPrimary);
-    auto* tDf = new ZText("Medium");  tDf->setTextSize(ZText::kMedium);  tDf->setTextType(ZText::kPrimary);
-    auto* tSm = new ZText("Small");   tSm->setTextSize(ZText::kSmall);   tSm->setTextType(ZText::kPrimary);
-    row2->addWidget(tLg);
-    row2->addWidget(tDf);
-    row2->addWidget(tSm);
-    row2->addStretch();
-    layout->addLayout(row2);
+    // Sizes - large / default / small
+    layout->addWidget(sectionLabel("Sizes"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        auto* lg = new ZText("Large");
+        lg->setTextSize(ZText::kLarge);
+        lg->setTextType(ZText::kPrimary);
+        auto* df = new ZText("Default");
+        df->setTextType(ZText::kPrimary);
+        auto* sm = new ZText("Small");
+        sm->setTextSize(ZText::kSmall);
+        sm->setTextType(ZText::kPrimary);
+        row->addWidget(lg);
+        row->addWidget(df);
+        row->addWidget(sm);
+        row->addStretch();
+        layout->addLayout(row);
+    }
 
-    // Truncated
-    layout->addWidget(sectionLabel("Text — Truncated (200px)"));
-    auto* tr = new ZText("This is a very long text that should be truncated with ellipsis");
-    tr->setTruncated(true);
-    tr->setFixedWidth(200);
-    tr->setTextType(ZText::kPrimary);
-    layout->addWidget(tr);
+    // Truncated - long text truncated at 200px
+    layout->addWidget(sectionLabel("Truncated"));
+    {
+        auto* tr = new ZText("This is a very long text that should be truncated "
+                             "with ellipsis when it exceeds the available width");
+        tr->setTruncated(true);
+        tr->setFixedWidth(200);
+        tr->setTextType(ZText::kPrimary);
+        layout->addWidget(tr);
+    }
 
     layout->addStretch();
     scroll->setWidget(content);
@@ -502,52 +606,71 @@ static QWidget* createInputPage()
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
     scroll->viewport()->setAutoFillBackground(false);
-
     auto* content = new QWidget();
     auto* layout = new QVBoxLayout(content);
     layout->setSpacing(24);
     layout->setContentsMargins(32, 24, 32, 24);
 
-    // Basic
-    layout->addWidget(sectionLabel("Input — Basic"));
-    auto* basic = new ZInput();
-    basic->setPlaceholderText("Basic input");
-    layout->addWidget(basic);
+    // Basic - one default ZInput
+    layout->addWidget(sectionLabel("Basic"));
+    layout->addWidget(new ZInput());
 
-    // Sizes
-    layout->addWidget(sectionLabel("Input — Sizes"));
-    auto* szRow = new QHBoxLayout();
-    szRow->setSpacing(12);
-    auto* iLg = new ZInput(); iLg->setInputSize(ZInput::kLarge); iLg->setPlaceholderText("Large");
-    auto* iDf = new ZInput(); iDf->setPlaceholderText("Default");
-    auto* iSm = new ZInput(); iSm->setInputSize(ZInput::kSmall); iSm->setPlaceholderText("Small");
-    szRow->addWidget(iLg);
-    szRow->addWidget(iDf);
-    szRow->addWidget(iSm);
-    szRow->addStretch();
-    layout->addLayout(szRow);
+    // Placeholder
+    layout->addWidget(sectionLabel("Placeholder"));
+    {
+        auto* input = new ZInput();
+        input->setPlaceholderText("Please input");
+        layout->addWidget(input);
+    }
 
-    // Clearable
-    layout->addWidget(sectionLabel("Input — Clearable"));
-    auto* clearInput = new ZInput();
-    clearInput->setPlaceholderText("Type something and clear...");
-    clearInput->setClearable(true);
-    layout->addWidget(clearInput);
+    // Clearable - clearable with default value
+    layout->addWidget(sectionLabel("Clearable"));
+    {
+        auto* input = new ZInput();
+        input->setPlaceholderText("Type something...");
+        input->setText("Clear me");
+        input->setClearable(true);
+        layout->addWidget(input);
+    }
 
-    // Password
-    layout->addWidget(sectionLabel("Input — Password"));
-    auto* pwdInput = new ZInput();
-    pwdInput->setPlaceholderText("Enter password");
-    pwdInput->setPasswordMode(true);
-    layout->addWidget(pwdInput);
+    // Password - password mode
+    layout->addWidget(sectionLabel("Password"));
+    {
+        auto* input = new ZInput();
+        input->setPlaceholderText("Please input password");
+        input->setPasswordMode(true);
+        layout->addWidget(input);
+    }
 
-    // Disabled
-    layout->addWidget(sectionLabel("Input — Disabled"));
-    auto* disabledInput = new ZInput();
-    disabledInput->setPlaceholderText("Disabled");
-    disabledInput->setText("Can't edit");
-    disabledInput->setEnabled(false);
-    layout->addWidget(disabledInput);
+    // Disabled - disabled with text
+    layout->addWidget(sectionLabel("Disabled"));
+    {
+        auto* input = new ZInput();
+        input->setPlaceholderText("Disabled");
+        input->setText("Disabled");
+        input->setEnabled(false);
+        layout->addWidget(input);
+    }
+
+    // Size - large / default / small
+    layout->addWidget(sectionLabel("Size"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        auto* lg = new ZInput();
+        lg->setInputSize(ZInput::kLarge);
+        lg->setPlaceholderText("Large");
+        auto* df = new ZInput();
+        df->setPlaceholderText("Default");
+        auto* sm = new ZInput();
+        sm->setInputSize(ZInput::kSmall);
+        sm->setPlaceholderText("Small");
+        row->addWidget(lg);
+        row->addWidget(df);
+        row->addWidget(sm);
+        row->addStretch();
+        layout->addLayout(row);
+    }
 
     layout->addStretch();
     scroll->setWidget(content);
@@ -560,40 +683,46 @@ static QWidget* createRadioPage()
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
     scroll->viewport()->setAutoFillBackground(false);
-
     auto* content = new QWidget();
     auto* layout = new QVBoxLayout(content);
     layout->setSpacing(24);
     layout->setContentsMargins(32, 24, 32, 24);
 
-    // Radio group
-    layout->addWidget(sectionLabel("Radio — Group"));
-    auto* radioGroup = new QButtonGroup(content);
-    auto* group1 = new QHBoxLayout();
-    group1->setSpacing(16);
-    auto* r1 = new ZRadio("Option A");
-    auto* r2 = new ZRadio("Option B");
-    auto* r3 = new ZRadio("Option C");
-    r1->setChecked(true);
-    radioGroup->addButton(r1);
-    radioGroup->addButton(r2);
-    radioGroup->addButton(r3);
-    group1->addWidget(r1);
-    group1->addWidget(r2);
-    group1->addWidget(r3);
-    group1->addStretch();
-    layout->addLayout(group1);
+    // Basic - 3 options, A checked
+    layout->addWidget(sectionLabel("Basic"));
+    {
+        auto* group = new QButtonGroup(content);
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        auto* r1 = new ZRadio("Option A");
+        auto* r2 = new ZRadio("Option B");
+        auto* r3 = new ZRadio("Option C");
+        r1->setChecked(true);
+        group->addButton(r1);
+        group->addButton(r2);
+        group->addButton(r3);
+        row->addWidget(r1);
+        row->addWidget(r2);
+        row->addWidget(r3);
+        row->addStretch();
+        layout->addLayout(row);
+    }
 
-    // Disabled
-    layout->addWidget(sectionLabel("Radio — Disabled"));
-    auto* group2 = new QHBoxLayout();
-    group2->setSpacing(16);
-    auto* rd1 = new ZRadio("Disabled unchecked"); rd1->setEnabled(false);
-    auto* rd2 = new ZRadio("Disabled checked");   rd2->setChecked(true); rd2->setEnabled(false);
-    group2->addWidget(rd1);
-    group2->addWidget(rd2);
-    group2->addStretch();
-    layout->addLayout(group2);
+    // Disabled - one checked, one unchecked
+    layout->addWidget(sectionLabel("Disabled"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        auto* rd1 = new ZRadio("Disabled unchecked");
+        rd1->setEnabled(false);
+        auto* rd2 = new ZRadio("Disabled checked");
+        rd2->setChecked(true);
+        rd2->setEnabled(false);
+        row->addWidget(rd1);
+        row->addWidget(rd2);
+        row->addStretch();
+        layout->addLayout(row);
+    }
 
     layout->addStretch();
     scroll->setWidget(content);
@@ -606,33 +735,38 @@ static QWidget* createCheckboxPage()
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
     scroll->viewport()->setAutoFillBackground(false);
-
     auto* content = new QWidget();
     auto* layout = new QVBoxLayout(content);
     layout->setSpacing(24);
     layout->setContentsMargins(32, 24, 32, 24);
 
-    // Basic
-    layout->addWidget(sectionLabel("Checkbox — Basic"));
-    auto* row1 = new QHBoxLayout();
-    row1->setSpacing(16);
-    auto* c1 = new ZCheckbox("Checked");   c1->setChecked(true);
-    auto* c2 = new ZCheckbox("Unchecked");
-    row1->addWidget(c1);
-    row1->addWidget(c2);
-    row1->addStretch();
-    layout->addLayout(row1);
+    // Basic - 3 checkboxes
+    layout->addWidget(sectionLabel("Basic"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        row->addWidget(new ZCheckbox("Option A"));
+        row->addWidget(new ZCheckbox("Option B"));
+        row->addWidget(new ZCheckbox("Option C"));
+        row->addStretch();
+        layout->addLayout(row);
+    }
 
-    // Disabled
-    layout->addWidget(sectionLabel("Checkbox — Disabled"));
-    auto* row2 = new QHBoxLayout();
-    row2->setSpacing(16);
-    auto* cd1 = new ZCheckbox("Disabled unchecked"); cd1->setEnabled(false);
-    auto* cd2 = new ZCheckbox("Disabled checked");   cd2->setChecked(true); cd2->setEnabled(false);
-    row2->addWidget(cd1);
-    row2->addWidget(cd2);
-    row2->addStretch();
-    layout->addLayout(row2);
+    // Disabled - one checked, one unchecked
+    layout->addWidget(sectionLabel("Disabled"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        auto* cd1 = new ZCheckbox("Disabled unchecked");
+        cd1->setEnabled(false);
+        auto* cd2 = new ZCheckbox("Disabled checked");
+        cd2->setChecked(true);
+        cd2->setEnabled(false);
+        row->addWidget(cd1);
+        row->addWidget(cd2);
+        row->addStretch();
+        layout->addLayout(row);
+    }
 
     layout->addStretch();
     scroll->setWidget(content);
@@ -645,33 +779,39 @@ static QWidget* createSwitchPage()
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
     scroll->viewport()->setAutoFillBackground(false);
-
     auto* content = new QWidget();
     auto* layout = new QVBoxLayout(content);
     layout->setSpacing(24);
     layout->setContentsMargins(32, 24, 32, 24);
 
-    // Basic switches
-    layout->addWidget(sectionLabel("Switch — Basic"));
-    auto* row1 = new QHBoxLayout();
-    row1->setSpacing(16);
-    auto* sOff = new ZSwitch();
-    auto* sOn = new ZSwitch();  sOn->setChecked(true);
-    row1->addWidget(sOff);
-    row1->addWidget(sOn);
-    row1->addStretch();
-    layout->addLayout(row1);
+    // Basic - one OFF, one ON (checked)
+    layout->addWidget(sectionLabel("Basic"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        row->addWidget(new ZSwitch());
+        auto* on = new ZSwitch();
+        on->setChecked(true);
+        row->addWidget(on);
+        row->addStretch();
+        layout->addLayout(row);
+    }
 
-    // Disabled
-    layout->addWidget(sectionLabel("Switch — Disabled"));
-    auto* row2 = new QHBoxLayout();
-    row2->setSpacing(16);
-    auto* sdOff = new ZSwitch(); sdOff->setEnabled(false);
-    auto* sdOn  = new ZSwitch(); sdOn->setChecked(true); sdOn->setEnabled(false);
-    row2->addWidget(sdOff);
-    row2->addWidget(sdOn);
-    row2->addStretch();
-    layout->addLayout(row2);
+    // Disabled - disabled OFF + disabled ON
+    layout->addWidget(sectionLabel("Disabled"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        auto* off = new ZSwitch();
+        off->setEnabled(false);
+        auto* on = new ZSwitch();
+        on->setChecked(true);
+        on->setEnabled(false);
+        row->addWidget(off);
+        row->addWidget(on);
+        row->addStretch();
+        layout->addLayout(row);
+    }
 
     layout->addStretch();
     scroll->setWidget(content);
@@ -684,25 +824,33 @@ static QWidget* createSliderPage()
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
     scroll->viewport()->setAutoFillBackground(false);
-
     auto* content = new QWidget();
     auto* layout = new QVBoxLayout(content);
     layout->setSpacing(24);
     layout->setContentsMargins(32, 24, 32, 24);
 
-    // Values
-    layout->addWidget(sectionLabel("Slider — Values"));
-    auto* sl0 = new ZSlider(); sl0->setValue(0);
-    auto* sl50 = new ZSlider(); sl50->setValue(50);
-    auto* sl100 = new ZSlider(); sl100->setValue(100);
-    layout->addWidget(sl0);
-    layout->addWidget(sl50);
-    layout->addWidget(sl100);
+    // Basic - at 0, 50, 100
+    layout->addWidget(sectionLabel("Basic"));
+    {
+        auto* s0 = new ZSlider();
+        s0->setValue(0);
+        auto* s50 = new ZSlider();
+        s50->setValue(50);
+        auto* s100 = new ZSlider();
+        s100->setValue(100);
+        layout->addWidget(s0);
+        layout->addWidget(s50);
+        layout->addWidget(s100);
+    }
 
-    // Disabled
-    layout->addWidget(sectionLabel("Slider — Disabled"));
-    auto* sd = new ZSlider(); sd->setValue(60); sd->setEnabled(false);
-    layout->addWidget(sd);
+    // Disabled - disabled at value 30
+    layout->addWidget(sectionLabel("Disabled"));
+    {
+        auto* sd = new ZSlider();
+        sd->setValue(30);
+        sd->setEnabled(false);
+        layout->addWidget(sd);
+    }
 
     layout->addStretch();
     scroll->setWidget(content);
@@ -715,56 +863,62 @@ static QWidget* createProgressPage()
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
     scroll->viewport()->setAutoFillBackground(false);
-
     auto* content = new QWidget();
     auto* layout = new QVBoxLayout(content);
     layout->setSpacing(24);
     layout->setContentsMargins(32, 24, 32, 24);
 
-    // Line: percentages
-    layout->addWidget(sectionLabel("Progress — Line"));
-    auto* p0 = new ZProgress(); p0->setPercentage(0);
-    auto* p50 = new ZProgress(); p50->setPercentage(50);
-    auto* p100 = new ZProgress(); p100->setPercentage(100);
-    layout->addWidget(p0);
-    layout->addWidget(p50);
-    layout->addWidget(p100);
+    // Basic - line at 0%, 50%, 100%
+    layout->addWidget(sectionLabel("Basic"));
+    {
+        auto* p0 = new ZProgress();
+        p0->setPercentage(0);
+        auto* p50 = new ZProgress();
+        p50->setPercentage(50);
+        auto* p100 = new ZProgress();
+        p100->setPercentage(100);
+        layout->addWidget(p0);
+        layout->addWidget(p50);
+        layout->addWidget(p100);
+    }
 
-    // Line: status
-    layout->addWidget(sectionLabel("Progress — Status (Line)"));
-    auto* ps = new ZProgress(); ps->setPercentage(100); ps->setStatus(ZProgress::kSuccess);
-    auto* pe = new ZProgress(); pe->setPercentage(80);  pe->setStatus(ZProgress::kException);
-    auto* pw = new ZProgress(); pw->setPercentage(60);  pw->setStatus(ZProgress::kWarning);
-    layout->addWidget(ps);
-    layout->addWidget(pe);
-    layout->addWidget(pw);
+    // Status - 60% with success / exception / warning
+    layout->addWidget(sectionLabel("Status"));
+    {
+        auto* ps = new ZProgress();
+        ps->setPercentage(60);
+        ps->setStatus(ZProgress::kSuccess);
+        auto* pe = new ZProgress();
+        pe->setPercentage(60);
+        pe->setStatus(ZProgress::kException);
+        auto* pw = new ZProgress();
+        pw->setPercentage(60);
+        pw->setStatus(ZProgress::kWarning);
+        layout->addWidget(ps);
+        layout->addWidget(pe);
+        layout->addWidget(pw);
+    }
 
-    // Circle
-    layout->addWidget(sectionLabel("Progress — Circle"));
-    auto* hr = new QHBoxLayout();
-    hr->setSpacing(16);
-    auto* pc0 = new ZProgress(); pc0->setType(ZProgress::kCircle); pc0->setPercentage(0);
-    auto* pc50 = new ZProgress(); pc50->setType(ZProgress::kCircle); pc50->setPercentage(50);
-    auto* pc100 = new ZProgress(); pc100->setType(ZProgress::kCircle); pc100->setPercentage(100);
-    pc100->setStatus(ZProgress::kSuccess);
-    hr->addWidget(pc0);
-    hr->addWidget(pc50);
-    hr->addWidget(pc100);
-    hr->addStretch();
-    layout->addLayout(hr);
-
-    // Circle: status
-    layout->addWidget(sectionLabel("Progress — Circle Status"));
-    auto* hr2 = new QHBoxLayout();
-    hr2->setSpacing(16);
-    auto* pcs = new ZProgress(); pcs->setType(ZProgress::kCircle); pcs->setPercentage(100); pcs->setStatus(ZProgress::kSuccess);
-    auto* pce = new ZProgress(); pce->setType(ZProgress::kCircle); pce->setPercentage(75);  pce->setStatus(ZProgress::kException);
-    auto* pcw = new ZProgress(); pcw->setType(ZProgress::kCircle); pcw->setPercentage(50);  pcw->setStatus(ZProgress::kWarning);
-    hr2->addWidget(pcs);
-    hr2->addWidget(pce);
-    hr2->addWidget(pcw);
-    hr2->addStretch();
-    layout->addLayout(hr2);
+    // Circle - 0%, 50%, 100%
+    layout->addWidget(sectionLabel("Circle"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        auto* pc0 = new ZProgress();
+        pc0->setType(ZProgress::kCircle);
+        pc0->setPercentage(0);
+        auto* pc50 = new ZProgress();
+        pc50->setType(ZProgress::kCircle);
+        pc50->setPercentage(50);
+        auto* pc100 = new ZProgress();
+        pc100->setType(ZProgress::kCircle);
+        pc100->setPercentage(100);
+        row->addWidget(pc0);
+        row->addWidget(pc50);
+        row->addWidget(pc100);
+        row->addStretch();
+        layout->addLayout(row);
+    }
 
     layout->addStretch();
     scroll->setWidget(content);
@@ -777,42 +931,88 @@ static QWidget* createAlertPage()
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
     scroll->viewport()->setAutoFillBackground(false);
-
     auto* content = new QWidget();
     auto* layout = new QVBoxLayout(content);
     layout->setSpacing(24);
     layout->setContentsMargins(32, 24, 32, 24);
 
-    // Types — light effect
-    layout->addWidget(sectionLabel("Alert — Light Effect"));
-    layout->addWidget(new ZAlert("Success alert text", ZAlert::kSuccess));
-    layout->addWidget(new ZAlert("Info alert text"));
-    layout->addWidget(new ZAlert("Warning alert text", ZAlert::kWarning));
-    layout->addWidget(new ZAlert("Error alert text", ZAlert::kError));
+    // Basic - 4 alerts with titles
+    layout->addWidget(sectionLabel("Basic"));
+    layout->addWidget(new ZAlert("Success alert", ZAlert::kSuccess));
+    layout->addWidget(new ZAlert("Info alert", ZAlert::kInfo));
+    layout->addWidget(new ZAlert("Warning alert", ZAlert::kWarning));
+    layout->addWidget(new ZAlert("Error alert", ZAlert::kError));
 
-    // Dark effect
-    layout->addWidget(sectionLabel("Alert — Dark Effect"));
-    auto* ad1 = new ZAlert("Success dark", ZAlert::kSuccess); ad1->setEffect(ZAlert::kDark);
-    auto* ad2 = new ZAlert("Info dark", ZAlert::kInfo);       ad2->setEffect(ZAlert::kDark);
-    auto* ad3 = new ZAlert("Warning dark", ZAlert::kWarning); ad3->setEffect(ZAlert::kDark);
-    auto* ad4 = new ZAlert("Error dark", ZAlert::kError);     ad4->setEffect(ZAlert::kDark);
-    layout->addWidget(ad1);
-    layout->addWidget(ad2);
-    layout->addWidget(ad3);
-    layout->addWidget(ad4);
+    // Theme - 4 light + 4 dark
+    layout->addWidget(sectionLabel("Theme"));
+    // light (default effect)
+    layout->addWidget(new ZAlert("Success light", ZAlert::kSuccess));
+    layout->addWidget(new ZAlert("Info light", ZAlert::kInfo));
+    layout->addWidget(new ZAlert("Warning light", ZAlert::kWarning));
+    layout->addWidget(new ZAlert("Error light", ZAlert::kError));
+    // dark
+    {
+        auto* ad1 = new ZAlert("Success dark", ZAlert::kSuccess);
+        ad1->setEffect(ZAlert::kDark);
+        auto* ad2 = new ZAlert("Info dark", ZAlert::kInfo);
+        ad2->setEffect(ZAlert::kDark);
+        auto* ad3 = new ZAlert("Warning dark", ZAlert::kWarning);
+        ad3->setEffect(ZAlert::kDark);
+        auto* ad4 = new ZAlert("Error dark", ZAlert::kError);
+        ad4->setEffect(ZAlert::kDark);
+        layout->addWidget(ad1);
+        layout->addWidget(ad2);
+        layout->addWidget(ad3);
+        layout->addWidget(ad4);
+    }
 
-    // Closable
-    layout->addWidget(sectionLabel("Alert — Closable"));
-    auto* ac = new ZAlert("Click × to close this alert", ZAlert::kSuccess);
-    ac->setClosable(true);
-    QObject::connect(ac, &ZAlert::closed, ac, &QWidget::hide);
-    layout->addWidget(ac);
+    // Closable - 4 closable alerts
+    layout->addWidget(sectionLabel("Closable"));
+    {
+        auto* a1 = new ZAlert("Success alert", ZAlert::kSuccess);
+        a1->setClosable(true);
+        QObject::connect(a1, &ZAlert::closed, a1, &QWidget::hide);
+        layout->addWidget(a1);
+        auto* a2 = new ZAlert("Info alert", ZAlert::kInfo);
+        a2->setClosable(true);
+        QObject::connect(a2, &ZAlert::closed, a2, &QWidget::hide);
+        layout->addWidget(a2);
+        auto* a3 = new ZAlert("Warning alert", ZAlert::kWarning);
+        a3->setClosable(true);
+        QObject::connect(a3, &ZAlert::closed, a3, &QWidget::hide);
+        layout->addWidget(a3);
+        auto* a4 = new ZAlert("Error alert", ZAlert::kError);
+        a4->setClosable(true);
+        QObject::connect(a4, &ZAlert::closed, a4, &QWidget::hide);
+        layout->addWidget(a4);
+    }
 
-    // No icon
-    layout->addWidget(sectionLabel("Alert — No Icon"));
-    auto* ani = new ZAlert("This alert has no icon", ZAlert::kWarning);
-    ani->setShowIcon(false);
-    layout->addWidget(ani);
+    // show-icon - one with, one without
+    layout->addWidget(sectionLabel("show-icon"));
+    layout->addWidget(new ZAlert("With icon", ZAlert::kInfo));
+    {
+        auto* ani = new ZAlert("No icon", ZAlert::kInfo);
+        ani->setShowIcon(false);
+        layout->addWidget(ani);
+    }
+
+    // center - one centered alert
+    layout->addWidget(sectionLabel("center"));
+    {
+        auto* ac = new ZAlert("Centered alert text", ZAlert::kInfo);
+        ac->setCenter(true);
+        layout->addWidget(ac);
+    }
+
+    // description - one alert with long description text as title
+    layout->addWidget(sectionLabel("description"));
+    {
+        auto* ad = new ZAlert(
+            "This is a longer description that explains the alert in more detail. "
+            "It provides additional context for the user about what happened.",
+            ZAlert::kInfo);
+        layout->addWidget(ad);
+    }
 
     layout->addStretch();
     scroll->setWidget(content);
@@ -825,47 +1025,46 @@ static QWidget* createTooltipPage()
     scroll->setWidgetResizable(true);
     scroll->setFrameShape(QFrame::NoFrame);
     scroll->viewport()->setAutoFillBackground(false);
-
     auto* content = new QWidget();
     auto* layout = new QVBoxLayout(content);
     layout->setSpacing(24);
     layout->setContentsMargins(32, 24, 32, 24);
 
-    layout->addWidget(sectionLabel("Tooltip — Hover over buttons (500ms delay)"));
-    auto* row = new QHBoxLayout();
-    row->setSpacing(12);
+    // Hover - 3 buttons with hover tooltips
+    layout->addWidget(sectionLabel("Hover"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        auto* btn1 = new ZButton("Top");
+        btn1->setButtonType(ZButton::kPrimary);
+        ZTooltip::install(btn1, "Tooltip on top");
+        row->addWidget(btn1);
+        auto* btn2 = new ZButton("Bottom");
+        btn2->setButtonType(ZButton::kPrimary);
+        ZTooltip::install(btn2, "Tooltip on bottom");
+        row->addWidget(btn2);
+        auto* btn3 = new ZButton("Left");
+        btn3->setButtonType(ZButton::kPrimary);
+        ZTooltip::install(btn3, "Tooltip on left");
+        row->addWidget(btn3);
+        row->addStretch();
+        layout->addLayout(row);
+    }
 
-    auto* btn1 = new ZButton("Hover me [Top]");
-    btn1->setButtonType(ZButton::kPrimary);
-    ZTooltip::install(btn1, "Tooltip above the button");
-    row->addWidget(btn1);
-
-    auto* btn2 = new ZButton("Hover me [Long text]");
-    btn2->setButtonType(ZButton::kSuccess);
-    ZTooltip::install(btn2, "A longer tooltip that wraps to multiple lines when the text is too long");
-    row->addWidget(btn2);
-
-    auto* btn3 = new ZButton("Disabled tooltip");
-    btn3->setButtonType(ZButton::kDanger);
-    btn3->setEnabled(false);
-    ZTooltip::install(btn3, "This tooltip appears even on disabled buttons");
-    row->addWidget(btn3);
-
-    row->addStretch();
-    layout->addLayout(row);
-
-    // Static showText demo
-    layout->addWidget(sectionLabel("Tooltip — Click for static tooltip (3s auto-hide)"));
-    auto* row2 = new QHBoxLayout();
-    row2->setSpacing(12);
-    auto* btnShow = new ZButton("Click to show tooltip");
-    btnShow->setButtonType(ZButton::kPrimary);
-    QObject::connect(btnShow, &QPushButton::clicked, [btnShow]() {
-        ZTooltip::showText(btnShow, "Static tooltip — auto-hides after 3s", 3000);
-    });
-    row2->addWidget(btnShow);
-    row2->addStretch();
-    layout->addLayout(row2);
+    // Static - button calls ZTooltip::showText on click
+    layout->addWidget(sectionLabel("Static"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        auto* btnShow = new ZButton("Click to show tooltip");
+        btnShow->setButtonType(ZButton::kPrimary);
+        QObject::connect(btnShow, &QPushButton::clicked, [btnShow]() {
+            ZTooltip::showText(btnShow, "Static tooltip - auto-hides after 3s", 3000);
+        });
+        row->addWidget(btnShow);
+        row->addStretch();
+        layout->addLayout(row);
+    }
 
     layout->addStretch();
     scroll->setWidget(content);
@@ -928,7 +1127,7 @@ TestWidget::TestWidget(QWidget* parent)
     stack_->addWidget(createAlertPage());
     stack_->addWidget(createTooltipPage());
 
-    // Wire sidebar → stack
+    // Wire sidebar -> stack
     QObject::connect(sidebar_, &QListWidget::currentRowChanged,
                      stack_, &QStackedWidget::setCurrentIndex);
     sidebar_->setCurrentRow(0);
