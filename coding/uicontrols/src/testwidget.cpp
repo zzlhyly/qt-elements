@@ -672,6 +672,29 @@ static QWidget* createInputPage()
         layout->addLayout(row);
     }
 
+    // Textarea
+    layout->addWidget(sectionLabel("Textarea"));
+    {
+        auto* input = new ZInput(); input->setTextarea(4);
+        input->setPlaceholderText("Enter multiple lines of text...");
+        layout->addWidget(input);
+    }
+
+    // With Icon
+    layout->addWidget(sectionLabel("With Icon"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        auto* inp1 = new ZInput(); inp1->setPrefixIcon(QChar(0x1F50D));
+        inp1->setPlaceholderText("Search");
+        auto* inp2 = new ZInput(); inp2->setSuffixIcon(QChar(0x2713));
+        inp2->setPlaceholderText("With suffix");
+        row->addWidget(inp1);
+        row->addWidget(inp2);
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
     layout->addStretch();
     scroll->setWidget(content);
     return scroll;
@@ -856,6 +879,50 @@ static QWidget* createSwitchPage()
         layout->addLayout(row);
     }
 
+    // Sizes
+    layout->addWidget(sectionLabel("Sizes"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        auto* sl = new ZSwitch(); sl->setSwitchSize(ZSwitch::kLarge);
+        auto* sd = new ZSwitch();
+        auto* ss = new ZSwitch(); ss->setSwitchSize(ZSwitch::kSmall);
+        auto* slon = new ZSwitch(); slon->setSwitchSize(ZSwitch::kLarge); slon->setChecked(true);
+        auto* sdon = new ZSwitch(); sdon->setChecked(true);
+        auto* sson = new ZSwitch(); sson->setSwitchSize(ZSwitch::kSmall); sson->setChecked(true);
+        row->addWidget(sl); row->addWidget(slon);
+        row->addWidget(sd); row->addWidget(sdon);
+        row->addWidget(ss); row->addWidget(sson);
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
+    // Loading
+    layout->addWidget(sectionLabel("Loading"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        auto* swl1 = new ZSwitch(); swl1->setLoading(true);
+        auto* swl2 = new ZSwitch(); swl2->setChecked(true); swl2->setLoading(true);
+        row->addWidget(swl1);
+        row->addWidget(swl2);
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
+    // Active Text
+    layout->addWidget(sectionLabel("Active Text"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        auto* swt1 = new ZSwitch(); swt1->setActiveText("ON"); swt1->setInactiveText("OFF");
+        auto* swt2 = new ZSwitch(); swt2->setChecked(true); swt2->setActiveText("Yes"); swt2->setInactiveText("No");
+        row->addWidget(swt1);
+        row->addWidget(swt2);
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
     layout->addStretch();
     scroll->setWidget(content);
     return scroll;
@@ -994,6 +1061,33 @@ static QWidget* createProgressPage()
         auto* pt2 = new ZProgress(); pt2->setPercentage(60); pt2->setShowText(false);
         layout->addWidget(pt1);
         layout->addWidget(pt2);
+    }
+
+    // Dashboard
+    layout->addWidget(sectionLabel("Dashboard"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        auto* pd0 = new ZProgress(); pd0->setType(ZProgress::kDashboard); pd0->setPercentage(0);
+        auto* pd30 = new ZProgress(); pd30->setType(ZProgress::kDashboard); pd30->setPercentage(30);
+        auto* pd80 = new ZProgress(); pd80->setType(ZProgress::kDashboard); pd80->setPercentage(80);
+        row->addWidget(pd0); row->addWidget(pd30); row->addWidget(pd80);
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
+    // Indeterminate
+    layout->addWidget(sectionLabel("Indeterminate"));
+    {
+        auto* pi = new ZProgress(); pi->setIndeterminate(true);
+        layout->addWidget(pi);
+    }
+
+    // Text Inside
+    layout->addWidget(sectionLabel("Text Inside"));
+    {
+        auto* pt = new ZProgress(); pt->setPercentage(70); pt->setStrokeWidth(18); pt->setTextInside(true);
+        layout->addWidget(pt);
     }
 
     layout->addStretch();
