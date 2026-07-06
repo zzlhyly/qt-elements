@@ -25,31 +25,46 @@ cmake --build build --config Debug
 
 ## Projects
 
-- `coding/uicontrols/` — **主项目**：使用 Qt5 原生绘制开发的个人 UI 组件库，视觉对标 [Element Plus](https://element-plus.org/)，力求像素级还原
+- `coding/uicontrols/` — **Primary project**: personal UI component library built with Qt5 native QPainter rendering, pixel-level visual fidelity to [Element Plus](https://element-plus.org/)
 - Build outputs go to `<build-dir>/product/<project-name>/`
 
 ## Design
 
-- 组件开发仅使用 Qt 原生 API（QPainter、QStyle），不依赖 QSS 外部样式表
-- 设计参考：Element Plus 官方文档 https://element-plus.org/zh-CN/component/button.html
-- 后续所有新组件均从此站点获取对标的 API、视觉效果、状态定义
-- 每个组件独立在一个子目录（如 `src/button/`），含 `.h`/`.cpp`
+- Components use only Qt native APIs (QPainter, QStyle) — no QSS/CSS stylesheets
+- Design reference: Element Plus official docs https://element-plus.org/zh-CN/component/button.html
+- All new components use this site for API, visual effects, and state definitions
+- Each component lives in its own subdirectory (e.g. `src/button/`), with `.h`/`.cpp`
 
 ## Theme System
 
-- 全局色彩/尺寸令牌位于 `src/theme/theme.h`（header-only）
-- 使用方式：`#include "theme/theme.h"`，通过 `theme::` 命名空间访问
-- 颜色示例：`theme::buttonSolidBg(type, theme::kHover)`、`theme::tagLightBg(type)`
-- 尺寸示例：`theme::buttonSize(size)` 返回 `theme::SizeSpec`
-- 新组件优先从 theme 获取颜色和尺寸，避免重复定义色彩表
+- Global color/size tokens located in `src/theme/theme.h` (header-only)
+- Usage: `#include "theme/theme.h"`, access via `theme::` namespace
+- Color examples: `theme::buttonSolidBg(type, theme::kHover)`, `theme::tagLightBg(type)`
+- Size examples: `theme::buttonSize(size)` returns `theme::SizeSpec`
+- New components should source colors and sizes from theme to avoid duplicated color tables
+
+## Language Rule
+
+- All string literals in source code MUST be ASCII only
+- Chinese/comments are allowed ONLY in `//` or `/* */` comment blocks
+- No Chinese characters in string literals, variable names, section labels, or widget text
+- UIs shown to users (testwidget demo pages, component labels, etc.) must use English ASCII strings
 
 ## Code style
 
-- 遵循 [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)
-- 类名 PascalCase，成员变量 `trailing_underscore_`
-- 枚举值 `k` 前缀（如 `kPrimary`, `kLarge`）
-- Include guard: `DIRNAME_FILENAME_H_` 格式
-- 文件命名全小写
+- Follows [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)
+- PascalCase class names, `trailing_underscore_` member variables
+- `k` prefix for enum values (`kPrimary`, `kLarge`)
+- Include guard: `DIRNAME_FILENAME_H_` format
+- File names all lowercase
+
+## Encoding
+
+- All `.cpp`/`.h` files must be UTF-8 with BOM and CRLF line endings
+- Use `scripts/fix-encoding.ps1` to batch-convert all files:
+  ```powershell
+  pwsh -File scripts/fix-encoding.ps1
+  ```
 
 ## Qt plugin deployment
 
