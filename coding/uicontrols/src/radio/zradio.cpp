@@ -33,6 +33,12 @@ QSize ZRadio::sizeHint() const
     return QSize(totalW, qMax(20, fm.height()));
 }
 
+void ZRadio::setBorder(bool border)
+{
+    border_ = border;
+    update();
+}
+
 void ZRadio::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
@@ -50,6 +56,15 @@ void ZRadio::paintEvent(QPaintEvent*)
     QFontMetrics fm(f);
     int circleSize = 14;
     int y = (height() - circleSize) / 2;
+
+    // Border rect
+    if (border_) {
+        QColor borderClr = checked ? theme::colorPrimary() : QColor(0xdc, 0xdf, 0xe6);
+        p.setPen(QPen(borderClr, 1));
+        p.setBrush(Qt::white);
+        QRectF br = rect().adjusted(0, 0, -1, -1);
+        p.drawRoundedRect(br.adjusted(4, 4, -4, -4), 4, 4);
+    }
 
     // Outer circle
     QRectF circleRect(0, y, circleSize, circleSize);

@@ -22,6 +22,18 @@ ZCheckbox::ZCheckbox(const QString& text, QWidget* parent)
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 }
 
+void ZCheckbox::setIndeterminate(bool ind)
+{
+    indeterminate_ = ind;
+    update();
+}
+
+void ZCheckbox::nextCheckState()
+{
+    indeterminate_ = false;
+    QAbstractButton::nextCheckState();
+}
+
 QSize ZCheckbox::sizeHint() const
 {
     QFont f = font();
@@ -52,7 +64,17 @@ void ZCheckbox::paintEvent(QPaintEvent*)
     QRectF boxRect(0, y, boxSize, boxSize);
     qreal radius = theme::borderRadiusSmall(); // 2px
 
-    if (disabled) {
+    if (indeterminate_) {
+        // Indeterminate: filled primary bg, white dash in center
+        p.setBrush(theme::colorPrimary());
+        p.setPen(Qt::NoPen);
+        p.drawRoundedRect(boxRect, radius, radius);
+        p.setBrush(Qt::white);
+        p.setPen(Qt::NoPen);
+        qreal barX = boxRect.x() + 3.0;
+        qreal barY = boxRect.y() + 6.0;
+        p.drawRoundedRect(QRectF(barX, barY, 8.0, 2.0), 1.0, 1.0);
+    } else if (disabled) {
         if (checked) {
             // Disabled checked: light bg with disabled checkmark
             p.setBrush(theme::fillLight());

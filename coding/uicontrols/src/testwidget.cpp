@@ -210,6 +210,22 @@ static QWidget* createButtonPage()
         layout->addLayout(row);
     }
 
+    // Icon
+    layout->addWidget(sectionLabel("Icon"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        auto* bi1 = new ZButton(QString(QChar(0x1F50D)) + " Search");
+        bi1->setButtonType(ZButton::kPrimary);
+        auto* bi2 = new ZButton(QString(QChar(0x2605)) + " Star");
+        bi2->setButtonType(ZButton::kSuccess);
+        auto* bi3 = new ZButton(QString(QChar(0x2665)) + " Like");
+        bi3->setButtonType(ZButton::kInfo);
+        row->addWidget(bi1); row->addWidget(bi2); row->addWidget(bi3);
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
     layout->addStretch();
     scroll->setWidget(content);
     return scroll;
@@ -763,6 +779,19 @@ static QWidget* createRadioPage()
         layout->addLayout(vbox);
     }
 
+    // Border
+    layout->addWidget(sectionLabel("Border"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        auto* rb1 = new ZRadio("Option A"); rb1->setBorder(true); rb1->setChecked(true);
+        auto* rb2 = new ZRadio("Option B"); rb2->setBorder(true);
+        auto* rb3 = new ZRadio("Option C"); rb3->setBorder(true);
+        row->addWidget(rb1); row->addWidget(rb2); row->addWidget(rb3);
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
     layout->addStretch();
     scroll->setWidget(content);
     return scroll;
@@ -818,6 +847,14 @@ static QWidget* createCheckboxPage()
         row->addWidget(cc2);
         row->addStretch();
         layout->addLayout(row);
+    }
+
+    // Indeterminate
+    layout->addWidget(sectionLabel("Indeterminate"));
+    {
+        auto* ci = new ZCheckbox("Indeterminate");
+        ci->setIndeterminate(true);
+        layout->addWidget(ci);
     }
 
     layout->addStretch();
@@ -969,6 +1006,13 @@ static QWidget* createSliderPage()
         auto* sr2 = new ZSlider(); sr2->setMinimum(20); sr2->setMaximum(80);  sr2->setValue(50);
         layout->addWidget(sr1);
         layout->addWidget(sr2);
+    }
+
+    // Stops
+    layout->addWidget(sectionLabel("Stops"));
+    {
+        auto* ss = new ZSlider(); ss->setStep(25); ss->setShowStops(true); ss->setValue(50);
+        layout->addWidget(ss);
     }
 
     layout->addStretch();

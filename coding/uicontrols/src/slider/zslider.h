@@ -13,10 +13,14 @@ public:
     void setMinimum(int min);
     void setMaximum(int max);
     void setValue(int value);
+    void setStep(int step);
+    void setShowStops(bool show);
 
     int minimum() const { return min_; }
     int maximum() const { return max_; }
     int value() const { return value_; }
+    int step() const { return step_; }
+    bool isShowStops() const { return showStops_; }
 
     QSize sizeHint() const override;
 
@@ -37,6 +41,8 @@ private:
     int min_ = 0;
     int max_ = 100;
     int value_ = 0;
+    int step_ = 1;
+    bool showStops_ = false;
     bool dragging_ = false;
     int trackPad_ = 10;
 };

@@ -23,6 +23,9 @@ void ZSlider::setValue(int value)
     emit valueChanged(value_);
 }
 
+void ZSlider::setStep(int step)           { step_ = qMax(1, step); update(); }
+void ZSlider::setShowStops(bool show)     { showStops_ = show; update(); }
+
 QSize ZSlider::sizeHint() const
 {
     return QSize(200, 24);
@@ -41,7 +44,12 @@ int ZSlider::valueFromX(int x) const
     int trackW = width() - 2 * trackPad_;
     if (trackW <= 0) return min_;
     double ratio = static_cast<double>(x - trackPad_) / trackW;
-    return qRound(min_ + ratio * (max_ - min_));
+    int raw = qRound(min_ + ratio * (max_ - min_));
+    // Snap to step
+    if (step_ > 1) {
+        raw = qRound(static_cast<double>(raw - min_) / step_) * step_ + min_;
+    }
+    return qBound(min_, raw, max_);
 }
 
 QRect ZSlider::thumbRect() const
@@ -85,6 +93,21 @@ void ZSlider::paintEvent(QPaintEvent*)
         p.setBrush(fillColor);
         p.setPen(Qt::NoPen);
         p.drawPath(fillPath);
+    }
+
+    // Stops
+    if (showStops_ && !disabled && max_ > min_) {
+        int stopCount = (max_ - min_) / step_ + 1;
+        int trackW = w - 2 * trackPad_;
+        QPen stopPen(QColor(0xdc, 0xdf, 0xe6), 1);
+        p.setBrush(Qt::white);
+        p.setPen(stopPen);
+        for (int i = 0; i < stopCount; ++i) {
+            int stopVal = min_ + i * step_;
+            double r = static_cast<double>(stopVal - min_) / (max_ - min_);
+            int sx = static_cast<int>(trackPad_ + r * trackW);
+            p.drawEllipse(QPointF(sx, ty + trackH / 2.0), 2.0, 2.0);
+        }
     }
 
     // Thumb circle
