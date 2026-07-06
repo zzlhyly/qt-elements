@@ -724,6 +724,22 @@ static QWidget* createRadioPage()
         layout->addLayout(row);
     }
 
+    // Vertical
+    layout->addWidget(sectionLabel("Vertical"));
+    {
+        auto* vbox = new QVBoxLayout();
+        vbox->setSpacing(12);
+        auto* group = new QButtonGroup(content);
+        auto* rv1 = new ZRadio("Option A"); rv1->setChecked(true);
+        auto* rv2 = new ZRadio("Option B");
+        auto* rv3 = new ZRadio("Option C");
+        group->addButton(rv1); group->addButton(rv2); group->addButton(rv3);
+        vbox->addWidget(rv1);
+        vbox->addWidget(rv2);
+        vbox->addWidget(rv3);
+        layout->addLayout(vbox);
+    }
+
     layout->addStretch();
     scroll->setWidget(content);
     return scroll;
@@ -764,6 +780,19 @@ static QWidget* createCheckboxPage()
         cd2->setEnabled(false);
         row->addWidget(cd1);
         row->addWidget(cd2);
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
+    // Checked
+    layout->addWidget(sectionLabel("Checked"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        auto* cc1 = new ZCheckbox("Checked");  cc1->setChecked(true);
+        auto* cc2 = new ZCheckbox("Unchecked");
+        row->addWidget(cc1);
+        row->addWidget(cc2);
         row->addStretch();
         layout->addLayout(row);
     }
@@ -813,6 +842,20 @@ static QWidget* createSwitchPage()
         layout->addLayout(row);
     }
 
+    // With Label
+    layout->addWidget(sectionLabel("With Label"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        auto* sw = new ZSwitch();
+        auto* label = new QLabel("Toggle me");
+        label->setFont(QFont("", 13));
+        row->addWidget(sw);
+        row->addWidget(label);
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
     layout->addStretch();
     scroll->setWidget(content);
     return scroll;
@@ -850,6 +893,15 @@ static QWidget* createSliderPage()
         sd->setValue(30);
         sd->setEnabled(false);
         layout->addWidget(sd);
+    }
+
+    // Range
+    layout->addWidget(sectionLabel("Range"));
+    {
+        auto* sr1 = new ZSlider(); sr1->setMinimum(0);  sr1->setMaximum(50);  sr1->setValue(25);
+        auto* sr2 = new ZSlider(); sr2->setMinimum(20); sr2->setMaximum(80);  sr2->setValue(50);
+        layout->addWidget(sr1);
+        layout->addWidget(sr2);
     }
 
     layout->addStretch();
@@ -918,6 +970,30 @@ static QWidget* createProgressPage()
         row->addWidget(pc100);
         row->addStretch();
         layout->addLayout(row);
+    }
+
+    // Stroke Width
+    layout->addWidget(sectionLabel("Stroke Width"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(16);
+        auto* ps1 = new ZProgress(); ps1->setPercentage(50); ps1->setStrokeWidth(3);
+        auto* ps2 = new ZProgress(); ps2->setPercentage(50); ps2->setStrokeWidth(6);
+        auto* ps3 = new ZProgress(); ps3->setPercentage(50); ps3->setStrokeWidth(12);
+        row->addWidget(ps1);
+        row->addWidget(ps2);
+        row->addWidget(ps3);
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
+    // Show Text
+    layout->addWidget(sectionLabel("Show Text"));
+    {
+        auto* pt1 = new ZProgress(); pt1->setPercentage(60); pt1->setShowText(true);
+        auto* pt2 = new ZProgress(); pt2->setPercentage(60); pt2->setShowText(false);
+        layout->addWidget(pt1);
+        layout->addWidget(pt2);
     }
 
     layout->addStretch();
