@@ -1,4 +1,4 @@
-#include <QWidget>
+﻿#include <QWidget>
 #include "widgets/alert/zalert.h"
 
 QWidget* ZAlertDemoClosable() {

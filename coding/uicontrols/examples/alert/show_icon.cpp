@@ -1,4 +1,4 @@
-#include <QVBoxLayout>
+﻿#include <QVBoxLayout>
 #include <QWidget>
 #include "widgets/alert/zalert.h"
 

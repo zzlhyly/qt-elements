@@ -1,4 +1,4 @@
-#ifndef WIDGETS_ALERT_ZALERT_H_
+﻿#ifndef WIDGETS_ALERT_ZALERT_H_
 #define WIDGETS_ALERT_ZALERT_H_
 
 #include <QWidget>

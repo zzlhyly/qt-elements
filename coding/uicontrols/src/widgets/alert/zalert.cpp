@@ -1,4 +1,4 @@
-#include "widgets/alert/zalert.h"
+﻿#include "widgets/alert/zalert.h"
 
 #include <QFontMetrics>
 #include <QMouseEvent>

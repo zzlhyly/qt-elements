@@ -1,4 +1,4 @@
-#include <QLabel>
+﻿#include <QLabel>
 #include <QVBoxLayout>
 #include <QWidget>
 #include "widgets/input/zinput.h"

@@ -1,4 +1,4 @@
-#ifndef WIDGETS_DIVIDER_ZDIVIDER_H_
+﻿#ifndef WIDGETS_DIVIDER_ZDIVIDER_H_
 #define WIDGETS_DIVIDER_ZDIVIDER_H_
 
 #include <QWidget>

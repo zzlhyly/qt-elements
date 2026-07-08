@@ -1,4 +1,4 @@
-#ifndef WIDGETS_TAG_ZTAG_H_
+﻿#ifndef WIDGETS_TAG_ZTAG_H_
 #define WIDGETS_TAG_ZTAG_H_
 
 #include <QWidget>

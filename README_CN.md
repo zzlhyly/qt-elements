@@ -79,9 +79,9 @@ qt-elements/
 │           │   ├── text/            # ZText
 │           │   ├── badge/           # ZBadge
 │           │   └── divider/         # ZDivider
-│           ├── radio/               # ZRadio
-│           ├── checkbox/            # ZCheckbox
-│           ├── switch/              # ZSwitch
+│           │   ├── checkbox/        # ZCheckbox
+│           │   ├── radio/           # ZRadio
+│           │   ├── switch/          # ZSwitch
 │           ├── slider/              # ZSlider
 │           ├── progress/            # ZProgress
 │           ├── popup/               # ZPopup

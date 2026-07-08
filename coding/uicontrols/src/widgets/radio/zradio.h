@@ -1,11 +1,13 @@
-﻿#ifndef CODING_UICONTROLS_SRC_RADIO_ZRADIO_H_
-#define CODING_UICONTROLS_SRC_RADIO_ZRADIO_H_
+﻿#ifndef WIDGETS_RADIO_ZRADIO_H_
+#define WIDGETS_RADIO_ZRADIO_H_
 
 #include <QAbstractButton>
 
 class ZRadio : public QAbstractButton
 {
     Q_OBJECT
+
+    Q_PROPERTY(bool border READ isBorder WRITE setBorder)
 
 public:
     explicit ZRadio(QWidget* parent = nullptr);
@@ -23,4 +25,4 @@ private:
     bool border_ = false;
 };
 
-#endif // CODING_UICONTROLS_SRC_RADIO_ZRADIO_H_
+#endif // WIDGETS_RADIO_ZRADIO_H_

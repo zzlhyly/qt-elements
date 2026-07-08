@@ -1,4 +1,4 @@
-#include "widgets/tag/ztag.h"
+﻿#include "widgets/tag/ztag.h"
 #include "painter/painter.h"
 
 #include <QFontMetrics>

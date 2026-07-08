@@ -1,4 +1,4 @@
-#ifndef WIDGETS_BADGE_ZBADGE_H_
+﻿#ifndef WIDGETS_BADGE_ZBADGE_H_
 #define WIDGETS_BADGE_ZBADGE_H_
 
 #include <QWidget>

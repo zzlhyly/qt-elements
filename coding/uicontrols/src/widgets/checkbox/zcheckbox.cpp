@@ -1,5 +1,6 @@
 ﻿#include "zcheckbox.h"
 #include "theme/theme.h"
+#include "painter/painter.h"
 
 #include <QFontMetrics>
 #include <QPainter>
@@ -22,14 +23,9 @@ ZCheckbox::ZCheckbox(const QString& text, QWidget* parent)
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 }
 
-void ZCheckbox::setIndeterminate(bool ind)
-{
-    indeterminate_ = ind;
-    update();
-}
+void ZCheckbox::setIndeterminate(bool ind) { indeterminate_ = ind; update(); }
 
-void ZCheckbox::nextCheckState()
-{
+void ZCheckbox::nextCheckState() {
     indeterminate_ = false;
     QAbstractButton::nextCheckState();
 }
@@ -38,11 +34,9 @@ QSize ZCheckbox::sizeHint() const
 {
     QFont f = font();
     f.setPixelSize(14);
-    f.setWeight(QFont::Normal);
     QFontMetrics fm(f);
     int textW = fm.horizontalAdvance(text());
-    int totalW = 14 + 8 + textW;  // box + gap + text
-    return QSize(totalW, qMax(20, fm.height()));
+    return QSize(14 + 8 + textW, qMax(20, fm.height()));
 }
 
 void ZCheckbox::paintEvent(QPaintEvent*)
@@ -55,31 +49,21 @@ void ZCheckbox::paintEvent(QPaintEvent*)
 
     QFont f = font();
     f.setPixelSize(14);
-    f.setWeight(QFont::Normal);
-    p.setFont(f);
-
     QFontMetrics fm(f);
     int boxSize = 14;
     int y = (height() - boxSize) / 2;
     QRectF boxRect(0, y, boxSize, boxSize);
-    qreal radius = theme::borderRadiusSmall(); // 2px
+    qreal radius = theme::borderRadiusSmall();
 
     if (indeterminate_) {
-        // Indeterminate: filled primary bg, white dash in center
-        p.setBrush(theme::colorPrimary());
-        p.setPen(Qt::NoPen);
-        p.drawRoundedRect(boxRect, radius, radius);
+        painter::DrawBackground(p, boxRect.toRect(), theme::colorPrimary(), radius);
+        // White dash in center — glyph too simple for a Painter function
         p.setBrush(Qt::white);
         p.setPen(Qt::NoPen);
-        qreal barX = boxRect.x() + 3.0;
-        qreal barY = boxRect.y() + 6.0;
-        p.drawRoundedRect(QRectF(barX, barY, 8.0, 2.0), 1.0, 1.0);
+        p.drawRoundedRect(QRectF(boxRect.x() + 3.0, boxRect.y() + 6.0, 8.0, 2.0), 1.0, 1.0);
     } else if (disabled) {
         if (checked) {
-            // Disabled checked: light bg with disabled checkmark
-            p.setBrush(theme::fillLight());
-            p.setPen(Qt::NoPen);
-            p.drawRoundedRect(boxRect, radius, radius);
+            painter::DrawBackground(p, boxRect.toRect(), theme::fillLight(), radius);
             QPen checkPen(theme::textDisabled(), 2);
             checkPen.setCapStyle(Qt::RoundCap);
             p.setPen(checkPen);
@@ -89,15 +73,11 @@ void ZCheckbox::paintEvent(QPaintEvent*)
             path.lineTo(boxRect.x() + 10.5, boxRect.y() + 4.5);
             p.drawPath(path);
         } else {
-            p.setBrush(theme::fillLight());
-            p.setPen(QPen(theme::borderLight(), 1));
-            p.drawRoundedRect(boxRect, radius, radius);
+            painter::DrawBackground(p, boxRect.toRect(), theme::fillLight(), radius);
+            painter::DrawBorder(p, boxRect, theme::borderLight(), 1.0, radius);
         }
     } else if (checked) {
-        // Checked: primary fill + white checkmark
-        p.setBrush(theme::colorPrimary());
-        p.setPen(Qt::NoPen);
-        p.drawRoundedRect(boxRect, radius, radius);
+        painter::DrawBackground(p, boxRect.toRect(), theme::colorPrimary(), radius);
         QPen checkPen(Qt::white, 2);
         checkPen.setCapStyle(Qt::RoundCap);
         p.setPen(checkPen);
@@ -107,17 +87,13 @@ void ZCheckbox::paintEvent(QPaintEvent*)
         path.lineTo(boxRect.x() + 10.5, boxRect.y() + 4.5);
         p.drawPath(path);
     } else {
-        // Unchecked
         QColor boxPenColor = underMouse() ? theme::colorPrimary() : theme::borderColor();
-        p.setBrush(Qt::white);
-        p.setPen(QPen(boxPenColor, 1));
-        p.drawRoundedRect(boxRect, radius, radius);
+        painter::DrawBackground(p, boxRect.toRect(), Qt::white, radius);
+        painter::DrawBorder(p, boxRect, boxPenColor, 1.0, radius);
     }
 
-    // Text
     int textX = boxSize + 8;
     QColor textCol = disabled ? theme::textDisabled() : theme::textRegular();
-    p.setPen(textCol);
-    QRect textRect(textX, 0, width() - textX, height());
-    p.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, text());
+    painter::DrawText(p, QRect(textX, 0, width() - textX, height()),
+                      text(), f, textCol, Qt::AlignLeft | Qt::AlignVCenter);
 }

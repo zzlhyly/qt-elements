@@ -28,12 +28,12 @@ SET(SRC_FILES
     src/widgets/text/ztext.h
     src/widgets/input/zinput.cpp
     src/widgets/input/zinput.h
-    src/radio/zradio.cpp
-    src/radio/zradio.h
-    src/checkbox/zcheckbox.cpp
-    src/checkbox/zcheckbox.h
-    src/switch/zswitch.cpp
-    src/switch/zswitch.h
+    src/widgets/radio/zradio.cpp
+    src/widgets/radio/zradio.h
+    src/widgets/checkbox/zcheckbox.cpp
+    src/widgets/checkbox/zcheckbox.h
+    src/widgets/switch/zswitch.cpp
+    src/widgets/switch/zswitch.h
     src/slider/zslider.cpp
     src/slider/zslider.h
     src/progress/zprogress.cpp

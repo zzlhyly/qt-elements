@@ -1,4 +1,4 @@
-#include "zbadge.h"
+﻿#include "zbadge.h"
 #include "painter/painter.h"
 
 #include <QFontMetrics>

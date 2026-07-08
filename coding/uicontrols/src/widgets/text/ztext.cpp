@@ -1,4 +1,4 @@
-#include "ztext.h"
+﻿#include "ztext.h"
 #include "theme/theme.h"
 #include "painter/painter.h"
 

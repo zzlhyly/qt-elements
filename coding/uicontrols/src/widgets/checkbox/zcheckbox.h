@@ -1,11 +1,13 @@
-﻿#ifndef CODING_UICONTROLS_SRC_CHECKBOX_ZCHECKBOX_H_
-#define CODING_UICONTROLS_SRC_CHECKBOX_ZCHECKBOX_H_
+﻿#ifndef WIDGETS_CHECKBOX_ZCHECKBOX_H_
+#define WIDGETS_CHECKBOX_ZCHECKBOX_H_
 
 #include <QAbstractButton>
 
 class ZCheckbox : public QAbstractButton
 {
     Q_OBJECT
+
+    Q_PROPERTY(bool indeterminate READ isIndeterminate WRITE setIndeterminate)
 
 public:
     explicit ZCheckbox(QWidget* parent = nullptr);
@@ -24,4 +26,4 @@ private:
     bool indeterminate_ = false;
 };
 
-#endif // CODING_UICONTROLS_SRC_CHECKBOX_ZCHECKBOX_H_
+#endif // WIDGETS_CHECKBOX_ZCHECKBOX_H_

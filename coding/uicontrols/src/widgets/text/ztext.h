@@ -1,4 +1,4 @@
-#ifndef WIDGETS_TEXT_ZTEXT_H_
+﻿#ifndef WIDGETS_TEXT_ZTEXT_H_
 #define WIDGETS_TEXT_ZTEXT_H_
 
 #include <QWidget>

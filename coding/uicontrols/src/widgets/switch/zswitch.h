@@ -1,15 +1,18 @@
-﻿#ifndef CODING_UICONTROLS_SRC_SWITCH_ZSWITCH_H_
-#define CODING_UICONTROLS_SRC_SWITCH_ZSWITCH_H_
+﻿#ifndef WIDGETS_SWITCH_ZSWITCH_H_
+#define WIDGETS_SWITCH_ZSWITCH_H_
 
 #include <QAbstractButton>
-#include <QPropertyAnimation>
-#include <QTimer>
 #include <QString>
+#include "animation/animation_manager.h"
 
 class ZSwitch : public QAbstractButton
 {
     Q_OBJECT
-    Q_PROPERTY(qreal offset READ offset WRITE setOffset)
+
+    Q_PROPERTY(SwitchSize switchSize READ switchSize WRITE setSwitchSize)
+    Q_PROPERTY(bool loading READ isLoading WRITE setLoading)
+    Q_PROPERTY(QString activeText READ activeText WRITE setActiveText)
+    Q_PROPERTY(QString inactiveText READ inactiveText WRITE setInactiveText)
 
 public:
     enum SwitchSize { kLarge, kDefault, kSmall };
@@ -17,9 +20,6 @@ public:
     explicit ZSwitch(QWidget* parent = nullptr);
 
     QSize sizeHint() const override;
-
-    qreal offset() const { return offset_; }
-    void setOffset(qreal o);
 
     void setSwitchSize(SwitchSize size);
     void setLoading(bool loading);
@@ -37,14 +37,19 @@ protected:
     void checkStateSet() override;
 
 private:
-    QPropertyAnimation* anim_;
+    void startSlideAnimation();
+    void startLoadingAnimation();
+    void stopLoadingAnimation();
+
     qreal offset_ = 0.0;
     SwitchSize size_ = kDefault;
     bool loading_ = false;
     QString active_text_;
     QString inactive_text_;
-    QTimer* loading_timer_ = nullptr;
-    int loading_angle_ = 0;
+    AnimationManager* anim_manager_;
+    AnimHandle slide_anim_;
+    AnimHandle loading_anim_;
+    qreal loading_angle_ = 0;
 };
 
-#endif // CODING_UICONTROLS_SRC_SWITCH_ZSWITCH_H_
+#endif // WIDGETS_SWITCH_ZSWITCH_H_

@@ -1,4 +1,4 @@
-#include "zdivider.h"
+﻿#include "zdivider.h"
 #include "painter/painter.h"
 
 #include <QFontMetrics>
