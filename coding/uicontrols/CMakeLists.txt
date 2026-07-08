@@ -3,8 +3,19 @@ SET(SRC_FILES
     src/main.cpp
     src/testwidget.cpp
     src/testwidget.h
-    src/button/zbutton.cpp
-    src/button/zbutton.h
+    # Foundation modules
+    src/style/style.h
+    src/statemachine/statemachine.cpp
+    src/statemachine/statemachine.h
+    src/painter/painter.cpp
+    src/painter/painter.h
+    src/icon/icon_manager.cpp
+    src/icon/icon_manager.h
+    src/animation/animation_manager.cpp
+    src/animation/animation_manager.h
+    # Widgets
+    src/widgets/button/zbutton.cpp
+    src/widgets/button/zbutton.h
     src/tag/ztag.cpp
     src/tag/ztag.h
     src/badge/zbadge.cpp

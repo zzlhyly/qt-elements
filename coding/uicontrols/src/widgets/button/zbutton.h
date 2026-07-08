@@ -1,12 +1,28 @@
-﻿#ifndef CODING_UICONTROLS_SRC_BUTTON_ZBUTTON_H_
-#define CODING_UICONTROLS_SRC_BUTTON_ZBUTTON_H_
+﻿#ifndef WIDGETS_BUTTON_ZBUTTON_H_
+#define WIDGETS_BUTTON_ZBUTTON_H_
 
 #include <QAbstractButton>
+#include <QIcon>
 #include "theme/theme.h"
+
+// Foundation modules
+#include "statemachine/statemachine.h"
+#include "animation/animation_manager.h"
+
+namespace statemachine { class StateTracker; }
+class AnimHandle;
+class AnimationManager;
 
 class ZButton : public QAbstractButton
 {
     Q_OBJECT
+
+    Q_PROPERTY(ButtonType buttonType READ buttonType WRITE setButtonType)
+    Q_PROPERTY(ButtonSize buttonSize READ buttonSize WRITE setButtonSize)
+    Q_PROPERTY(ButtonVariant buttonVariant READ buttonVariant WRITE setButtonVariant)
+    Q_PROPERTY(bool round READ isRound WRITE setRound)
+    Q_PROPERTY(bool circle READ isCircle WRITE setCircle)
+    Q_PROPERTY(bool loading READ isLoading WRITE setLoading)
 
 public:
     enum ButtonType { kDefault, kPrimary, kSuccess, kWarning, kDanger, kInfo };
@@ -15,6 +31,7 @@ public:
 
     explicit ZButton(QWidget* parent = nullptr);
     ZButton(const QString& text, QWidget* parent = nullptr);
+    ~ZButton() override;
 
     void setButtonType(ButtonType type);
     void setButtonSize(ButtonSize size);
@@ -35,7 +52,6 @@ public:
 
 protected:
     void paintEvent(QPaintEvent*) override;
-    void timerEvent(QTimerEvent*) override;
     void enterEvent(QEvent*) override;
     void leaveEvent(QEvent*) override;
     void focusInEvent(QFocusEvent*) override;
@@ -45,21 +61,18 @@ protected:
 
 private:
     theme::SizeSpec sizeSpec() const;
-    qreal borderRadius() const;
-    QColor bgColor() const;
-    QColor textColor() const;
-    QColor borderColor() const;
 
     ButtonType type_ = kDefault;
-    bool loading_ = false;
-    int loading_timer_id_ = 0;
-    int loading_angle_ = 0;
     ButtonSize size_ = kMedium;
     ButtonVariant variant_ = kSolid;
     bool round_ = false;
     bool circle_ = false;
-    bool hovered_ = false;
-    bool focus_keyboard_ = false;
+    bool loading_ = false;
+    qreal loading_angle_ = 0;
+
+    statemachine::StateTracker* state_tracker_;
+    AnimationManager* anim_manager_;
+    AnimHandle loading_anim_;
 };
 
-#endif // CODING_UICONTROLS_SRC_BUTTON_ZBUTTON_H_
+#endif // WIDGETS_BUTTON_ZBUTTON_H_

@@ -10,7 +10,7 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
-#include "button/zbutton.h"
+#include "widgets/button/zbutton.h"
 #include "tag/ztag.h"
 #include "badge/zbadge.h"
 #include "divider/zdivider.h"
