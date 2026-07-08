@@ -75,10 +75,10 @@ qt-elements/
 │           │   ├── tag/             # ZTag
 │           │   ├── input/           # ZInput
 │           │   ├── link/            # ZLink
-│           │   └── alert/           # ZAlert
-│           ├── badge/               # ZBadge
-│           ├── divider/             # ZDivider
-│           ├── text/                # ZText
+│           │   ├── alert/           # ZAlert
+│           │   ├── text/            # ZText
+│           │   ├── badge/           # ZBadge
+│           │   └── divider/         # ZDivider
 │           ├── radio/               # ZRadio
 │           ├── checkbox/            # ZCheckbox
 │           ├── switch/              # ZSwitch

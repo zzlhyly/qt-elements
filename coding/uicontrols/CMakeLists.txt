@@ -18,14 +18,14 @@ SET(SRC_FILES
     src/widgets/button/zbutton.h
     src/widgets/tag/ztag.cpp
     src/widgets/tag/ztag.h
-    src/badge/zbadge.cpp
-    src/badge/zbadge.h
-    src/divider/zdivider.cpp
-    src/divider/zdivider.h
+    src/widgets/badge/zbadge.cpp
+    src/widgets/badge/zbadge.h
+    src/widgets/divider/zdivider.cpp
+    src/widgets/divider/zdivider.h
     src/widgets/link/zlink.cpp
     src/widgets/link/zlink.h
-    src/text/ztext.cpp
-    src/text/ztext.h
+    src/widgets/text/ztext.cpp
+    src/widgets/text/ztext.h
     src/widgets/input/zinput.cpp
     src/widgets/input/zinput.h
     src/radio/zradio.cpp

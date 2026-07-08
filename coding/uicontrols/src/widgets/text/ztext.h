@@ -1,11 +1,15 @@
-﻿#ifndef CODING_UICONTROLS_SRC_TEXT_ZTEXT_H_
-#define CODING_UICONTROLS_SRC_TEXT_ZTEXT_H_
+#ifndef WIDGETS_TEXT_ZTEXT_H_
+#define WIDGETS_TEXT_ZTEXT_H_
 
 #include <QWidget>
 
 class ZText : public QWidget
 {
     Q_OBJECT
+
+    Q_PROPERTY(TextType textType READ textType WRITE setTextType)
+    Q_PROPERTY(TextSize textSize READ textSize WRITE setTextSize)
+    Q_PROPERTY(bool truncated READ isTruncated WRITE setTruncated)
 
 public:
     enum TextType { kDefault, kPrimary, kSuccess, kInfo, kWarning, kDanger };
@@ -30,13 +34,10 @@ protected:
     void paintEvent(QPaintEvent*) override;
 
 private:
-    QColor resolveColor() const;
-    int resolveFontSize() const;
-
     QString text_;
     TextType type_ = kDefault;
     TextSize size_ = kSmall;
     bool truncated_ = false;
 };
 
-#endif // CODING_UICONTROLS_SRC_TEXT_ZTEXT_H_
+#endif // WIDGETS_TEXT_ZTEXT_H_

@@ -1,5 +1,5 @@
-﻿#ifndef CODING_UICONTROLS_SRC_BADGE_ZBADGE_H_
-#define CODING_UICONTROLS_SRC_BADGE_ZBADGE_H_
+#ifndef WIDGETS_BADGE_ZBADGE_H_
+#define WIDGETS_BADGE_ZBADGE_H_
 
 #include <QWidget>
 #include "theme/theme.h"
@@ -7,6 +7,12 @@
 class ZBadge : public QWidget
 {
     Q_OBJECT
+
+    Q_PROPERTY(int value READ value WRITE setValue)
+    Q_PROPERTY(BadgeType badgeType READ badgeType WRITE setBadgeType)
+    Q_PROPERTY(int max READ max WRITE setMax)
+    Q_PROPERTY(bool dot READ isDot WRITE setDot)
+    Q_PROPERTY(bool badgeHidden READ isBadgeHidden WRITE setBadgeHidden)
 
 public:
     enum BadgeType { kPrimary, kSuccess, kInfo, kWarning, kDanger };
@@ -40,4 +46,4 @@ private:
     bool hidden_ = false;
 };
 
-#endif // CODING_UICONTROLS_SRC_BADGE_ZBADGE_H_
+#endif // WIDGETS_BADGE_ZBADGE_H_

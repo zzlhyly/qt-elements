@@ -12,10 +12,10 @@
 
 #include "widgets/button/zbutton.h"
 #include "widgets/tag/ztag.h"
-#include "badge/zbadge.h"
-#include "divider/zdivider.h"
+#include "widgets/badge/zbadge.h"
+#include "widgets/divider/zdivider.h"
 #include "widgets/link/zlink.h"
-#include "text/ztext.h"
+#include "widgets/text/ztext.h"
 #include "widgets/input/zinput.h"
 #include "radio/zradio.h"
 #include "checkbox/zcheckbox.h"

@@ -1,5 +1,5 @@
-﻿#ifndef CODING_UICONTROLS_SRC_DIVIDER_ZDIVIDER_H_
-#define CODING_UICONTROLS_SRC_DIVIDER_ZDIVIDER_H_
+#ifndef WIDGETS_DIVIDER_ZDIVIDER_H_
+#define WIDGETS_DIVIDER_ZDIVIDER_H_
 
 #include <QWidget>
 #include "theme/theme.h"
@@ -7,6 +7,10 @@
 class ZDivider : public QWidget
 {
     Q_OBJECT
+
+    Q_PROPERTY(Direction direction READ direction WRITE setDirection)
+    Q_PROPERTY(ContentPosition contentPosition READ contentPosition WRITE setContentPosition)
+    Q_PROPERTY(BorderStyle borderStyle READ borderStyle WRITE setBorderStyle)
 
 public:
     enum Direction { kHorizontal, kVertical };
@@ -38,4 +42,4 @@ private:
     BorderStyle borderStyle_ = kSolid;
 };
 
-#endif // CODING_UICONTROLS_SRC_DIVIDER_ZDIVIDER_H_
+#endif // WIDGETS_DIVIDER_ZDIVIDER_H_
