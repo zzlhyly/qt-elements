@@ -1,12 +1,20 @@
-﻿#ifndef CODING_UICONTROLS_SRC_PROGRESS_ZPROGRESS_H_
-#define CODING_UICONTROLS_SRC_PROGRESS_ZPROGRESS_H_
+#ifndef WIDGETS_PROGRESS_ZPROGRESS_H_
+#define WIDGETS_PROGRESS_ZPROGRESS_H_
 
 #include <QWidget>
-#include <QTimer>
+#include "animation/animation_manager.h"
 
 class ZProgress : public QWidget
 {
     Q_OBJECT
+
+    Q_PROPERTY(int percentage READ percentage WRITE setPercentage)
+    Q_PROPERTY(ProgressType type READ type WRITE setType)
+    Q_PROPERTY(int strokeWidth READ strokeWidth WRITE setStrokeWidth)
+    Q_PROPERTY(ProgressStatus status READ status WRITE setStatus)
+    Q_PROPERTY(bool showText READ isShowText WRITE setShowText)
+    Q_PROPERTY(bool indeterminate READ isIndeterminate WRITE setIndeterminate)
+    Q_PROPERTY(bool textInside READ isTextInside WRITE setTextInside)
 
 public:
     enum ProgressType { kLine, kCircle, kDashboard };
@@ -45,9 +53,10 @@ private:
     bool showText_ = true;
     bool indeterminate_ = false;
     bool textInside_ = false;
-    QTimer* indTimer_ = nullptr;
-    int indPos_ = 0;
-    int indDir_ = 1;
+    AnimationManager* anim_manager_;
+    AnimHandle ind_anim_;
+    int ind_pos_ = 0;
+    int ind_dir_ = 1;
 };
 
-#endif // CODING_UICONTROLS_SRC_PROGRESS_ZPROGRESS_H_
+#endif // WIDGETS_PROGRESS_ZPROGRESS_H_

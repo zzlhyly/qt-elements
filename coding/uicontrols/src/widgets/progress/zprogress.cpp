@@ -1,5 +1,6 @@
-﻿#include "zprogress.h"
+#include "zprogress.h"
 #include "theme/theme.h"
+#include "painter/painter.h"
 
 #include <QFontMetrics>
 #include <QPainter>
@@ -7,6 +8,7 @@
 
 ZProgress::ZProgress(QWidget* parent)
     : QWidget(parent)
+    , anim_manager_(new AnimationManager(this))
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     setMinimumWidth(50);
@@ -26,19 +28,12 @@ void ZProgress::setStatus(ProgressStatus s) { status_ = s; update(); }
 void ZProgress::setShowText(bool s)    { showText_ = s; update(); }
 void ZProgress::setIndeterminate(bool i) {
     if (i) {
-        if (!indTimer_) {
-            indTimer_ = new QTimer(this);
-            indTimer_->setInterval(50);
-            connect(indTimer_, &QTimer::timeout, this, [this]() {
-                indPos_ += indDir_;
-                if (indPos_ >= 70) indDir_ = -1;
-                if (indPos_ <= 0) indDir_ = 1;
-                update();
-            });
+        if (!ind_anim_.IsValid()) {
+            ind_anim_ = anim_manager_->CreateProgressAnimation(this, QByteArray(),
+                2000, [this](qreal) { update(); });
         }
-        indTimer_->start();
-    } else if (indTimer_) {
-        indTimer_->stop();
+    } else {
+        if (ind_anim_.IsValid()) ind_anim_.Stop();
     }
     indeterminate_ = i;
     update();
@@ -66,20 +61,20 @@ void ZProgress::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing);
-    p.setRenderHint(QPainter::TextAntialiasing);
 
     if (type_ == kDashboard) {
-        // ─── Dashboard (240° gauge) ───────────────────────────────
         int side = qMin(width(), height());
         qreal cx = width() / 2.0;
         qreal cy = height() / 2.0;
         qreal radius = (side - strokeWidth_) / 2.0;
         QRectF arcRect(cx - radius, cy - radius, radius * 2.0, radius * 2.0);
+
         p.setBrush(Qt::NoBrush);
         QPen bgPen(QColor(0xeb, 0xee, 0xf5), strokeWidth_);
         bgPen.setCapStyle(Qt::RoundCap);
         p.setPen(bgPen);
         p.drawArc(arcRect, -210 * 16, 240 * 16);
+
         if (percentage_ > 0) {
             QPen fgPen(statusColor(), strokeWidth_);
             fgPen.setCapStyle(Qt::RoundCap);
@@ -87,113 +82,87 @@ void ZProgress::paintEvent(QPaintEvent*)
             int spanAngle = percentage_ * 240 / 100 * 16;
             p.drawArc(arcRect, -210 * 16, -spanAngle);
         }
+
         if (showText_) {
             QFont f = font();
             f.setPixelSize(14);
-            f.setWeight(QFont::Normal);
-            p.setFont(f);
-            p.setPen(theme::textRegular());
-            QString label = QString::number(percentage_) + QStringLiteral("%");
-            p.drawText(QRectF(0, 0, width(), height()), Qt::AlignCenter, label);
+            painter::DrawText(p, rect(), QString::number(percentage_) + "%",
+                              f, theme::textRegular(), Qt::AlignCenter);
         }
     } else if (type_ == kCircle) {
-        // ─── Circle mode ──────────────────────────────────────────
         int side = qMin(width(), height());
         qreal cx = width() / 2.0;
         qreal cy = height() / 2.0;
         qreal radius = (side - strokeWidth_) / 2.0;
-
         QRectF arcRect(cx - radius, cy - radius, radius * 2.0, radius * 2.0);
 
-        // Background ring
         p.setBrush(Qt::NoBrush);
         QPen bgPen(QColor(0xeb, 0xee, 0xf5), strokeWidth_);
         bgPen.setCapStyle(Qt::RoundCap);
         p.setPen(bgPen);
         p.drawArc(arcRect, 0, 360 * 16);
 
-        // Foreground arc — starts at 12 o'clock (-90°)
         if (percentage_ > 0) {
             QPen fgPen(statusColor(), strokeWidth_);
             fgPen.setCapStyle(Qt::RoundCap);
             p.setPen(fgPen);
             int spanAngle = percentage_ * 360 / 100 * 16;
-            p.drawArc(arcRect, -90 * 16, -spanAngle);  // negative = counter-clockwise
+            p.drawArc(arcRect, -90 * 16, -spanAngle);
         }
 
-        // Center text
         if (showText_) {
             QFont f = font();
             f.setPixelSize(14);
-            f.setWeight(QFont::Normal);
-            p.setFont(f);
-            p.setPen(theme::textRegular());
-            QString label = QString::number(percentage_) + QStringLiteral("%");
-            if (percentage_ == 100 && status_ == kSuccess) {
-                label = QString(QChar(0x2713));  // ✓
-            }
-            p.drawText(QRectF(0, 0, width(), height()), Qt::AlignCenter, label);
+            QString label = QString::number(percentage_) + "%";
+            if (percentage_ == 100 && status_ == kSuccess) label = QString(QChar(0x2713));
+            painter::DrawText(p, rect(), label, f, theme::textRegular(), Qt::AlignCenter);
         }
     } else {
-        // ─── Line mode ────────────────────────────────────────────
         int w = width();
         int h = height();
-        int trackY = (h - strokeWidth_) / 2;
         int trackH = strokeWidth_;
+        int trackY = (h - trackH) / 2;
 
-        // Reserve space for text on the right
         QFont f = font();
         f.setPixelSize(12);
-        f.setWeight(QFont::Normal);
         QFontMetrics fm(f);
-        QString label = QString::number(percentage_) + QStringLiteral("%");
+        QString label = QString::number(percentage_) + "%";
         int textW = 0;
         if (!indeterminate_ && (showText_ && !textInside_))
             textW = fm.horizontalAdvance(label) + 8;
         int barW = qMax(w - textW, 20);
 
         // Track background
-        QRectF trackRect(0, trackY, barW, trackH);
-        QPainterPath trackPath;
-        trackPath.addRoundedRect(trackRect, trackH / 2.0, trackH / 2.0);
-        p.setBrush(QColor(0xeb, 0xee, 0xf5));
-        p.setPen(Qt::NoPen);
-        p.drawPath(trackPath);
+        painter::DrawBackground(p, QRect(0, trackY, barW, trackH),
+                                QColor(0xeb, 0xee, 0xf5), trackH / 2.0);
 
         if (indeterminate_) {
-            // Sliding block (30% width)
-            int blockW = barW * 30 / 100;
-            int blockX = indPos_ * barW / 100;
-            QRectF blockRect(blockX, trackY, blockW, trackH);
-            QPainterPath blockPath;
-            blockPath.addRoundedRect(blockRect, trackH / 2.0, trackH / 2.0);
-            blockPath = blockPath.intersected(trackPath);
-            p.setBrush(theme::colorPrimary());
-            p.drawPath(blockPath);
-        } else if (percentage_ > 0) {
-            // Filled portion
-            int fillW = qMax(trackH, barW * percentage_ / 100);
-            QRectF fillRect(0, trackY, fillW, trackH);
-            QPainterPath fillPath;
-            fillPath.addRoundedRect(fillRect, trackH / 2.0, trackH / 2.0);
-            fillPath = fillPath.intersected(trackPath);
-            p.setBrush(statusColor());
-            p.setPen(Qt::NoPen);
-            p.drawPath(fillPath);
+            // Sliding block — animate ind_pos_ with a simple bounce
+            // ponytail: simple bounce, replaced by animation progress when available
+            static int s_bounce = 0;
+            static int s_dir = 1;
+            s_bounce += s_dir;
+            if (s_bounce >= 70) s_dir = -1;
+            if (s_bounce <= 0) s_dir = 1;
 
-            // Inside text
+            int blockW = barW * 30 / 100;
+            int blockX = s_bounce * barW / 100;
+            painter::DrawBackground(p, QRect(blockX, trackY, blockW, trackH),
+                                    theme::colorPrimary(), trackH / 2.0);
+        } else if (percentage_ > 0) {
+            int fillW = qMax(trackH, barW * percentage_ / 100);
+            painter::DrawBackground(p, QRect(0, trackY, fillW, trackH),
+                                    statusColor(), trackH / 2.0);
+
             if (textInside_ && showText_) {
-                p.setFont(f);
-                p.setPen(Qt::white);
-                p.drawText(QRectF(0, trackY, fillW, trackH), Qt::AlignCenter, label);
+                painter::DrawText(p, QRect(0, trackY, fillW, trackH),
+                                  label, f, Qt::white, Qt::AlignCenter);
             }
         }
 
-        // Text — positioned to the right of the bar
         if (showText_ && !textInside_ && !indeterminate_) {
-            p.setFont(f);
-            p.setPen(theme::textRegular());
-            p.drawText(QRect(barW + 4, 0, textW, h), Qt::AlignLeft | Qt::AlignVCenter, label);
+            painter::DrawText(p, QRect(barW + 4, 0, textW, h), label, f,
+                              theme::textRegular(), Qt::AlignVCenter | Qt::AlignLeft);
         }
     }
 }

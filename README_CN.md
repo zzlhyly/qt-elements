@@ -82,10 +82,10 @@ qt-elements/
 │           │   ├── checkbox/        # ZCheckbox
 │           │   ├── radio/           # ZRadio
 │           │   ├── switch/          # ZSwitch
-│           ├── slider/              # ZSlider
-│           ├── progress/            # ZProgress
+│           │   ├── progress/         # ZProgress
+│           │   ├── slider/           # ZSlider
+│           │   └── tooltip/          # ZTooltip
 │           ├── popup/               # ZPopup
-│           └── tooltip/             # ZTooltip
 ├── build/                          # 构建输出（Win32, Debug）
 ├── scripts/                        # 工具脚本
 │   └── fix-encoding.ps1            # UTF-8 BOM + CRLF 转换器

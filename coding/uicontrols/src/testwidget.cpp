@@ -20,11 +20,11 @@
 #include "widgets/radio/zradio.h"
 #include "widgets/checkbox/zcheckbox.h"
 #include "widgets/switch/zswitch.h"
-#include "slider/zslider.h"
-#include "progress/zprogress.h"
+#include "widgets/slider/zslider.h"
+#include "widgets/progress/zprogress.h"
 #include "widgets/alert/zalert.h"
 #include "popup/zpopup.h"
-#include "tooltip/ztooltip.h"
+#include "widgets/tooltip/ztooltip.h"
 
 static QLabel* sectionLabel(const QString& text)
 {
@@ -976,18 +976,20 @@ static QWidget* createSliderPage()
     layout->setSpacing(24);
     layout->setContentsMargins(32, 24, 32, 24);
 
-    // Basic - at 0, 50, 100
+    // Basic - with value label
     layout->addWidget(sectionLabel("Basic"));
     {
-        auto* s0 = new ZSlider();
-        s0->setValue(0);
-        auto* s50 = new ZSlider();
-        s50->setValue(50);
-        auto* s100 = new ZSlider();
-        s100->setValue(100);
-        layout->addWidget(s0);
-        layout->addWidget(s50);
-        layout->addWidget(s100);
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        auto* s = new ZSlider();
+        s->setValue(30);
+        auto* label = new QLabel("30");
+        QObject::connect(s, &ZSlider::valueChanged, [label](int v) {
+            label->setText(QString::number(v));
+        });
+        row->addWidget(s, 1);
+        row->addWidget(label);
+        layout->addLayout(row);
     }
 
     // Disabled - disabled at value 30
@@ -1277,9 +1279,43 @@ static QWidget* createTooltipPage()
         auto* btnShow = new ZButton("Click to show tooltip");
         btnShow->setButtonType(ZButton::kPrimary);
         QObject::connect(btnShow, &QPushButton::clicked, [btnShow]() {
-            ZTooltip::showText(btnShow, "Static tooltip - auto-hides after 3s", 3000);
+            ZTooltip::showText(btnShow, "Static tooltip - auto-hides after 3s", ZTooltip::kDark, 3000);
         });
         row->addWidget(btnShow);
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
+    // Light theme
+    layout->addWidget(sectionLabel("Light Theme"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        auto* btn = new ZButton("Light tooltip");
+        btn->setButtonType(ZButton::kPrimary);
+        ZTooltip::install(btn, "This is a light tooltip", ZPopup::kTop, ZTooltip::kLight);
+        row->addWidget(btn);
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
+    // Manual trigger
+    layout->addWidget(sectionLabel("Manual Trigger"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        auto* btnManual = new ZButton("Manual show/hide");
+        btnManual->setButtonType(ZButton::kSuccess);
+        auto* tt = new ZTooltip(btnManual);
+        tt->setTarget(btnManual);
+        tt->setText("Manually controlled tooltip - click again to hide");
+        tt->setTrigger(ZTooltip::kManual);
+        auto shown = new bool(false);
+        QObject::connect(btnManual, &QPushButton::clicked, [tt, shown]() {
+            if (*shown) { tt->hide(); *shown = false; }
+            else { tt->show(); *shown = true; }
+        });
+        row->addWidget(btnManual);
         row->addStretch();
         layout->addLayout(row);
     }

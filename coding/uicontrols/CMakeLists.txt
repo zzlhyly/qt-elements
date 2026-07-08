@@ -34,16 +34,16 @@ SET(SRC_FILES
     src/widgets/checkbox/zcheckbox.h
     src/widgets/switch/zswitch.cpp
     src/widgets/switch/zswitch.h
-    src/slider/zslider.cpp
-    src/slider/zslider.h
-    src/progress/zprogress.cpp
-    src/progress/zprogress.h
+    src/widgets/slider/zslider.cpp
+    src/widgets/slider/zslider.h
+    src/widgets/progress/zprogress.cpp
+    src/widgets/progress/zprogress.h
     src/widgets/alert/zalert.cpp
     src/widgets/alert/zalert.h
     src/popup/zpopup.cpp
     src/popup/zpopup.h
-    src/tooltip/ztooltip.cpp
-    src/tooltip/ztooltip.h
+    src/widgets/tooltip/ztooltip.cpp
+    src/widgets/tooltip/ztooltip.h
     src/theme/theme.h
 )
 if(WIN32)

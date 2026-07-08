@@ -1,11 +1,17 @@
-﻿#ifndef CODING_UICONTROLS_SRC_SLIDER_ZSLIDER_H_
-#define CODING_UICONTROLS_SRC_SLIDER_ZSLIDER_H_
+#ifndef WIDGETS_SLIDER_ZSLIDER_H_
+#define WIDGETS_SLIDER_ZSLIDER_H_
 
 #include <QWidget>
 
 class ZSlider : public QWidget
 {
     Q_OBJECT
+
+    Q_PROPERTY(int minimum READ minimum WRITE setMinimum)
+    Q_PROPERTY(int maximum READ maximum WRITE setMaximum)
+    Q_PROPERTY(int value READ value WRITE setValue)
+    Q_PROPERTY(int step READ step WRITE setStep)
+    Q_PROPERTY(bool showStops READ isShowStops WRITE setShowStops)
 
 public:
     explicit ZSlider(QWidget* parent = nullptr);
@@ -47,4 +53,4 @@ private:
     int trackPad_ = 10;
 };
 
-#endif // CODING_UICONTROLS_SRC_SLIDER_ZSLIDER_H_
+#endif // WIDGETS_SLIDER_ZSLIDER_H_
