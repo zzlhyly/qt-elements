@@ -16,7 +16,7 @@
 #include "divider/zdivider.h"
 #include "link/zlink.h"
 #include "text/ztext.h"
-#include "input/zinput.h"
+#include "widgets/input/zinput.h"
 #include "radio/zradio.h"
 #include "checkbox/zcheckbox.h"
 #include "switch/zswitch.h"

@@ -1,69 +1,65 @@
 ﻿#include "zinput.h"
-#include "theme/theme.h"
 
 #include <QEvent>
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QLineEdit>
 #include <QPainter>
-#include <QPainterPath>
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
 
-// ponytail: QPushButton flat+palette hover doesn't work against native style -> custom 15-line painter
+#include "painter/painter.h"
+
+// Icon button for clear / password-toggle — uses Theme colors via Painter
 namespace {
 
-class HoverButton : public QPushButton {
+class IconButton : public QPushButton {
 public:
     using QPushButton::QPushButton;
 protected:
     void paintEvent(QPaintEvent*) override {
         QPainter p(this);
-        p.setPen(hovered_ ? hover_color_ : normal_color_);
+        p.setPen(hovered_ ? theme::colorPrimary() : theme::textRegular());
         p.setFont(font());
         p.drawText(rect(), Qt::AlignCenter, text());
     }
     void enterEvent(QEvent*) override { hovered_ = true; update(); }
     void leaveEvent(QEvent*) override { hovered_ = false; update(); }
 private:
-    QColor normal_color_ = QColor(0x90, 0x93, 0x99);
-    QColor hover_color_ = QColor(0x40, 0x9e, 0xff);
     bool hovered_ = false;
 };
 
 } // namespace
 
+// ─── Construction ────────────────────────────────────────────────────
+
 ZInput::ZInput(QWidget* parent)
     : QWidget(parent)
+    , state_tracker_(new statemachine::StateTracker(this))
 {
-    // Inner line edit
     edit_ = new QLineEdit(this);
     edit_->setFrame(false);
     QPalette pal = edit_->palette();
     pal.setColor(QPalette::Base, Qt::transparent);
-    pal.setColor(QPalette::PlaceholderText, QColor(0xa8, 0xab, 0xb2));
+    pal.setColor(QPalette::PlaceholderText, theme::textDisabled());
     edit_->setPalette(pal);
 
     edit_->installEventFilter(this);
-
     setFocusProxy(edit_);
 
-    // Clear button
-    clear_btn_ = new HoverButton(QString(theme::icon::close()), this);
+    clear_btn_ = new IconButton(QString(theme::icon::close()), this);
     clear_btn_->setFixedSize(16, 16);
     clear_btn_->setFlat(true);
     clear_btn_->setCursor(Qt::PointingHandCursor);
     clear_btn_->setVisible(false);
 
-    // Password toggle button
-    password_btn_ = new HoverButton(this);
+    password_btn_ = new IconButton(this);
     password_btn_->setFixedSize(16, 16);
     password_btn_->setFlat(true);
     password_btn_->setCursor(Qt::PointingHandCursor);
     password_btn_->setVisible(false);
 
-    // Layout
     auto* lay = new QHBoxLayout(this);
     lay->setContentsMargins(8, 1, 8, 1);
     lay->setSpacing(4);
@@ -71,7 +67,6 @@ ZInput::ZInput(QWidget* parent)
     lay->addWidget(clear_btn_);
     lay->addWidget(password_btn_);
 
-    // Signals for QLineEdit
     connect(edit_, &QLineEdit::textChanged, this, [this]() {
         updateClearButton();
         emit textChanged(edit_->text());
@@ -90,26 +85,25 @@ ZInput::ZInput(QWidget* parent)
     updateLayout();
 }
 
+// ─── Public setters / getters ────────────────────────────────────────
+
 void ZInput::setText(const QString& text)           { edit_->setText(text); }
 QString ZInput::text() const                        { return edit_->text(); }
 void ZInput::setPlaceholderText(const QString& t)   { edit_->setPlaceholderText(t); }
 QString ZInput::placeholderText() const             { return edit_->placeholderText(); }
 
-void ZInput::setInputSize(InputSize size)
-{
+void ZInput::setInputSize(InputSize size) {
     size_ = size;
     updateLayout();
     update();
 }
 
-void ZInput::setClearable(bool clearable)
-{
+void ZInput::setClearable(bool clearable) {
     clearable_ = clearable;
     updateClearButton();
 }
 
-void ZInput::setPasswordMode(bool password)
-{
+void ZInput::setPasswordMode(bool password) {
     password_mode_ = password;
     password_btn_->setVisible(password_mode_);
     if (password_mode_) {
@@ -120,23 +114,21 @@ void ZInput::setPasswordMode(bool password)
     }
 }
 
-void ZInput::setTextarea(int rows)
-{
+void ZInput::setTextarea(int rows) {
     rows_ = rows;
     if (!textarea_) {
         textarea_ = new QPlainTextEdit(this);
         textarea_->setFrameShape(QFrame::NoFrame);
-        textarea_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        textarea_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        textarea_->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        textarea_->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         textarea_->document()->setDocumentMargin(0);
         QPalette tp = textarea_->palette();
         tp.setColor(QPalette::Base, Qt::transparent);
-        tp.setColor(QPalette::PlaceholderText, QColor(0xa8, 0xab, 0xb2));
+        tp.setColor(QPalette::PlaceholderText, theme::textDisabled());
         textarea_->setPalette(tp);
         textarea_->installEventFilter(this);
         textarea_->setVisible(false);
 
-        // Add textarea to layout after edit_, before buttons
         auto* lay = qobject_cast<QHBoxLayout*>(layout());
         if (lay) {
             int idx = lay->indexOf(edit_);
@@ -145,12 +137,6 @@ void ZInput::setTextarea(int rows)
 
         connect(textarea_, &QPlainTextEdit::textChanged, this, [this]() {
             emit textChanged(textarea_->toPlainText());
-        });
-
-        connect(textarea_, &QPlainTextEdit::cursorPositionChanged, this, [this]() {
-            if (textarea_->isVisible()) {
-                // Re-emit for compatibility - clear button isn't used in textarea mode
-            }
         });
     }
 
@@ -161,16 +147,13 @@ void ZInput::setTextarea(int rows)
     textarea_->setFixedHeight(rows * lineHeight + 8);
     textarea_->setPlaceholderText(placeholderText());
 
-    // Adjust overall widget size
     setFixedHeight(rows * lineHeight + 10);
     setFocusProxy(textarea_);
     update();
 }
 
-void ZInput::setPrefixIcon(const QChar& icon)
-{
+void ZInput::setPrefixIcon(const QChar& icon) {
     prefix_icon_ = icon;
-    // Adjust layout margins to make room for the icon
     auto* lay = qobject_cast<QHBoxLayout*>(layout());
     if (lay && !icon.isNull()) {
         lay->setContentsMargins(28, 1, 8, 1);
@@ -180,10 +163,8 @@ void ZInput::setPrefixIcon(const QChar& icon)
     update();
 }
 
-void ZInput::setSuffixIcon(const QChar& icon)
-{
+void ZInput::setSuffixIcon(const QChar& icon) {
     suffix_icon_ = icon;
-    // Adjust right margin to make room for the icon
     auto* lay = qobject_cast<QHBoxLayout*>(layout());
     if (lay && !icon.isNull()) {
         lay->setContentsMargins(lay->contentsMargins().left(), 1, 28, 1);
@@ -191,23 +172,21 @@ void ZInput::setSuffixIcon(const QChar& icon)
     update();
 }
 
-ZInput::InputSize ZInput::inputSize() const         { return size_; }
-bool ZInput::isClearable() const                    { return clearable_; }
-bool ZInput::isPasswordMode() const                 { return password_mode_; }
-QLineEdit* ZInput::lineEdit() const                 { return edit_; }
+ZInput::InputSize ZInput::inputSize() const          { return size_; }
+bool ZInput::isClearable() const                     { return clearable_; }
+bool ZInput::isPasswordMode() const                  { return password_mode_; }
+QLineEdit* ZInput::lineEdit() const                  { return edit_; }
 
-void ZInput::updateLayout()
-{
-    static const int heights[] = {40, 32, 24};
-    static const int fontSizes[] = {14, 14, 12};
-    int h = heights[size_];
-    int fs = fontSizes[size_];
+// ─── Layout ──────────────────────────────────────────────────────────
 
-    setMinimumHeight(h);
-    setFixedHeight(h);
+void ZInput::updateLayout() {
+    theme::SizeSpec s = theme::inputSize(size_);
+
+    setMinimumHeight(s.height);
+    setFixedHeight(s.height);
 
     QFont f = font();
-    f.setPixelSize(fs);
+    f.setPixelSize(s.fontSize);
     setFont(f);
     edit_->setFont(f);
     if (textarea_) {
@@ -215,25 +194,33 @@ void ZInput::updateLayout()
     }
 }
 
-void ZInput::updateClearButton()
-{
+void ZInput::updateClearButton() {
     clear_btn_->setVisible(clearable_ && !edit_->text().isEmpty());
 }
 
-bool ZInput::eventFilter(QObject* obj, QEvent* event)
-{
+// ─── Events ──────────────────────────────────────────────────────────
+
+bool ZInput::eventFilter(QObject* obj, QEvent* event) {
     if (obj == edit_ || obj == textarea_) {
         switch (event->type()) {
         case QEvent::Enter:
-            hovered_ = true;
+            state_tracker_->SetHovered(true);
+            state_tracker_->Update();
             update();
             break;
         case QEvent::Leave:
-            hovered_ = false;
+            state_tracker_->SetHovered(false);
+            state_tracker_->Update();
             update();
             break;
         case QEvent::FocusIn:
+            state_tracker_->SetFocused(true);
+            state_tracker_->Update();
+            update();
+            break;
         case QEvent::FocusOut:
+            state_tracker_->SetFocused(false);
+            state_tracker_->Update();
             update();
             break;
         default:
@@ -243,72 +230,67 @@ bool ZInput::eventFilter(QObject* obj, QEvent* event)
     return QWidget::eventFilter(obj, event);
 }
 
-void ZInput::paintEvent(QPaintEvent*)
-{
+void ZInput::changeEvent(QEvent*) {
+    state_tracker_->SetEnabled(isEnabled());
+    state_tracker_->Update();
+    update();
+}
+
+// ─── Painting ────────────────────────────────────────────────────────
+
+void ZInput::paintEvent(QPaintEvent*) {
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing);
 
     QRect r = rect();
     qreal radius = theme::borderRadiusBase();
-    qreal bw = 1.0;
 
-    QColor bg = isEnabled() ? theme::colorWhite() : theme::fillLight();
+    statemachine::ComponentState compState = state_tracker_->CurrentState();
+    bool disabled = (compState == statemachine::ComponentState::kDisabled);
+    bool hovered = (compState == statemachine::ComponentState::kHover);
+    // Focus check: use inner widget's real focus, not StateTracker's resolved priority
+    // StateTracker puts kHover > kFocused, but input should show focus ring when focused
+    QWidget* focusWidget = textarea_ && textarea_->isVisible()
+        ? static_cast<QWidget*>(textarea_) : static_cast<QWidget*>(edit_);
+    bool focused = focusWidget && focusWidget->hasFocus();
 
-    QWidget* focusWidget = textarea_ && textarea_->isVisible() ? static_cast<QWidget*>(textarea_) : static_cast<QWidget*>(edit_);
+    // Background
+    QColor bg = disabled ? theme::fillLight() : theme::colorWhite();
+    painter::DrawBackground(p, r, bg, radius);
 
-    // Border color
+    // Border
     QColor border;
-    if (!isEnabled()) {
+    if (disabled) {
         border = theme::borderLight();
-    } else if (focusWidget && focusWidget->hasFocus()) {
+    } else if (focused) {
         border = theme::colorPrimary();
         // Focus glow ring
-        QColor glow = theme::colorPrimary();
-        glow.setAlpha(38);
-        QPainterPath glowPath;
-        glowPath.addRoundedRect(QRectF(r).adjusted(-1.5, -1.5, 1.5, 1.5),
-                                radius + 2, radius + 2);
-        p.setPen(QPen(glow, 2));
-        p.setBrush(Qt::NoBrush);
-        p.drawPath(glowPath);
-    } else if (hovered_) {
+        painter::DrawFocusRing(p, QRectF(r).adjusted(-2, -2, 2, 2),
+                                radius + 2, theme::focusOutline());
+    } else if (hovered) {
         border = theme::primaryLight7();
     } else {
         border = theme::borderColor();
     }
 
-    // Background fill
-    QPainterPath bgPath;
-    bgPath.addRoundedRect(QRectF(r).adjusted(bw, bw, -bw, -bw), radius, radius);
-    p.setPen(Qt::NoPen);
-    p.setBrush(bg);
-    p.drawPath(bgPath);
-
-    // Border
-    QPainterPath borderPath;
-    borderPath.addRoundedRect(QRectF(r).adjusted(bw / 2, bw / 2, -bw / 2, -bw / 2),
-                              radius, radius);
-    p.setPen(QPen(border, bw));
-    p.setBrush(Qt::NoBrush);
-    p.drawPath(borderPath);
+    QRectF borderRect = QRectF(r).adjusted(0.5, 0.5, -0.5, -0.5);
+    painter::DrawBorder(p, borderRect, border, 1.0, radius);
 
     // Prefix icon
     if (!prefix_icon_.isNull()) {
         QFont f = p.font();
         f.setPixelSize(14);
+        p.setPen(theme::textRegular());
         p.setFont(f);
-        p.setPen(QColor(0x90, 0x93, 0x99));
-        QRect ir(8, 0, 16, height());
-        p.drawText(ir, Qt::AlignCenter, QString(prefix_icon_));
+        p.drawText(QRect(8, 0, 16, height()), Qt::AlignCenter, QString(prefix_icon_));
     }
 
     // Suffix icon
     if (!suffix_icon_.isNull()) {
         QFont f = p.font();
         f.setPixelSize(14);
+        p.setPen(theme::textRegular());
         p.setFont(f);
-        p.setPen(QColor(0x90, 0x93, 0x99));
-        QRect ir(width() - 24, 0, 16, height());
-        p.drawText(ir, Qt::AlignCenter, QString(suffix_icon_));
+        p.drawText(QRect(width() - 24, 0, 16, height()), Qt::AlignCenter, QString(suffix_icon_));
     }
 }

@@ -260,6 +260,17 @@ inline int tagCloseSize(int size) {
     return sizes[size];
 }
 
+// ─── Input: size specs ─────────────────────────────────────────────
+
+inline SizeSpec inputSize(int size) {
+    static const SizeSpec specs[] = {
+        { 40, 14, 4, 12, 1, 4 },   // Large
+        { 32, 14, 4, 12, 1, 4 },   // Default
+        { 24, 12, 3,  8, 1, 4 },   // Small
+    };
+    return specs[size];
+}
+
 } // namespace theme
 
 #endif // CODING_UICONTROLS_SRC_THEME_THEME_H_

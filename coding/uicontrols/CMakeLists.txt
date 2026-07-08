@@ -26,8 +26,8 @@ SET(SRC_FILES
     src/link/zlink.h
     src/text/ztext.cpp
     src/text/ztext.h
-    src/input/zinput.cpp
-    src/input/zinput.h
+    src/widgets/input/zinput.cpp
+    src/widgets/input/zinput.h
     src/radio/zradio.cpp
     src/radio/zradio.h
     src/checkbox/zcheckbox.cpp

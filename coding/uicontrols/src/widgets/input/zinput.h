@@ -1,15 +1,24 @@
-﻿#ifndef CODING_UICONTROLS_SRC_INPUT_ZINPUT_H_
-#define CODING_UICONTROLS_SRC_INPUT_ZINPUT_H_
+﻿#ifndef WIDGETS_INPUT_ZINPUT_H_
+#define WIDGETS_INPUT_ZINPUT_H_
 
 #include <QWidget>
+#include "theme/theme.h"
+#include "statemachine/statemachine.h"
 
 class QLineEdit;
 class QPushButton;
 class QPlainTextEdit;
 
+namespace statemachine { class StateTracker; }
+
 class ZInput : public QWidget
 {
     Q_OBJECT
+
+    Q_PROPERTY(InputSize inputSize READ inputSize WRITE setInputSize)
+    Q_PROPERTY(bool clearable READ isClearable WRITE setClearable)
+    Q_PROPERTY(bool passwordMode READ isPasswordMode WRITE setPasswordMode)
+    Q_PROPERTY(QString placeholderText READ placeholderText WRITE setPlaceholderText)
 
 public:
     enum InputSize { kLarge, kDefault, kSmall };
@@ -40,6 +49,7 @@ signals:
 protected:
     void paintEvent(QPaintEvent*) override;
     bool eventFilter(QObject* obj, QEvent* event) override;
+    void changeEvent(QEvent*) override;
 
 private:
     void updateLayout();
@@ -52,10 +62,11 @@ private:
     InputSize size_ = kDefault;
     bool clearable_ = false;
     bool password_mode_ = false;
-    bool hovered_ = false;
     int rows_ = 0;
     QChar prefix_icon_;
     QChar suffix_icon_;
+
+    statemachine::StateTracker* state_tracker_;
 };
 
-#endif // CODING_UICONTROLS_SRC_INPUT_ZINPUT_H_
+#endif // WIDGETS_INPUT_ZINPUT_H_
