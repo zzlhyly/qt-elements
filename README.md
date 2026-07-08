@@ -64,19 +64,27 @@ qt-elements/
 │       ├── CMakeLists.txt
 │       └── src/
 │           ├── theme/theme.h       # Global color & size token system
-│           ├── testwidget.h/.cpp   # Component demo browser
-│           ├── button/             # ZButton
-│           ├── tag/                # ZTag
-│           ├── badge/              # ZBadge
-│           ├── divider/            # ZDivider
-│           ├── link/               # ZLink
-│           ├── text/               # ZText
-│           ├── input/              # ZInput
-│           ├── radio/              # ZRadio
-│           ├── checkbox/           # ZCheckbox
-│           ├── switch/             # ZSwitch
-│           ├── slider/             # ZSlider
-│           └── progress/           # ZProgress
+│           ├── style/style.h        # Visual style resolution
+│           ├── statemachine/        # StateTracker
+│           ├── painter/             # Painter helper functions
+│           ├── animation/           # AnimationManager
+│           ├── icon/                # IconManager
+│           ├── widgets/
+│           │   ├── button/          # ZButton
+│           │   ├── tag/             # ZTag
+│           │   ├── input/           # ZInput
+│           │   ├── link/            # ZLink
+│           │   └── alert/           # ZAlert
+│           ├── badge/               # ZBadge
+│           ├── divider/             # ZDivider
+│           ├── text/                # ZText
+│           ├── radio/               # ZRadio
+│           ├── checkbox/            # ZCheckbox
+│           ├── switch/              # ZSwitch
+│           ├── slider/              # ZSlider
+│           ├── progress/            # ZProgress
+│           ├── popup/               # ZPopup
+│           └── tooltip/             # ZTooltip
 ├── build/                          # Build output (Win32, Debug)
 ├── scripts/                        # Utility scripts
 │   └── fix-encoding.ps1            # UTF-8 BOM + CRLF converter

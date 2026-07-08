@@ -1,0 +1,22 @@
+#include <QHBoxLayout>
+#include <QWidget>
+#include "widgets/tag/ztag.h"
+
+QWidget* ZTagDemoClosable() {
+    auto* w = new QWidget();
+    auto* row = new QHBoxLayout(w);
+    row->setSpacing(12);
+    const char* names[] = {"Primary", "Success", "Info", "Warning", "Danger"};
+    const ZTag::TagType types[] = {ZTag::kPrimary, ZTag::kSuccess, ZTag::kInfo,
+                                   ZTag::kWarning, ZTag::kDanger};
+    for (int i = 0; i < 5; ++i) {
+        auto* tag = new ZTag(names[i]);
+        tag->setTagType(types[i]);
+        tag->setEffect(ZTag::kLight);
+        tag->setClosable(true);
+        QObject::connect(tag, &ZTag::closed, tag, &QWidget::hide);
+        row->addWidget(tag);
+    }
+    row->addStretch();
+    return w;
+}

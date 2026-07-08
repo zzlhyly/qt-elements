@@ -1,12 +1,23 @@
-﻿#ifndef CODING_UICONTROLS_SRC_TAG_ZTAG_H_
-#define CODING_UICONTROLS_SRC_TAG_ZTAG_H_
+#ifndef WIDGETS_TAG_ZTAG_H_
+#define WIDGETS_TAG_ZTAG_H_
 
 #include <QWidget>
 #include "theme/theme.h"
+#include "statemachine/statemachine.h"
+#include "style/style.h"
+
+namespace statemachine { class StateTracker; }
 
 class ZTag : public QWidget
 {
     Q_OBJECT
+
+    Q_PROPERTY(TagType tagType READ tagType WRITE setTagType)
+    Q_PROPERTY(TagEffect effect READ effect WRITE setEffect)
+    Q_PROPERTY(TagSize tagSize READ tagSize WRITE setTagSize)
+    Q_PROPERTY(bool closable READ isClosable WRITE setClosable)
+    Q_PROPERTY(bool round READ isRound WRITE setRound)
+    Q_PROPERTY(bool hit READ isHit WRITE setHit)
 
 public:
     enum TagType { kPrimary, kSuccess, kInfo, kWarning, kDanger };
@@ -18,7 +29,6 @@ public:
 
     void setText(const QString& text);
     QString text() const;
-
     void setTagType(TagType type);
     void setEffect(TagEffect effect);
     void setTagSize(TagSize size);
@@ -46,10 +56,6 @@ protected:
     void mouseMoveEvent(QMouseEvent*) override;
 
 private:
-    theme::SizeSpec sizeSpec() const;
-    QColor bgColor() const;
-    QColor textColor() const;
-    QColor borderColor() const;
     QRect closeButtonRect() const;
 
     TagType type_ = kPrimary;
@@ -59,8 +65,8 @@ private:
     bool closable_ = false;
     bool round_ = false;
     bool hit_ = false;
-    bool close_hovered_ = false;
-    bool close_pressed_ = false;
+
+    statemachine::StateTracker* close_state_;
 };
 
-#endif // CODING_UICONTROLS_SRC_TAG_ZTAG_H_
+#endif // WIDGETS_TAG_ZTAG_H_

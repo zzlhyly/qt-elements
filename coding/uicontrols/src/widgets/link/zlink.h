@@ -1,12 +1,17 @@
-﻿#ifndef CODING_UICONTROLS_SRC_LINK_ZLINK_H_
-#define CODING_UICONTROLS_SRC_LINK_ZLINK_H_
+﻿#ifndef WIDGETS_LINK_ZLINK_H_
+#define WIDGETS_LINK_ZLINK_H_
 
 #include <QWidget>
 #include "theme/theme.h"
+#include "statemachine/statemachine.h"
+
+namespace statemachine { class StateTracker; }
 
 class ZLink : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(LinkType linkType READ linkType WRITE setLinkType)
+    Q_PROPERTY(bool underline READ isUnderline WRITE setUnderline)
 
 public:
     enum LinkType { kDefault, kPrimary, kSuccess, kWarning, kDanger, kInfo };
@@ -37,7 +42,7 @@ private:
     QString text_;
     LinkType type_ = kDefault;
     bool underline_ = false;
-    bool hovered_ = false;
+    statemachine::StateTracker* state_tracker_;
 };
 
-#endif // CODING_UICONTROLS_SRC_LINK_ZLINK_H_
+#endif  // WIDGETS_LINK_ZLINK_H_

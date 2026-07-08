@@ -16,14 +16,14 @@ SET(SRC_FILES
     # Widgets
     src/widgets/button/zbutton.cpp
     src/widgets/button/zbutton.h
-    src/tag/ztag.cpp
-    src/tag/ztag.h
+    src/widgets/tag/ztag.cpp
+    src/widgets/tag/ztag.h
     src/badge/zbadge.cpp
     src/badge/zbadge.h
     src/divider/zdivider.cpp
     src/divider/zdivider.h
-    src/link/zlink.cpp
-    src/link/zlink.h
+    src/widgets/link/zlink.cpp
+    src/widgets/link/zlink.h
     src/text/ztext.cpp
     src/text/ztext.h
     src/widgets/input/zinput.cpp
@@ -38,8 +38,8 @@ SET(SRC_FILES
     src/slider/zslider.h
     src/progress/zprogress.cpp
     src/progress/zprogress.h
-    src/alert/zalert.cpp
-    src/alert/zalert.h
+    src/widgets/alert/zalert.cpp
+    src/widgets/alert/zalert.h
     src/popup/zpopup.cpp
     src/popup/zpopup.h
     src/tooltip/ztooltip.cpp

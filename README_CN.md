@@ -64,19 +64,28 @@ qt-elements/
 │       ├── CMakeLists.txt
 │       └── src/
 │           ├── theme/theme.h       # 全局色彩与尺寸令牌系统
-│           ├── testwidget.h/.cpp   # 组件展示浏览器
-│           ├── button/             # ZButton
-│           ├── tag/                # ZTag
-│           ├── badge/              # ZBadge
-│           ├── divider/            # ZDivider
-│           ├── link/               # ZLink
-│           ├── text/               # ZText
-│           ├── input/              # ZInput
-│           ├── radio/              # ZRadio
-│           ├── checkbox/           # ZCheckbox
-│           ├── switch/             # ZSwitch
-│           ├── slider/             # ZSlider
-│           └── progress/           # ZProgress
+│           ├── style/style.h        # 视觉样式解析
+│           ├── statemachine/        # StateTracker 状态机
+│           ├── painter/             # Painter 辅助函数
+│           ├── animation/           # AnimationManager 动画管理
+│           ├── icon/                # IconManager 图标管理
+│           ├── testwidget.h/.cpp    # 组件展示浏览器
+│           ├── widgets/
+│           │   ├── button/          # ZButton
+│           │   ├── tag/             # ZTag
+│           │   ├── input/           # ZInput
+│           │   ├── link/            # ZLink
+│           │   └── alert/           # ZAlert
+│           ├── badge/               # ZBadge
+│           ├── divider/             # ZDivider
+│           ├── text/                # ZText
+│           ├── radio/               # ZRadio
+│           ├── checkbox/            # ZCheckbox
+│           ├── switch/              # ZSwitch
+│           ├── slider/              # ZSlider
+│           ├── progress/            # ZProgress
+│           ├── popup/               # ZPopup
+│           └── tooltip/             # ZTooltip
 ├── build/                          # 构建输出（Win32, Debug）
 ├── scripts/                        # 工具脚本
 │   └── fix-encoding.ps1            # UTF-8 BOM + CRLF 转换器

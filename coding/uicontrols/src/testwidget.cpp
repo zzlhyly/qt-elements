@@ -11,10 +11,10 @@
 #include <QVBoxLayout>
 
 #include "widgets/button/zbutton.h"
-#include "tag/ztag.h"
+#include "widgets/tag/ztag.h"
 #include "badge/zbadge.h"
 #include "divider/zdivider.h"
-#include "link/zlink.h"
+#include "widgets/link/zlink.h"
 #include "text/ztext.h"
 #include "widgets/input/zinput.h"
 #include "radio/zradio.h"
@@ -22,7 +22,7 @@
 #include "switch/zswitch.h"
 #include "slider/zslider.h"
 #include "progress/zprogress.h"
-#include "alert/zalert.h"
+#include "widgets/alert/zalert.h"
 #include "popup/zpopup.h"
 #include "tooltip/ztooltip.h"
 

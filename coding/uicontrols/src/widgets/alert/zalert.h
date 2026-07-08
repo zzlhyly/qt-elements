@@ -1,11 +1,21 @@
-﻿#ifndef CODING_UICONTROLS_SRC_ALERT_ZALERT_H_
-#define CODING_UICONTROLS_SRC_ALERT_ZALERT_H_
+#ifndef WIDGETS_ALERT_ZALERT_H_
+#define WIDGETS_ALERT_ZALERT_H_
 
 #include <QWidget>
+#include "style/style.h"
+#include "statemachine/statemachine.h"
+
+namespace statemachine { class StateTracker; }
 
 class ZAlert : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(AlertType type READ type WRITE setType)
+    Q_PROPERTY(AlertEffect effect READ effect WRITE setEffect)
+    Q_PROPERTY(bool closable READ isClosable WRITE setClosable)
+    Q_PROPERTY(bool showIcon READ isShowIcon WRITE setShowIcon)
+    Q_PROPERTY(bool center READ isCenter WRITE setCenter)
+    Q_PROPERTY(QString title READ title WRITE setTitle)
 
 public:
     enum AlertType { kSuccess, kInfo, kWarning, kError };
@@ -41,10 +51,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent*) override;
 
 private:
-    QColor bgColor() const;
-    QColor borderColor() const;
-    QColor textColor() const;
-    QChar iconGlyph() const;
+    void Init();
     QRect closeButtonRect() const;
 
     QString title_;
@@ -53,8 +60,7 @@ private:
     bool closable_ = false;
     bool showIcon_ = true;
     bool center_ = false;
-    bool close_hovered_ = false;
-    bool close_pressed_ = false;
+    statemachine::StateTracker* close_state_;
 };
 
-#endif // CODING_UICONTROLS_SRC_ALERT_ZALERT_H_
+#endif  // WIDGETS_ALERT_ZALERT_H_
