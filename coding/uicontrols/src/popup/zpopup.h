@@ -3,6 +3,10 @@
 
 #include <QWidget>
 
+// ZPopup — Lightweight positioned popup container.
+// Shows content relative to a target widget at a given placement (top/bottom/left/right).
+// Auto-fits to screen boundaries. Used by ZTooltip and other overlay components.
+
 class ZPopup : public QWidget
 {
     Q_OBJECT

@@ -3,6 +3,10 @@
 
 #include <QWidget>
 
+// ZSlider — Element Plus slider component.
+// Supports horizontal/vertical orientation, step snapping, stop markers,
+// and drag interaction. Renders track, fill, and thumb via QPainter.
+
 class ZSlider : public QWidget
 {
     Q_OBJECT
@@ -12,8 +16,11 @@ class ZSlider : public QWidget
     Q_PROPERTY(int value READ value WRITE setValue)
     Q_PROPERTY(int step READ step WRITE setStep)
     Q_PROPERTY(bool showStops READ isShowStops WRITE setShowStops)
+    Q_PROPERTY(Direction direction READ direction WRITE setDirection)
 
 public:
+    enum Direction { kHorizontal, kVertical };
+
     explicit ZSlider(QWidget* parent = nullptr);
 
     void setMinimum(int min);
@@ -21,12 +28,14 @@ public:
     void setValue(int value);
     void setStep(int step);
     void setShowStops(bool show);
+    void setDirection(Direction dir);
 
     int minimum() const { return min_; }
     int maximum() const { return max_; }
     int value() const { return value_; }
     int step() const { return step_; }
     bool isShowStops() const { return showStops_; }
+    Direction direction() const { return direction_; }
 
     QSize sizeHint() const override;
 
@@ -40,8 +49,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent*) override;
 
 private:
-    int thumbX() const;
-    int valueFromX(int x) const;
+    int thumbPos() const;
+    int valueFromPos(int pos) const;
     QRect thumbRect() const;
 
     int min_ = 0;
@@ -51,6 +60,7 @@ private:
     bool showStops_ = false;
     bool dragging_ = false;
     int trackPad_ = 10;
+    Direction direction_ = kHorizontal;
 };
 
 #endif // WIDGETS_SLIDER_ZSLIDER_H_

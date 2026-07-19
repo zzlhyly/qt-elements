@@ -4,6 +4,9 @@
 #include <QWidget>
 #include "theme/theme.h"
 
+// ZDivider — Element Plus divider with optional centered text.
+// Supports horizontal/vertical orientation and solid/dashed/dotted styles.
+
 class ZDivider : public QWidget
 {
     Q_OBJECT

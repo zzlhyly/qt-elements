@@ -3,6 +3,9 @@
 
 #include <QAbstractButton>
 
+// ZCheckbox — Element Plus checkbox with indeterminate state support.
+// Renders via QPainter: custom checkbox indicator + optional text label.
+
 class ZCheckbox : public QAbstractButton
 {
     Q_OBJECT

@@ -32,6 +32,8 @@ SET(SRC_FILES
     src/widgets/radio/zradio.h
     src/widgets/checkbox/zcheckbox.cpp
     src/widgets/checkbox/zcheckbox.h
+    src/widgets/checkboxgroup/zcheckboxgroup.cpp
+    src/widgets/checkboxgroup/zcheckboxgroup.h
     src/widgets/switch/zswitch.cpp
     src/widgets/switch/zswitch.h
     src/widgets/slider/zslider.cpp

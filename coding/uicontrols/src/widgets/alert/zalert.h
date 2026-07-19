@@ -7,6 +7,10 @@
 
 namespace statemachine { class StateTracker; }
 
+// ZAlert — Element Plus alert banner.
+// Supports success/info/warning/error types, light/dark effects,
+// optional icon, close button, and centered text.
+
 class ZAlert : public QWidget
 {
     Q_OBJECT

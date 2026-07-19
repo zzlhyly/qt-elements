@@ -3,6 +3,9 @@
 
 #include <QAbstractButton>
 
+// ZRadio — Element Plus radio button.
+// Custom QPainter-rendered radio indicator with optional border style.
+
 class ZRadio : public QAbstractButton
 {
     Q_OBJECT

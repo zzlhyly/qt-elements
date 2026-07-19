@@ -4,6 +4,10 @@
 #include <QWidget>
 #include "animation/animation_manager.h"
 
+// ZProgress — Element Plus progress bar.
+// Supports line/circle/dashboard types, status coloring (normal/success/exception/warning),
+// indeterminate animation, and optional text inside or outside the bar.
+
 class ZProgress : public QWidget
 {
     Q_OBJECT

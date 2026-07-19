@@ -1,4 +1,16 @@
-﻿#ifndef CODING_UICONTROLS_SRC_THEME_THEME_H_
+﻿// theme.h — Element Plus design token library (header-only, zero runtime cost).
+//
+// Provides all colors, sizes, and spacing used by the component library.
+// Every widget must source its visual tokens from this file — no hardcoded
+// color literals or magic numbers elsewhere.
+//
+// Color lookup tables follow a consistent layout:
+//   rows    = component type  (kDefault, kPrimary, kSuccess, kWarning, kDanger, kInfo)
+//   columns = state           (kNormal, kHover, kPressed, kDisabled)
+//
+// Usage: theme::buttonSolidBg(type, state), theme::tagLightBg(type), etc.
+
+#ifndef CODING_UICONTROLS_SRC_THEME_THEME_H_
 #define CODING_UICONTROLS_SRC_THEME_THEME_H_
 
 #include <QColor>

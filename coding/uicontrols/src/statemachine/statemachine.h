@@ -1,10 +1,19 @@
-﻿#ifndef CODING_UICONTROLS_SRC_STATEMACHINE_STATEMACHINE_H_
+﻿// statemachine.h — Unified state resolution for all interactive components.
+//
+// Components set boolean flags (hovered, pressed, focused, etc.) from event
+// handlers, then call Update() to compute the effective ComponentState.
+// Priority: Disabled > Loading > Pressed > Hovered > Focused > Selected > Checked > Idle.
+//
+// StateTracker emits StateChanged(old, new) so components can react to transitions.
+
+#ifndef CODING_UICONTROLS_SRC_STATEMACHINE_STATEMACHINE_H_
 #define CODING_UICONTROLS_SRC_STATEMACHINE_STATEMACHINE_H_
 
 #include <QObject>
 
 namespace statemachine {
 
+// Effective visual state after priority-based resolution.
 enum class ComponentState {
     kIdle,
     kHover,

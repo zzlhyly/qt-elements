@@ -19,6 +19,7 @@
 #include "widgets/input/zinput.h"
 #include "widgets/radio/zradio.h"
 #include "widgets/checkbox/zcheckbox.h"
+#include "widgets/checkboxgroup/zcheckboxgroup.h"
 #include "widgets/switch/zswitch.h"
 #include "widgets/slider/zslider.h"
 #include "widgets/progress/zprogress.h"
@@ -222,6 +223,38 @@ static QWidget* createButtonPage()
         auto* bi3 = new ZButton(QString(QChar(0x2665)) + " Like");
         bi3->setButtonType(ZButton::kInfo);
         row->addWidget(bi1); row->addWidget(bi2); row->addWidget(bi3);
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
+    // Button Group
+    layout->addWidget(sectionLabel("Button Group"));
+    {
+        auto* group = new QWidget();
+        auto* grp = new QHBoxLayout(group);
+        grp->setSpacing(0);
+        auto* bg1 = new ZButton("Previous");
+        bg1->setButtonType(ZButton::kPrimary);
+        auto* bg2 = new ZButton("Next");
+        bg2->setButtonType(ZButton::kPrimary);
+        grp->addWidget(bg1);
+        grp->addWidget(bg2);
+        layout->addWidget(group);
+    }
+
+    // Color
+    layout->addWidget(sectionLabel("Color"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        auto* bc1 = new ZButton("Default");
+        auto* bc2 = new ZButton("Primary");
+        bc2->setButtonType(ZButton::kPrimary);
+        auto* bc3 = new ZButton("Success");
+        bc3->setButtonType(ZButton::kSuccess);
+        auto* bc4 = new ZButton("Danger");
+        bc4->setButtonType(ZButton::kDanger);
+        row->addWidget(bc1); row->addWidget(bc2); row->addWidget(bc3); row->addWidget(bc4);
         row->addStretch();
         layout->addLayout(row);
     }
@@ -471,6 +504,23 @@ static QWidget* createDividerPage()
         layout->addWidget(dDotted);
     }
 
+    // Vertical
+    layout->addWidget(sectionLabel("Vertical"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(24);
+        auto* dv = new ZDivider();
+        dv->setDirection(ZDivider::kVertical);
+        dv->setFixedHeight(100);
+        auto* dv2 = new ZDivider("Text");
+        dv2->setDirection(ZDivider::kVertical);
+        dv2->setFixedHeight(100);
+        row->addWidget(dv);
+        row->addWidget(dv2);
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
     layout->addStretch();
     scroll->setWidget(content);
     return scroll;
@@ -711,6 +761,27 @@ static QWidget* createInputPage()
         layout->addLayout(row);
     }
 
+    // Prepend / Append
+    layout->addWidget(sectionLabel("Prepend / Append"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        auto* in1 = new ZInput();
+        auto* prep = new QLabel("http://");
+        prep->setContentsMargins(4, 0, 4, 0);
+        in1->setPrependWidget(prep);
+        in1->setPlaceholderText("Enter domain");
+        auto* in2 = new ZInput();
+        auto* app = new QPushButton(".com");
+        app->setFlat(true);
+        in2->setAppendWidget(app);
+        in2->setPlaceholderText("Enter site name");
+        row->addWidget(in1);
+        row->addWidget(in2);
+        row->addStretch();
+        layout->addLayout(row);
+    }
+
     layout->addStretch();
     scroll->setWidget(content);
     return scroll;
@@ -855,6 +926,22 @@ static QWidget* createCheckboxPage()
         auto* ci = new ZCheckbox("Indeterminate");
         ci->setIndeterminate(true);
         layout->addWidget(ci);
+    }
+
+    // Group
+    layout->addWidget(sectionLabel("Group"));
+    {
+        auto* group = new ZCheckboxGroup();
+        auto* cg1 = new ZCheckbox("Option A");
+        auto* cg2 = new ZCheckbox("Option B");
+        auto* cg3 = new ZCheckbox("Option C");
+        group->addCheckbox(cg1, 1);
+        group->addCheckbox(cg2, 2);
+        group->addCheckbox(cg3, 3);
+        group->setValue({2});
+        group->setMin(1);
+        group->setMax(2);
+        layout->addWidget(group);
     }
 
     layout->addStretch();
@@ -1015,6 +1102,20 @@ static QWidget* createSliderPage()
     {
         auto* ss = new ZSlider(); ss->setStep(25); ss->setShowStops(true); ss->setValue(50);
         layout->addWidget(ss);
+    }
+
+    // Vertical
+    layout->addWidget(sectionLabel("Vertical"));
+    {
+        auto* row = new QHBoxLayout();
+        row->setSpacing(12);
+        auto* sv = new ZSlider();
+        sv->setDirection(ZSlider::kVertical);
+        sv->setValue(30);
+        sv->setMinimumHeight(200);
+        row->addWidget(sv);
+        row->addStretch();
+        layout->addLayout(row);
     }
 
     layout->addStretch();

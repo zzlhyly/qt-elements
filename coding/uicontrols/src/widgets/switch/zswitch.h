@@ -5,6 +5,10 @@
 #include <QString>
 #include "animation/animation_manager.h"
 
+// ZSwitch — Element Plus switch toggle.
+// Animated slide transition between on/off states, supports loading spinner
+// and optional active/inactive text labels.
+
 class ZSwitch : public QAbstractButton
 {
     Q_OBJECT

@@ -12,6 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// animation_manager.h — Centralized animation factory for all components.
+//
+// Components must not create QVariantAnimation / QPropertyAnimation directly.
+// Instead, call Create*Animation() on an AnimationManager instance (typically
+// owned by the component). Animations auto-cleanup when the target is destroyed.
+//
+// Supported types: opacity, color, progress (continuous loop for spinners).
+
 #ifndef ANIMATION_ANIMATION_MANAGER_H_
 #define ANIMATION_ANIMATION_MANAGER_H_
 
@@ -23,6 +31,8 @@
 
 #include <functional>
 
+// Lightweight RAII handle to a running animation. Allows callers to stop,
+// pause, or query state without tracking the underlying QVariantAnimation*.
 class AnimHandle {
  public:
   AnimHandle() = default;

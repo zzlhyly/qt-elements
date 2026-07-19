@@ -3,6 +3,10 @@
 
 #include <QWidget>
 
+// ZText — Element Plus typography component.
+// Renders text with type coloring (primary/success/info/warning/danger),
+// size variants (large/medium/small), and optional right-elision truncation.
+
 class ZText : public QWidget
 {
     Q_OBJECT

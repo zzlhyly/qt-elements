@@ -8,6 +8,10 @@
 
 namespace statemachine { class StateTracker; }
 
+// ZTag — Element Plus tag component.
+// Supports types (primary/success/info/warning/danger), effects (light/dark/plain),
+// sizes, round shape, closable with close button, and hit (highlighted border).
+
 class ZTag : public QWidget
 {
     Q_OBJECT

@@ -7,6 +7,10 @@
 
 class QWidget;
 
+// ZTooltip — Element Plus tooltip overlay.
+// Shows a popup with text on hover or manual trigger. Supports dark/light
+// effects and configurable show/hide delays. Uses ZPopup for positioning.
+
 class ZTooltip : public QObject
 {
     Q_OBJECT

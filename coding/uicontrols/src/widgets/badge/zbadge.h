@@ -4,6 +4,10 @@
 #include <QWidget>
 #include "theme/theme.h"
 
+// ZBadge — Element Plus badge overlay.
+// Renders a numeric badge or dot indicator, typically positioned
+// relative to a child widget via layout or absolute positioning.
+
 class ZBadge : public QWidget
 {
     Q_OBJECT

@@ -13,6 +13,11 @@ namespace statemachine { class StateTracker; }
 class AnimHandle;
 class AnimationManager;
 
+// ZButton — Element Plus button component.
+// Supports types (primary/success/warning/danger/info), sizes, variants
+// (solid/plain/text/link/dashed), round/circle shapes, and loading state.
+// All visuals resolved via style::ResolveButton → painter layer.
+
 class ZButton : public QAbstractButton
 {
     Q_OBJECT

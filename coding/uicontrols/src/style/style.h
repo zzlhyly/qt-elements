@@ -1,4 +1,10 @@
-﻿#ifndef STYLE_STYLE_H_
+﻿// style.h — Maps (type × state × variant) → resolved visual properties.
+//
+// Each component has a Resolve* function that takes theme tokens and returns
+// a fully resolved visual struct (background, text, border colors + dimensions).
+// The painter layer consumes these structs directly — no further logic needed.
+
+#ifndef STYLE_STYLE_H_
 #define STYLE_STYLE_H_
 
 #include <QColor>

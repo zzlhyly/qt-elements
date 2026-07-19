@@ -7,6 +7,9 @@
 
 namespace statemachine { class StateTracker; }
 
+// ZLink — Element Plus link component.
+// Clickable text link with type coloring and optional underline.
+
 class ZLink : public QWidget
 {
     Q_OBJECT
