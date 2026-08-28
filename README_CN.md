@@ -7,28 +7,33 @@
 
 基于 Qt5 原生 QPainter 绘制的个人 UI 组件库。所有组件视觉对标 [Element Plus](https://element-plus.org/)，力求像素级还原——不使用 QSS，不使用 CSS，纯 Qt 原生 API。
 
+📖 **[组件文档](docs/README.md)** — 逐个组件的 API 参考、Demo 索引，以及未实现的 Element Plus 特性清单。
+
 ## ✨ 为什么选 qt-elements？
 
 大多数 Qt 自定义控件依赖样式表或混合方案来实现现代外观。qt-elements 走了一条不同的路线：每个像素都由 `QPainter` 绘制，颜色标记直接来源于 Element Plus 的 SCSS 源码。最终呈现的组件库在视觉效果上与 Element Plus 完全一致，但可以在任何 Qt5 应用中原生运行。
 
 ## 🧩 组件列表
 
+完整 API 参考见：**[docs/README.md](docs/README.md)**。
+
 | 组件 | 描述 |
 |------|------|
-| **ZButton** | 6 种类型、3 种尺寸、5 种变体（solid/plain/text/link/dashed）、圆角/圆形、加载中、禁用 |
-| **ZTag** | 5 种类型、3 种效果（light/dark/plain）、3 种尺寸、可关闭、圆角、边框 |
-| **ZBadge** | 5 种类型、圆点模式、最大值显示、隐藏状态 |
-| **ZDivider** | 水平/垂直、实线/虚线/点线、文字左/中/右定位 |
-| **ZLink** | 6 种类型、悬停下划线/常驻下划线、悬停变色、点击信号 |
-| **ZText** | 6 种类型、3 种尺寸、文字截断 |
-| **ZInput** | 3 种尺寸、可清空、密码切换、聚焦/悬停状态、自定义边框渲染 |
-| **ZRadio** | 圆形指示器 + 选中圆点、悬停/禁用状态 |
-| **ZCheckbox** | 方形指示器 + 对勾标记、悬停/禁用状态 |
-| **ZSwitch** | 滑块动画（200ms InOutCubic）、ON/OFF 颜色切换 |
-| **ZSlider** | 水平滑块、拖拽调值、可配置范围 |
-| **ZProgress** | 线条/圆环模式、4 种状态色、百分比文字 |
-| **ZAlert** | 4 种类型、浅色/深色效果、可关闭、图标开关 |
-| **ZTooltip** | 悬停提示（500ms 延迟）、静态提示展示、弹出层引擎 |
+| **[ZButton](docs/Button.md)** | 6 种类型、5 种变体（solid/plain/text/link/dashed）、3 种尺寸、圆角/圆形、加载中、禁用 |
+| **[ZTag](docs/Tag.md)** | 5 种类型、3 种效果（light/dark/plain）、3 种尺寸、可关闭、圆角、高亮边框 |
+| **[ZBadge](docs/Badge.md)** | 5 种类型、圆点模式、最大值截顶显示、隐藏状态 |
+| **[ZDivider](docs/Divider.md)** | 水平/垂直、实线/虚线/点线、文字左/中/右定位 |
+| **[ZLink](docs/Link.md)** | 6 种类型、可选下划线、悬停变色、点击信号 |
+| **[ZText](docs/Text.md)** | 6 种类型、3 种尺寸、单行截断 |
+| **[ZAlert](docs/Alert.md)** | 4 种类型、浅色/深色效果、可关闭、图标开关、文字居中 |
+| **[ZInput](docs/Input.md)** | 3 种尺寸、可清空、密码切换、多行文本域与自适应高度、前缀/后缀图标、前置/后置控件、字数统计 |
+| **[ZRadio](docs/Radio.md)** | 圆形指示器 + 选中圆点、边框模式、悬停/禁用状态 |
+| **[ZCheckbox](docs/Checkbox.md)** | 方形指示器 + 对勾标记、半选状态、悬停/禁用 |
+| **[ZCheckboxGroup](docs/CheckboxGroup.md)** | 整型多选模型、min/max 数量约束、按钮风格 |
+| **[ZSwitch](docs/Switch.md)** | 滑块平移动画、3 种尺寸、加载中、开/关文字 |
+| **[ZSlider](docs/Slider.md)** | 水平/垂直、拖拽调值、步进吸附、断点标记 |
+| **[ZProgress](docs/Progress.md)** | 线条/圆环/仪表盘、4 种状态色、文字内置、不确定态动画 |
+| **[ZTooltip](docs/Tooltip.md)** | 悬停/手动触发、深色/浅色效果、4 个方位、显示/隐藏延迟 |
 
 ## 🚀 快速开始
 
@@ -62,37 +67,47 @@ qt-elements/
 │   ├── CMakeLists.txt              # 顶层：vcpkg、Qt5、编译器配置
 │   └── uicontrols/                 # 组件库
 │       ├── CMakeLists.txt
-│       └── src/
-│           ├── theme/theme.h       # 全局色彩与尺寸令牌系统
-│           ├── style/style.h        # 视觉样式解析
-│           ├── statemachine/        # StateTracker 状态机
-│           ├── painter/             # Painter 辅助函数
-│           ├── animation/           # AnimationManager 动画管理
-│           ├── icon/                # IconManager 图标管理
-│           ├── testwidget.h/.cpp    # 组件展示浏览器
-│           ├── widgets/
-│           │   ├── button/          # ZButton
-│           │   ├── tag/             # ZTag
-│           │   ├── input/           # ZInput
-│           │   ├── link/            # ZLink
-│           │   ├── alert/           # ZAlert
-│           │   ├── text/            # ZText
-│           │   ├── badge/           # ZBadge
-│           │   └── divider/         # ZDivider
-│           │   ├── checkbox/        # ZCheckbox
-│           │   ├── radio/           # ZRadio
-│           │   ├── switch/          # ZSwitch
-│           │   ├── progress/         # ZProgress
-│           │   ├── slider/           # ZSlider
-│           │   └── tooltip/          # ZTooltip
-│           ├── popup/               # ZPopup
+│       ├── src/                    # 组件库 + 展示器外壳
+│       └── examples/               # 每个 Element Plus 示例一个文件
+├── docs/                           # 逐组件 API 文档
 ├── build/                          # 构建输出（Win32, Debug）
 ├── scripts/                        # 工具脚本
 │   └── fix-encoding.ps1            # UTF-8 BOM + CRLF 转换器
 ├── COMPONENTS.md                   # 分层路线图（40+ 计划组件）
-├── AGENTS.md                       # 开发者速查手册
+├── AGENTS.md                       # 项目规约与开发流程
 ├── LICENSE                         # MIT
 └── README.md
+```
+
+`src/` 详细结构：
+
+```
+src/
+├── theme/theme.h       # 全局色彩与尺寸令牌系统
+├── style/style.h       # 视觉样式解析
+├── statemachine/       # StateTracker 状态机
+├── painter/            # Painter 辅助函数
+├── animation/          # AnimationManager 动画管理
+├── icon/               # IconManager 图标管理
+├── popup/              # ZPopup 定位引擎
+├── widgets/
+│   ├── button/         # ZButton
+│   ├── tag/            # ZTag
+│   ├── input/          # ZInput
+│   ├── link/           # ZLink
+│   ├── alert/          # ZAlert
+│   ├── text/           # ZText
+│   ├── badge/          # ZBadge
+│   ├── divider/        # ZDivider
+│   ├── checkbox/       # ZCheckbox
+│   ├── checkboxgroup/  # ZCheckboxGroup
+│   ├── radio/          # ZRadio
+│   ├── switch/         # ZSwitch
+│   ├── progress/       # ZProgress
+│   ├── slider/         # ZSlider
+│   └── tooltip/        # ZTooltip
+├── gallery.cpp         # 展示器外壳（侧边栏 + 堆叠页面）
+└── main.cpp
 ```
 
 ## 🎨 设计原则
@@ -104,11 +119,14 @@ qt-elements/
 
 ## 🛠 添加新组件
 
-1. 创建 `coding/uicontrols/src/<name>/<name>.h` 和 `<name>.cpp`
+1. 创建 `coding/uicontrols/src/widgets/<name>/<name>.h` 和 `<name>.cpp`
 2. 将两者加入 `coding/uicontrols/CMakeLists.txt` 的 `SRC_FILES`
-3. 在 `testwidget.cpp` 中编写 `createXxxPage()` 展示函数
-4. 在 `TestWidget` 构造函数的侧边栏和堆叠控件中注册
-5. 更新 `COMPONENTS.md` 和两份 README
+3. 在 `coding/uicontrols/examples/<name>/` 下按 Element Plus 官方示例逐个建文件，每个文件只暴露一个 `QWidget* Z<Name>Demo<Title>()` 函数——示例目录由 CMake 自动 glob，无需改动 CMakeLists
+4. 在同一目录补充 `<name>_demos.h` / `<name>_demos.cpp`，将示例注册进 `DemoRegistry`，并在 `src/gallery.cpp` 中调用 `Register<Name>Demos()`
+5. 按既有页面的章节模板编写 `docs/<Name>.md`
+6. 更新 `COMPONENTS.md`、`docs/README.md` 和两份 README
+
+每个组件的强制开发流程与评审清单见 [`AGENTS.md`](AGENTS.md)。
 
 ## 📄 许可证
 
