@@ -125,8 +125,20 @@ The Theme system provides tokens for:
 - **Typography**: Font families, sizes, weights
 
 All tokens live in `src/theme/theme.h` (header-only, `namespace theme`).
-Usage: `#include "theme/theme.h"`, access via `theme::ButtonSolidBg(type, state)`,
-`theme::TagLightBg(type)`, `theme::ButtonSize(index)` returning `theme::SizeSpec`.
+
+Token functions are named `lowerCamelCase`, not `PascalCase`:
+
+```cpp
+#include "theme/theme.h"
+
+theme::buttonSolidBg(type, state);   // QColor
+theme::tagLightBg(type);             // QColor
+theme::buttonSize(index);            // theme::SizeSpec { height, fontSize, radius, padH, border, iconGap }
+theme::fontSizeBase();               // int
+```
+
+Colour tables are indexed by `int` with the component's own `k`-prefixed enum
+values, so call sites read `theme::tagLightBg(ZTag::kPrimary)`.
 
 New components must source all visual tokens from Theme — no duplicated color
 or size tables, no magic numbers.
@@ -341,6 +353,49 @@ examples/
 
 No monolithic `button_demo.cpp`. No combining demos into one file.
 
+### Demo Registration
+
+Every demo file exposes exactly one free function and nothing else:
+
+```cpp
+// examples/button/plain.cpp
+QWidget* ZButtonDemoPlain();
+```
+
+Each component directory also carries a registration pair, `<name>_demos.h` and
+`<name>_demos.cpp`, which declares the demo functions and registers them with
+the gallery:
+
+```cpp
+// examples/button/button_demos.cpp
+void RegisterButtonDemos(demo::DemoRegistry& registry) {
+    demo::DemoGroup group("Button");
+    group.Add("Basic", &ZButtonDemoBasic);
+    group.Add("Plain", &ZButtonDemoPlain);
+    registry.AddGroup(group);
+}
+```
+
+Every demo `.cpp` includes its own `<name>_demos.h`, so a changed signature
+fails at compile time instead of at link time.
+
+The shared infrastructure lives in `examples/demo/`:
+
+| Type / function | Responsibility |
+|-----------------|----------------|
+| `demo::DemoEntry` | one demo: section title + widget factory |
+| `demo::DemoGroup` | all demos of one component |
+| `demo::DemoRegistry` | ordered list of groups |
+| `demo::CreateDemoPage()` | scrollable page, one titled section per demo |
+
+`src/gallery.cpp` is the only place that names the components; it calls every
+`Register<Name>Demos()` function in sidebar order. Adding a component therefore
+means adding one call there — the gallery holds no demo content itself.
+
+Demo sources are globbed into the build with `CONFIGURE_DEPENDS`, so a new demo
+file needs no `CMakeLists.txt` edit. Library sources under `src/` are still
+listed explicitly in `SRC_FILES`.
+
 ---
 
 ## VI. Quality Gates
@@ -419,6 +474,16 @@ Upon completing a component, generate `docs/<ComponentName>.md` containing:
 - Differences from Element Plus
 - Future roadmap
 
+**Naming**: `<ComponentName>` is the Element Plus component name in PascalCase
+**without** the `Z` class prefix — `ZButton` is documented in `docs/Button.md`,
+`ZCheckboxGroup` in `docs/CheckboxGroup.md`. This keeps the file name aligned
+with the `src/widgets/<name>/` directory and the Element Plus page it mirrors.
+Add the new page to the index in `docs/README.md`.
+
+The "Unsupported features" and "Differences from Element Plus" sections must be
+based on the fetched Element Plus documentation, not on recollection; a wrong
+claim there is worse than an omission.
+
 ---
 
 ## VII. Operational Reference
@@ -462,6 +527,10 @@ cmake --build build --config Debug
   ```powershell
   pwsh -File scripts/fix-encoding.ps1
   ```
+- The script fixes **file** encoding only. MSVC `C4819` ("contains a character
+  that cannot be represented in the current code page") is a **compiler code
+  page** problem, not a file encoding one, so re-running the script will not
+  silence it. `coding/CMakeLists.txt` passes `/utf-8` for that — keep it.
 
 ### Qt Plugin Deployment
 
@@ -474,6 +543,12 @@ cmake --build build --config Debug
 
 1. Create `coding/uicontrols/src/widgets/<name>/<name>.h` and `<name>.cpp`
 2. Add source files to `coding/uicontrols/CMakeLists.txt` `SRC_FILES`
-3. Add examples under `coding/uicontrols/examples/<name>/`
-4. Run through the Development Workflow and Review Checklist
-5. Generate `docs/<name>.md`
+3. Add one file per Element Plus demo under `coding/uicontrols/examples/<name>/`,
+   each exposing a single `QWidget* Z<Name>Demo<Title>()` function — demo files
+   are globbed into the build, so no CMake edit is needed for them
+4. Add `<name>_demos.h` / `<name>_demos.cpp` in the same directory and register
+   the demos with `demo::DemoRegistry` (see *Demo Registration*)
+5. Call `Register<Name>Demos()` from `src/gallery.cpp` at the right sidebar position
+6. Run through the Development Workflow and Review Checklist
+7. Generate `docs/<ComponentName>.md` and add it to `docs/README.md`
+8. Update `COMPONENTS.md` and both READMEs
