@@ -1,6 +1,7 @@
 ﻿#include <QVBoxLayout>
 #include <QWidget>
 #include "widgets/alert/zalert.h"
+#include "alert/alert_demos.h"
 
 QWidget* ZAlertDemoCenter() {
     auto* w = new QWidget();

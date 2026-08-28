@@ -1,6 +1,7 @@
 ﻿#include <QHBoxLayout>
 #include <QWidget>
 #include "widgets/text/ztext.h"
+#include "text/text_demos.h"
 
 QWidget* ZTextDemoTypes() {
     auto* w = new QWidget();

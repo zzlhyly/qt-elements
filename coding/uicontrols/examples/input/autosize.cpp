@@ -1,6 +1,7 @@
 ﻿#include <QVBoxLayout>
 #include <QWidget>
 #include "widgets/input/zinput.h"
+#include "input/input_demos.h"
 
 QWidget* ZInputDemoAutosize() {
     auto* w = new QWidget();

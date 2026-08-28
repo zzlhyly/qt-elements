@@ -2,6 +2,7 @@
 #include <QHBoxLayout>
 #include <QWidget>
 #include "widgets/button/zbutton.h"
+#include "button/button_demos.h"
 
 QWidget* ZButtonDemoButtonGroup() {
     auto* w = new QWidget();

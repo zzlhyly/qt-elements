@@ -1,8 +1,15 @@
 project(uicontrols)
+# Demo sources are globbed: one file per Element Plus example, so the set
+# changes every time a component gains a demo. CONFIGURE_DEPENDS makes CMake
+# re-run when files are added or removed.
+FILE(GLOB_RECURSE DEMO_FILES CONFIGURE_DEPENDS
+    ${CMAKE_CURRENT_SOURCE_DIR}/examples/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/examples/*.h
+)
 SET(SRC_FILES
     src/main.cpp
-    src/testwidget.cpp
-    src/testwidget.h
+    src/gallery.cpp
+    src/gallery.h
     # Foundation modules
     src/style/style.h
     src/statemachine/statemachine.cpp
@@ -47,10 +54,14 @@ SET(SRC_FILES
     src/widgets/tooltip/ztooltip.cpp
     src/widgets/tooltip/ztooltip.h
     src/theme/theme.h
+    ${DEMO_FILES}
 )
 if(WIN32)
     SOURCE_GROUP(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SRC_FILES})
 endif(WIN32)
 add_executable(${PROJECT_NAME} WIN32 ${SRC_FILES})
 qtproject_setup_target(${PROJECT_NAME})
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/examples
+)

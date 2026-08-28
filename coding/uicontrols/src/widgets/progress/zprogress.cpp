@@ -1,4 +1,4 @@
-#include "zprogress.h"
+﻿#include "zprogress.h"
 #include "theme/theme.h"
 #include "painter/painter.h"
 

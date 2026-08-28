@@ -1,9 +1,10 @@
-#include <QHBoxLayout>
+﻿#include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QWidget>
 #include "widgets/tooltip/ztooltip.h"
+#include "tooltip/tooltip_demos.h"
 
 QWidget* ZTooltipDemoDelay() {
     auto* w = new QWidget();

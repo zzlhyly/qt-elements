@@ -1,5 +1,6 @@
 ﻿#include <QWidget>
 #include "widgets/alert/zalert.h"
+#include "alert/alert_demos.h"
 
 QWidget* ZAlertDemoClosable() {
     auto* alert = new ZAlert("Closable alert - click the close button to hide", ZAlert::kInfo);

@@ -1,6 +1,7 @@
 ﻿#include <QHBoxLayout>
 #include <QWidget>
 #include "widgets/badge/zbadge.h"
+#include "badge/badge_demos.h"
 
 QWidget* ZBadgeDemoMax() {
     auto* w = new QWidget();

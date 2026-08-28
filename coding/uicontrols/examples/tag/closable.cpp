@@ -1,6 +1,7 @@
 ﻿#include <QHBoxLayout>
 #include <QWidget>
 #include "widgets/tag/ztag.h"
+#include "tag/tag_demos.h"
 
 QWidget* ZTagDemoClosable() {
     auto* w = new QWidget();

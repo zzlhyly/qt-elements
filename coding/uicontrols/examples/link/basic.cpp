@@ -1,6 +1,7 @@
 ﻿#include <QHBoxLayout>
 #include <QWidget>
 #include "widgets/link/zlink.h"
+#include "link/link_demos.h"
 
 QWidget* ZLinkDemoBasic() {
     auto* w = new QWidget();

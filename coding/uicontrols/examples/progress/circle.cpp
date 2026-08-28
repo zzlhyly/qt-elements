@@ -1,6 +1,7 @@
-#include <QHBoxLayout>
+﻿#include <QHBoxLayout>
 #include <QWidget>
 #include "widgets/progress/zprogress.h"
+#include "progress/progress_demos.h"
 
 QWidget* ZProgressDemoCircle() {
     auto* w = new QWidget();

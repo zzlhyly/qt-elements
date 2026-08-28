@@ -2,6 +2,7 @@
 #include <QWidget>
 #include "widgets/checkboxgroup/zcheckboxgroup.h"
 #include "widgets/checkbox/zcheckbox.h"
+#include "checkbox/checkbox_demos.h"
 
 QWidget* ZCheckboxDemoBorder() {
     auto* w = new QWidget();

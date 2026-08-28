@@ -90,6 +90,7 @@ inline QColor fillColor()      { return {0xf0, 0xf2, 0xf5}; }
 inline QColor focusOutline()   { return {0xa0, 0xcf, 0xff}; }
 
 inline int fontWeight()        { return 500; }
+inline int fontSizeBase()      { return 14; }
 inline int borderWidth()       { return 1; }
 inline qreal borderRadiusBase()  { return 4.0; }
 inline qreal borderRadiusSmall() { return 3.0; }

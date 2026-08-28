@@ -1,6 +1,7 @@
 ﻿#include <QHBoxLayout>
 #include <QWidget>
 #include "widgets/button/zbutton.h"
+#include "button/button_demos.h"
 
 QWidget* ZButtonDemoLoading() {
     auto* w = new QWidget();

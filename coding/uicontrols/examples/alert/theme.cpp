@@ -1,6 +1,7 @@
 ﻿#include <QHBoxLayout>
 #include <QWidget>
 #include "widgets/alert/zalert.h"
+#include "alert/alert_demos.h"
 
 QWidget* ZAlertDemoTheme() {
     auto* w = new QWidget();

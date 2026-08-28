@@ -1,6 +1,7 @@
 ﻿#include <QHBoxLayout>
 #include <QWidget>
 #include "widgets/checkbox/zcheckbox.h"
+#include "checkbox/checkbox_demos.h"
 
 QWidget* ZCheckboxDemoDisabled() {
     auto* w = new QWidget();

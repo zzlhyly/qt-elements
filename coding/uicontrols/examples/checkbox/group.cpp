@@ -3,6 +3,7 @@
 #include <QLabel>
 #include "widgets/checkboxgroup/zcheckboxgroup.h"
 #include "widgets/checkbox/zcheckbox.h"
+#include "checkbox/checkbox_demos.h"
 
 QWidget* ZCheckboxDemoGroup() {
     auto* w = new QWidget();

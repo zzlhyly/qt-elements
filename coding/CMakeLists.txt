@@ -43,6 +43,13 @@ function(qtproject_setup_target TARGET)
     )
     target_link_libraries(${TARGET} Qt5::Core Qt5::Widgets Qt5::Gui)
 
+    # Sources are UTF-8 (see scripts/fix-encoding.ps1). Without this MSVC reads
+    # them using the system code page and emits C4819 for every non-ASCII
+    # character in a comment.
+    if(MSVC)
+        target_compile_options(${TARGET} PRIVATE /utf-8)
+    endif()
+
     if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         set_target_properties(${TARGET} PROPERTIES
             RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/product/${TARGET}"

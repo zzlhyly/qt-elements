@@ -1,6 +1,7 @@
 ﻿#include <QHBoxLayout>
 #include <QWidget>
 #include "widgets/divider/zdivider.h"
+#include "divider/divider_demos.h"
 
 QWidget* ZDividerDemoVertical() {
     auto* w = new QWidget();

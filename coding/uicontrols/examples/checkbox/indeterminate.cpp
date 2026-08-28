@@ -1,6 +1,7 @@
 ﻿#include <QVBoxLayout>
 #include <QWidget>
 #include "widgets/checkbox/zcheckbox.h"
+#include "checkbox/checkbox_demos.h"
 
 QWidget* ZCheckboxDemoIndeterminate() {
     auto* w = new QWidget();

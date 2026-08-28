@@ -7,28 +7,33 @@
 
 A personal UI component library for Qt5, built entirely with native QPainter rendering. Every component is designed to visually match [Element Plus](https://element-plus.org/) with pixel-level fidelity — no QSS, no CSS, pure Qt native APIs.
 
+📖 **[Component Documentation](docs/README.md)** — per-component API reference, demo index, and a precise list of Element Plus features that are not implemented.
+
 ## ✨ Why qt-elements?
 
 Most Qt custom widgets rely on stylesheets or hybrid approaches to achieve modern looks. qt-elements takes a different path: every pixel is drawn by `QPainter`, with exact color tokens sourced from Element Plus SCSS. The result is a component library that looks identical to Element Plus but runs natively in any Qt5 application.
 
 ## 🧩 Components
 
+Full API reference for each: **[docs/README.md](docs/README.md)**.
+
 | Component | Description |
 |-----------|-------------|
-| **ZButton** | 6 types, 3 sizes, 5 variants (solid/plain/text/link/dashed), round, circle, loading, disabled |
-| **ZTag** | 5 types, 3 effects (light/dark/plain), 3 sizes, closable, round, hit |
-| **ZBadge** | 5 types, dot mode, max value display, hidden state |
-| **ZDivider** | Horizontal/vertical, solid/dashed/dotted, text with left/center/right positioning |
-| **ZLink** | 6 types, underline on hover/always, hover state, click signal |
-| **ZText** | 6 types, 3 sizes, text truncation |
-| **ZInput** | 3 sizes, clearable, password toggle, focus/hover states, custom border rendering |
-| **ZRadio** | Circular indicator with checked dot, hover/disabled states |
-| **ZCheckbox** | Square indicator with checkmark, hover/disabled states |
-| **ZSwitch** | Animated thumb slide (200ms InOutCubic), ON/OFF color states |
-| **ZSlider** | Horizontal slider with drag-to-value, configurable range |
-| **ZProgress** | Line bar + circle ring modes, 4 status colors, percentage text |
-| **ZAlert** | 4 types, light/dark effects, closable, icon toggle |
-| **ZTooltip** | Hover tooltip with 500ms delay, static showText, popup overlay engine |
+| **[ZButton](docs/Button.md)** | 6 types, 5 variants (solid/plain/text/link/dashed), 3 sizes, round, circle, loading, disabled |
+| **[ZTag](docs/Tag.md)** | 5 types, 3 effects (light/dark/plain), 3 sizes, closable, round, hit |
+| **[ZBadge](docs/Badge.md)** | 5 types, dot mode, max value clamping, hidden state |
+| **[ZDivider](docs/Divider.md)** | Horizontal/vertical, solid/dashed/dotted, text with left/center/right positioning |
+| **[ZLink](docs/Link.md)** | 6 types, optional underline, hover state, click signal |
+| **[ZText](docs/Text.md)** | 6 types, 3 sizes, single-line truncation |
+| **[ZAlert](docs/Alert.md)** | 4 types, light/dark effects, closable, icon toggle, centered text |
+| **[ZInput](docs/Input.md)** | 3 sizes, clearable, password toggle, textarea + autosize, prefix/suffix icons, prepend/append widgets, word limit |
+| **[ZRadio](docs/Radio.md)** | Circular indicator with checked dot, border mode, hover/disabled states |
+| **[ZCheckbox](docs/Checkbox.md)** | Square indicator with checkmark, indeterminate state, hover/disabled |
+| **[ZCheckboxGroup](docs/CheckboxGroup.md)** | Integer multi-select model, min/max constraints, button style |
+| **[ZSwitch](docs/Switch.md)** | Animated thumb slide, 3 sizes, loading spinner, active/inactive text |
+| **[ZSlider](docs/Slider.md)** | Horizontal/vertical, drag-to-value, step snapping, stop markers |
+| **[ZProgress](docs/Progress.md)** | Line/circle/dashboard, 4 status colors, text inside, indeterminate |
+| **[ZTooltip](docs/Tooltip.md)** | Hover/manual trigger, dark/light effect, 4 placements, show/hide delays |
 
 ## 🚀 Quick Start
 
@@ -62,36 +67,47 @@ qt-elements/
 │   ├── CMakeLists.txt              # Top-level: vcpkg, Qt5, compiler config
 │   └── uicontrols/                 # Component library
 │       ├── CMakeLists.txt
-│       └── src/
-│           ├── theme/theme.h       # Global color & size token system
-│           ├── style/style.h        # Visual style resolution
-│           ├── statemachine/        # StateTracker
-│           ├── painter/             # Painter helper functions
-│           ├── animation/           # AnimationManager
-│           ├── icon/                # IconManager
-│           ├── widgets/
-│           │   ├── button/          # ZButton
-│           │   ├── tag/             # ZTag
-│           │   ├── input/           # ZInput
-│           │   ├── link/            # ZLink
-│           │   ├── alert/           # ZAlert
-│           │   ├── text/            # ZText
-│           │   ├── badge/           # ZBadge
-│           │   └── divider/         # ZDivider
-│           │   ├── checkbox/        # ZCheckbox
-│           │   ├── radio/           # ZRadio
-│           │   ├── switch/          # ZSwitch
-│           │   ├── progress/         # ZProgress
-│           │   ├── slider/           # ZSlider
-│           │   └── tooltip/          # ZTooltip
-│           ├── popup/               # ZPopup
+│       ├── src/                    # Library + gallery shell
+│       └── examples/               # One file per Element Plus demo
+├── docs/                           # Per-component API documentation
 ├── build/                          # Build output (Win32, Debug)
 ├── scripts/                        # Utility scripts
 │   └── fix-encoding.ps1            # UTF-8 BOM + CRLF converter
 ├── COMPONENTS.md                   # Tiered roadmap (40+ planned)
-├── AGENTS.md                       # Developer quick reference
+├── AGENTS.md                       # Project constitution & workflow
 ├── LICENSE                         # MIT
 └── README.md
+```
+
+`src/` in detail:
+
+```
+src/
+├── theme/theme.h       # Global color & size token system
+├── style/style.h       # Visual style resolution
+├── statemachine/       # StateTracker
+├── painter/            # Painter helper functions
+├── animation/          # AnimationManager
+├── icon/               # IconManager
+├── popup/              # ZPopup positioning engine
+├── widgets/
+│   ├── button/         # ZButton
+│   ├── tag/            # ZTag
+│   ├── input/          # ZInput
+│   ├── link/           # ZLink
+│   ├── alert/          # ZAlert
+│   ├── text/           # ZText
+│   ├── badge/          # ZBadge
+│   ├── divider/        # ZDivider
+│   ├── checkbox/       # ZCheckbox
+│   ├── checkboxgroup/  # ZCheckboxGroup
+│   ├── radio/          # ZRadio
+│   ├── switch/         # ZSwitch
+│   ├── progress/       # ZProgress
+│   ├── slider/         # ZSlider
+│   └── tooltip/        # ZTooltip
+├── gallery.cpp         # Demo gallery shell (sidebar + stacked pages)
+└── main.cpp
 ```
 
 ## 🎨 Design Principles
@@ -103,11 +119,14 @@ qt-elements/
 
 ## 🛠 Adding a Component
 
-1. Create `coding/uicontrols/src/<name>/<name>.h` and `<name>.cpp`
+1. Create `coding/uicontrols/src/widgets/<name>/<name>.h` and `<name>.cpp`
 2. Add both files to `coding/uicontrols/CMakeLists.txt` under `SRC_FILES`
-3. Build a demo page function `createXxxPage()` in `testwidget.cpp`
-4. Register it in the sidebar and stacked widget in `TestWidget` constructor
-5. Update `COMPONENTS.md` and both READMEs
+3. Add one file per Element Plus demo to `coding/uicontrols/examples/<name>/`, each exposing a single `QWidget* Z<Name>Demo<Title>()` function — these are globbed into the build automatically, so no CMake edit is needed for demos
+4. Add `<name>_demos.h` / `<name>_demos.cpp` in that same directory to register the demos with `DemoRegistry`, then call `Register<Name>Demos()` from `src/gallery.cpp`
+5. Write `docs/<Name>.md` following the section template used by the existing pages
+6. Update `COMPONENTS.md`, `docs/README.md` and both READMEs
+
+See [`AGENTS.md`](AGENTS.md) for the mandatory per-component workflow and review checklist.
 
 ## 📄 License
 

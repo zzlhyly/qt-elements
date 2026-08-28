@@ -1,4 +1,4 @@
-#include "zslider.h"
+﻿#include "zslider.h"
 #include "theme/theme.h"
 #include "painter/painter.h"
 

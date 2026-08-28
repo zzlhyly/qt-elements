@@ -1,4 +1,4 @@
-#ifndef WIDGETS_TOOLTIP_ZTOOLTIP_H_
+﻿#ifndef WIDGETS_TOOLTIP_ZTOOLTIP_H_
 #define WIDGETS_TOOLTIP_ZTOOLTIP_H_
 
 #include <QObject>

@@ -1,4 +1,4 @@
-#ifndef WIDGETS_SLIDER_ZSLIDER_H_
+﻿#ifndef WIDGETS_SLIDER_ZSLIDER_H_
 #define WIDGETS_SLIDER_ZSLIDER_H_
 
 #include <QWidget>

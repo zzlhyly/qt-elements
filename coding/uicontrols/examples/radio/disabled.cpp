@@ -1,6 +1,7 @@
 ﻿#include <QHBoxLayout>
 #include <QWidget>
 #include "widgets/radio/zradio.h"
+#include "radio/radio_demos.h"
 
 QWidget* ZRadioDemoDisabled() {
     auto* w = new QWidget();

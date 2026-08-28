@@ -1,7 +1,8 @@
-#include <QHBoxLayout>
+﻿#include <QHBoxLayout>
 #include <QPushButton>
 #include <QWidget>
 #include "widgets/tooltip/ztooltip.h"
+#include "tooltip/tooltip_demos.h"
 
 QWidget* ZTooltipDemoStatic() {
     auto* w = new QWidget();

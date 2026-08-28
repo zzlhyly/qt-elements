@@ -1,4 +1,4 @@
-#include "zcheckboxgroup.h"
+﻿#include "zcheckboxgroup.h"
 #include "widgets/checkbox/zcheckbox.h"
 #include "theme/theme.h"
 

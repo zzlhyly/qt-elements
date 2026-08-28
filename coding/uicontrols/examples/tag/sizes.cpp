@@ -1,6 +1,7 @@
 ﻿#include <QVBoxLayout>
 #include <QWidget>
 #include "widgets/tag/ztag.h"
+#include "tag/tag_demos.h"
 
 QWidget* ZTagDemoSizes() {
     auto* w = new QWidget();

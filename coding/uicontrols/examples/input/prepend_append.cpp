@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include "widgets/input/zinput.h"
+#include "input/input_demos.h"
 
 QWidget* ZInputDemoPrependAppend() {
     auto* w = new QWidget();

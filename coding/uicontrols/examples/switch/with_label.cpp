@@ -1,6 +1,7 @@
 ﻿#include <QHBoxLayout>
 #include <QWidget>
 #include "widgets/switch/zswitch.h"
+#include "switch/switch_demos.h"
 
 QWidget* ZSwitchDemoWithLabel() {
     auto* w = new QWidget();

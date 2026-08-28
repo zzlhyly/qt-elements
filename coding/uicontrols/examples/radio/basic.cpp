@@ -2,6 +2,7 @@
 #include <QHBoxLayout>
 #include <QWidget>
 #include "widgets/radio/zradio.h"
+#include "radio/radio_demos.h"
 
 QWidget* ZRadioDemoBasic() {
     auto* w = new QWidget();

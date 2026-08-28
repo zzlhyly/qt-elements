@@ -1,6 +1,7 @@
 ﻿#include <QVBoxLayout>
 #include <QWidget>
 #include "widgets/text/ztext.h"
+#include "text/text_demos.h"
 
 QWidget* ZTextDemoTruncated() {
     auto* w = new QWidget();

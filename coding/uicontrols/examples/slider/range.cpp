@@ -1,6 +1,7 @@
-#include <QHBoxLayout>
+﻿#include <QHBoxLayout>
 #include <QWidget>
 #include "widgets/slider/zslider.h"
+#include "slider/slider_demos.h"
 
 QWidget* ZSliderDemoRange() {
     auto* w = new QWidget();

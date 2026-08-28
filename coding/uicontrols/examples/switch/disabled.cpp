@@ -1,6 +1,7 @@
 ﻿#include <QHBoxLayout>
 #include <QWidget>
 #include "widgets/switch/zswitch.h"
+#include "switch/switch_demos.h"
 
 QWidget* ZSwitchDemoDisabled() {
     auto* w = new QWidget();

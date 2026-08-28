@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QLabel>
 #include "widgets/text/ztext.h"
+#include "text/text_demos.h"
 
 QWidget* ZTextDemoAllTypes() {
     auto* w = new QWidget();

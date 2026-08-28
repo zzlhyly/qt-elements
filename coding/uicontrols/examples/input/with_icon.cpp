@@ -1,6 +1,7 @@
 ﻿#include <QHBoxLayout>
 #include <QWidget>
 #include "widgets/input/zinput.h"
+#include "input/input_demos.h"
 
 QWidget* ZInputDemoWithIcon() {
     auto* w = new QWidget();
